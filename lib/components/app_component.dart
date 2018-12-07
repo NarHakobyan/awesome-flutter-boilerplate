@@ -5,11 +5,11 @@ import 'package:fluro/fluro.dart';
 
 class AppComponent extends StatefulWidget {
   @override
-  _AppComponentState createState() => _AppComponentState();
+  AppComponentState createState() => AppComponentState();
 }
 
-class _AppComponentState extends State<AppComponent> {
-  _AppComponentState() {
+class AppComponentState extends State<AppComponent> {
+  AppComponentState() {
     final router = new Router();
     Routes.configureRoutes(router);
     Application.router = router;
