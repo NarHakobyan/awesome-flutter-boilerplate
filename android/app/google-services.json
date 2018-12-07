@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "916560630143",
+    "firebase_url": "https://chat-9b843.firebaseio.com",
+    "project_id": "chat-9b843",
+    "storage_bucket": "chat-9b843.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:916560630143:android:bd8b0e2ff02d2252",
+        "android_client_info": {
+          "package_name": "com.narek.securechat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "916560630143-roi43n2dnccbtdes582pht2m0d7if4av.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCbyaolUupJN8XhHTvxUI49rv26k73tOtU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
