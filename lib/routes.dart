@@ -8,6 +8,7 @@
  */
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
+import 'package:secure_chat/pages/chat_page_component.dart';
 
 import 'package:secure_chat/pages/rooms_page_component.dart';
 
@@ -25,6 +26,12 @@ class Routes {
     router.define(rooms, handler: new Handler(
         handlerFunc: (BuildContext context, Map<String, List<String>> params) {
           return RoomsPageComponent();
+        }));
+
+
+    router.define(singleRoom, handler: new Handler(
+        handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+          return ChatPageComponent(roomId: params['id'][0],);
         }));
 
     router.printTree();

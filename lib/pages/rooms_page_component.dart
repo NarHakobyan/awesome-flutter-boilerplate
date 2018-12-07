@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:secure_chat/config/application.dart';
 
 import 'package:secure_chat/models/Room.dart';
 
@@ -11,7 +12,7 @@ class RoomsPageComponent extends StatefulWidget {
 class RoomsPageComponentState extends State<RoomsPageComponent> {
     Widget build(BuildContext context) {
         return new Scaffold(
-            appBar: AppBar(title: Text("Rooms")),
+            appBar: AppBar(title: Text("Rooms"), centerTitle: false, ),
             body: _buildBody(context),
         );
     }
@@ -40,7 +41,7 @@ class RoomsPageComponentState extends State<RoomsPageComponent> {
         return ListTile(
             key: ValueKey(record.name),
             title: Text(record.name),
-            onTap: () => print(ValueKey(record.name)),
+            onTap: () => Application.router.navigateTo(context, '/rooms/${record.id}'),
         );
     }
 }

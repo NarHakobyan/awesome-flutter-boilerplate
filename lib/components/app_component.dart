@@ -1,5 +1,5 @@
 import 'package:secure_chat/config/application.dart';
-import 'package:secure_chat/config/routes.dart';
+import 'package:secure_chat/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:fluro/fluro.dart';
 
@@ -20,7 +20,7 @@ class AppComponentState extends State<AppComponent> {
     final app = MaterialApp(
       title: 'Secure chat',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.grey,
       ),
       onGenerateRoute: Application.router.generator,
     );
