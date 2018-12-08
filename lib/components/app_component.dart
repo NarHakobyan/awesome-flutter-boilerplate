@@ -19,7 +19,7 @@ class _AppComponentState extends State<AppComponent> {
   Widget build(BuildContext context) {
     final app = MaterialApp(
       title: 'Secure chat',
-      theme: ThemeData(primarySwatch: Colors.grey, fontFamily: 'ProximaNova'),
+      theme: ThemeData(primarySwatch: Colors.lightBlue, fontFamily: 'ProximaNova'),
       onGenerateRoute: Application.router.generator,
     );
     print("initial route = ${app.initialRoute}");
