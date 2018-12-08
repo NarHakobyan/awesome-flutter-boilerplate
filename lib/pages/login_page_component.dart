@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:secure_chat/helpers/validators.dart';
+
+class NewLoginModel {
+  String email;
+  String password;
+}
 
 class LoginPageComponent extends StatefulWidget {
   @override
@@ -8,8 +14,8 @@ class LoginPageComponent extends StatefulWidget {
 class _LoginPageComponentState extends State<LoginPageComponent> {
   final _formKey = GlobalKey<FormState>();
 
-  var usernameController = TextEditingController();
-  var passwordController = TextEditingController();
+
+  final loginModel = NewLoginModel();
 
   @override
   Widget build(BuildContext context) {
@@ -48,13 +54,19 @@ class _LoginPageComponentState extends State<LoginPageComponent> {
             child: Column(
               children: <Widget>[
                 TextFormField(
+                    keyboardType: TextInputType.emailAddress,
                     validator: (String value) {
                       if (value.isEmpty) {
-                        return 'please fill the field';
+                        return 'please fill the field'.toUpperCase();
+                      }
+                      if (!Validators.isValidEmail(value)) {
+                        return 'please fill a valid email address'.toUpperCase();
                       }
                     },
-                    controller: usernameController,
-                    decoration: InputDecoration(labelText: 'username'.toUpperCase(), labelStyle: textFieldLabelStyle)),
+                    onSaved: (email) {
+                      loginModel.email = email;
+                    },
+                    decoration: InputDecoration(labelText: 'email'.toUpperCase(), labelStyle: textFieldLabelStyle)),
                 TextFormField(
                   validator: (String value) {
                     if (value.isEmpty) {
@@ -64,7 +76,9 @@ class _LoginPageComponentState extends State<LoginPageComponent> {
                       return 'field must be more then 6 symbols'.toUpperCase();
                     }
                   },
-                  controller: passwordController,
+                  onSaved: (password) {
+                    loginModel.password = password;
+                  },
                   decoration: InputDecoration(labelText: 'password'.toUpperCase(), labelStyle: textFieldLabelStyle),
                   obscureText: true,
                 ),
@@ -88,16 +102,15 @@ class _LoginPageComponentState extends State<LoginPageComponent> {
                     color: Colors.transparent,
                     child: InkWell(
                         onTap: () {
-                            final FormState form = _formKey.currentState;
+                          final FormState form = _formKey.currentState;
 
-                            if(form.validate() == false) {
-                                return;
-                            }
+                          if (form.validate() == false) {
+                            return;
+                          }
 
-                            print(usernameController.value.text);
-                            print(passwordController.value.text);
+                          form.save();
 
-
+                          print(loginModel.email);
                         },
                         child: Center(
                           child: Text(
