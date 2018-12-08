@@ -11,11 +11,12 @@ class ButtonComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var borderRadius = BorderRadius.horizontal(left: Radius.circular(50), right: Radius.circular(50));
     return Container(
       width: width ?? 250,
       height: height ?? 50,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.horizontal(left: Radius.circular(50), right: Radius.circular(50)),
+          borderRadius: borderRadius,
           gradient: LinearGradient(
             colors: colors,
           ),
@@ -29,6 +30,7 @@ class ButtonComponent extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
+            borderRadius: borderRadius,
             onTap: onTap,
             child: Center(
               child: this.child,
