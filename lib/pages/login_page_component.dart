@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:secure_chat/components/button_component.dart';
 
 import 'package:secure_chat/helpers/validators.dart';
 
@@ -32,7 +33,7 @@ class _LoginPageComponentState extends State<LoginPageComponent> {
 
     try {
       await _auth.signInWithEmailAndPassword(email: loginModel.email, password: loginModel.password);
-    } catch (e, s) {
+    } catch (e) {
       Fluttertoast.showToast(
           msg: "Email or password is incorrect".toUpperCase(),
           toastLength: Toast.LENGTH_SHORT,
@@ -46,8 +47,6 @@ class _LoginPageComponentState extends State<LoginPageComponent> {
 
   @override
   Widget build(BuildContext context) {
-    var textFieldLabelStyle = TextStyle(letterSpacing: 2);
-
     var themeData = Theme.of(context);
 
     return Scaffold(
@@ -77,72 +76,61 @@ class _LoginPageComponentState extends State<LoginPageComponent> {
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 30),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              children: <Widget>[
-                TextFormField(
-                    keyboardType: TextInputType.emailAddress,
-                    validator: (String value) {
-                      if (value.isEmpty) {
-                        return 'please fill the field'.toUpperCase();
-                      }
-                      if (!Validators.isValidEmail(value)) {
-                        return 'please fill a valid email address'.toUpperCase();
-                      }
-                    },
-                    onSaved: (email) {
-                      loginModel.email = email;
-                    },
-                    decoration: InputDecoration(labelText: 'email'.toUpperCase(), labelStyle: textFieldLabelStyle)),
-                TextFormField(
-                  validator: (String value) {
-                    if (value.isEmpty) {
-                      return 'please fill the field'.toUpperCase();
-                    }
-                    if (value.length < 6) {
-                      return 'field must be more then 6 symbols'.toUpperCase();
-                    }
-                  },
-                  onSaved: (password) {
-                    loginModel.password = password;
-                  },
-                  decoration: InputDecoration(labelText: 'password'.toUpperCase(), labelStyle: textFieldLabelStyle),
-                  obscureText: true,
-                ),
-                Container(
-                  width: 250,
-                  height: 50.0,
-                  margin: EdgeInsets.only(top: 50),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.horizontal(left: Radius.circular(50), right: Radius.circular(50)),
-                      gradient: LinearGradient(
-                        colors: <Color>[themeData.primaryColor, themeData.primaryColorDark],
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey[500],
-                          offset: Offset(0.0, 1.5),
-                          blurRadius: 1.5,
-                        ),
-                      ]),
-                  child: Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                        onTap: _loginHandler,
-                        child: Center(
-                          child: Text(
-                            'login'.toUpperCase(),
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        )),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          child: _buildForm(),
         )
       ],
     ));
+  }
+
+  _buildForm() {
+      const textFieldLabelStyle = const TextStyle(letterSpacing: 2);
+      ThemeData themeData = Theme.of(context);
+
+      return Form(
+          key: _formKey,
+          child: Column(
+              children: <Widget>[
+                  TextFormField(
+                      keyboardType: TextInputType.emailAddress,
+                      validator: (String value) {
+                          if (value.isEmpty) {
+                              return 'please fill the field'.toUpperCase();
+                          }
+                          if (!Validators.isValidEmail(value)) {
+                              return 'please fill a valid email address'.toUpperCase();
+                          }
+                      },
+                      onSaved: (email) {
+                          loginModel.email = email;
+                      },
+                      decoration: InputDecoration(labelText: 'email'.toUpperCase(), labelStyle: textFieldLabelStyle)),
+                  TextFormField(
+                      validator: (String value) {
+                          if (value.isEmpty) {
+                              return 'please fill the field'.toUpperCase();
+                          }
+                          if (value.length < 6) {
+                              return 'field must be more then 6 symbols'.toUpperCase();
+                          }
+                      },
+                      onSaved: (password) {
+                          loginModel.password = password;
+                      },
+                      decoration: InputDecoration(labelText: 'password'.toUpperCase(), labelStyle: textFieldLabelStyle),
+                      obscureText: true,
+                  ),
+                  Container(
+                      margin: EdgeInsets.only(top: 20),
+                    child: ButtonComponent(
+                        colors: <Color>[themeData.primaryColor, themeData.primaryColorDark],
+                        onTap: _loginHandler,
+                        child: Text(
+                        'login'.toUpperCase(),
+                        style: TextStyle(color: Colors.white),
+                    ),),
+                  ),
+              ],
+          ),
+      );
   }
 }
