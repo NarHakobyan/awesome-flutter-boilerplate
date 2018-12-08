@@ -6,10 +6,10 @@ import 'package:secure_chat/models/Room.dart';
 
 class RoomsPageComponent extends StatefulWidget {
     @override
-    RoomsPageComponentState createState() => RoomsPageComponentState();
+    _RoomsPageComponentState createState() => _RoomsPageComponentState();
 }
 
-class RoomsPageComponentState extends State<RoomsPageComponent> {
+class _RoomsPageComponentState extends State<RoomsPageComponent> {
     Widget build(BuildContext context) {
         return new Scaffold(
             appBar: AppBar(title: Text("Rooms"), centerTitle: false, ),

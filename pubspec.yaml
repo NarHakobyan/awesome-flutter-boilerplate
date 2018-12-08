@@ -42,6 +42,15 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  fonts:
+    - family: ProximaNova
+      fonts:
+        - asset: fonts/ProximaNova-Regular.ttf
+        - asset: fonts/ProximaNova-RegularIt.ttf
+          style: italic
+        - asset: fonts/ProximaNova-Bold.ttf
+        - asset: fonts/ProximaNovaT-Thin.ttf
+        - asset: fonts/ProximaNova-Semibold.ttf
 
   # To add assets to your application, add an assets section, like this:
   # assets:

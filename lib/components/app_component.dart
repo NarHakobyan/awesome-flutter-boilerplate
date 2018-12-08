@@ -5,11 +5,11 @@ import 'package:fluro/fluro.dart';
 
 class AppComponent extends StatefulWidget {
   @override
-  AppComponentState createState() => AppComponentState();
+  _AppComponentState createState() => _AppComponentState();
 }
 
-class AppComponentState extends State<AppComponent> {
-  AppComponentState() {
+class _AppComponentState extends State<AppComponent> {
+  _AppComponentState() {
     final router = new Router();
     Routes.configureRoutes(router);
     Application.router = router;
@@ -19,9 +19,7 @@ class AppComponentState extends State<AppComponent> {
   Widget build(BuildContext context) {
     final app = MaterialApp(
       title: 'Secure chat',
-      theme: ThemeData(
-        primarySwatch: Colors.grey,
-      ),
+      theme: ThemeData(primarySwatch: Colors.grey, fontFamily: 'ProximaNova'),
       onGenerateRoute: Application.router.generator,
     );
     print("initial route = ${app.initialRoute}");

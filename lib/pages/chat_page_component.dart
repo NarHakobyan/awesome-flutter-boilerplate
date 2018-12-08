@@ -10,13 +10,13 @@ class ChatPageComponent extends StatefulWidget {
     final String roomId;
 
     @override
-    ChatPageComponentState createState() => ChatPageComponentState();
+    _ChatPageComponentState createState() => _ChatPageComponentState();
 
     ChatPageComponent({@required this.roomId});
 
 }
 
-class ChatPageComponentState extends State<ChatPageComponent>
+class _ChatPageComponentState extends State<ChatPageComponent>
     with TickerProviderStateMixin {
     final List<ChatMessage> _messages = <ChatMessage>[];
     final TextEditingController _textController = TextEditingController();
