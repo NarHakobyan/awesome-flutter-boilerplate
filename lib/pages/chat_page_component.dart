@@ -106,8 +106,9 @@ void _handleSubmitted(String text) {
             toastLength: Toast.LENGTH_SHORT,
             gravity: ToastGravity.BOTTOM,
             timeInSecForIos: 1,
-            bgcolor: "#e74c3c",
-            textcolor: '#ffffff');
+            backgroundColor: Colors.red,
+            textColor: Colors.white
+        );
         return;
     }
     _textController.clear();
