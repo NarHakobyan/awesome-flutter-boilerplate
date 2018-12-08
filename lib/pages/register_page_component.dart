@@ -7,24 +7,32 @@ import 'package:secure_chat/config/application.dart';
 import 'package:secure_chat/helpers/validators.dart';
 import 'package:secure_chat/routes.dart';
 
-class NewLoginModel {
+class NewRegisterModel {
+  String displayName;
   String email;
   String password;
-}
 
-class LoginPageComponent extends StatefulWidget {
   @override
-  _LoginPageComponentState createState() => _LoginPageComponentState();
+  String toString() {
+      return 'NewRegisterModel{displayName: $displayName, email: $email, password: $password}';
+  }
+
+
 }
 
-class _LoginPageComponentState extends State<LoginPageComponent> {
+class RegisterPageComponent extends StatefulWidget {
+  @override
+  _RegisterPageComponentState createState() => _RegisterPageComponentState();
+}
+
+class _RegisterPageComponentState extends State<RegisterPageComponent> {
   final _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  final loginModel = NewLoginModel();
+  final registerModel = NewRegisterModel();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  _loginHandler() async {
+  _registerHandler() async {
     final FormState form = _formKey.currentState;
 
     if (form.validate() == false) {
@@ -34,10 +42,23 @@ class _LoginPageComponentState extends State<LoginPageComponent> {
     form.save();
 
     try {
-      await _auth.signInWithEmailAndPassword(email: loginModel.email, password: loginModel.password);
+      FirebaseUser user =
+          await _auth.createUserWithEmailAndPassword(email: registerModel.email, password: registerModel.password);
+      UserUpdateInfo userUpdateInfo = UserUpdateInfo()..displayName = registerModel.displayName;
+      await user.updateProfile(userUpdateInfo);
+
+      Fluttertoast.showToast(
+          msg: "you have successfully registered.".toUpperCase(),
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIos: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white);
+
+      Application.router.navigateTo(context, Routes.rooms);
     } catch (e) {
       Fluttertoast.showToast(
-          msg: "Email or password is incorrect".toUpperCase(),
+          msg: e.details.toUpperCase(),
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.BOTTOM,
           timeInSecForIos: 1,
@@ -48,8 +69,6 @@ class _LoginPageComponentState extends State<LoginPageComponent> {
 
   @override
   Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-
     return Scaffold(
         key: _scaffoldKey,
         body: Column(
@@ -57,24 +76,8 @@ class _LoginPageComponentState extends State<LoginPageComponent> {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            new Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                FlutterLogo(
-                  size: 100,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 30),
-                  child: Text(
-                    'Welcome to your secure chat'.toUpperCase(),
-                    style: TextStyle(fontSize: 22, color: themeData.primaryColor),
-                  ),
-                ),
-                Text('Secure communication for the 21st century'.toUpperCase(),
-                    style: TextStyle(color: Colors.grey[400]))
-              ],
+            new FlutterLogo(
+              size: 100,
             ),
             new Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30),
@@ -88,6 +91,7 @@ class _LoginPageComponentState extends State<LoginPageComponent> {
     const textFieldLabelStyle = const TextStyle(letterSpacing: 2);
     var themeData = Theme.of(context);
 
+    final FocusNode _displayNameFocus = FocusNode();
     final FocusNode _emailFocus = FocusNode();
     final FocusNode _passwordFocus = FocusNode();
 
@@ -95,6 +99,24 @@ class _LoginPageComponentState extends State<LoginPageComponent> {
       key: _formKey,
       child: Column(
         children: <Widget>[
+          TextFormField(
+              keyboardType: TextInputType.text,
+              maxLines: 1,
+              textInputAction: TextInputAction.next,
+              focusNode: _displayNameFocus,
+              onFieldSubmitted: (_) {
+                _displayNameFocus.unfocus();
+                FocusScope.of(context).requestFocus(_emailFocus);
+              },
+              validator: (String value) {
+                if (value.isEmpty) {
+                  return 'please fill the field'.toUpperCase();
+                }
+              },
+              onSaved: (value) {
+                registerModel.displayName = value;
+              },
+              decoration: InputDecoration(labelText: 'display name'.toUpperCase(), labelStyle: textFieldLabelStyle)),
           TextFormField(
               keyboardType: TextInputType.emailAddress,
               maxLines: 1,
@@ -114,7 +136,7 @@ class _LoginPageComponentState extends State<LoginPageComponent> {
                 }
               },
               onSaved: (email) {
-                loginModel.email = email;
+                registerModel.email = email;
               },
               decoration: InputDecoration(labelText: 'email'.toUpperCase(), labelStyle: textFieldLabelStyle)),
           TextFormField(
@@ -123,7 +145,7 @@ class _LoginPageComponentState extends State<LoginPageComponent> {
             onFieldSubmitted: (_) {
               _passwordFocus.unfocus();
 
-              _loginHandler();
+              _registerHandler();
             },
             validator: (String value) {
               if (value.isEmpty) {
@@ -134,7 +156,7 @@ class _LoginPageComponentState extends State<LoginPageComponent> {
               }
             },
             onSaved: (password) {
-              loginModel.password = password;
+              registerModel.password = password;
             },
             decoration: InputDecoration(labelText: 'password'.toUpperCase(), labelStyle: textFieldLabelStyle),
             obscureText: true,
@@ -143,9 +165,9 @@ class _LoginPageComponentState extends State<LoginPageComponent> {
             padding: EdgeInsets.symmetric(vertical: 20),
             child: ButtonComponent(
               colors: <Color>[themeData.primaryColor, themeData.primaryColorDark],
-              onTap: _loginHandler,
+              onTap: _registerHandler,
               child: Text(
-                'Sign in'.toUpperCase(),
+                'Sign up'.toUpperCase(),
                 style: TextStyle(color: Colors.white),
               ),
             ),
@@ -153,10 +175,10 @@ class _LoginPageComponentState extends State<LoginPageComponent> {
           Container(
             child: FlatButton(
               onPressed: () {
-                  Application.router.navigateTo(context, Routes.register, replace: true, transition: TransitionType.nativeModal);
+                Application.router.navigateTo(context, Routes.login, replace: true, transition: TransitionType.nativeModal);
               },
               child: Text(
-                'sign up for an account'.toUpperCase(),
+                'already have an account?'.toUpperCase(),
                 style: TextStyle(fontSize: 19),
               ),
             ),

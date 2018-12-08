@@ -11,10 +11,12 @@ import 'package:flutter/material.dart';
 
 import 'package:secure_chat/pages/chat_page_component.dart';
 import 'package:secure_chat/pages/login_page_component.dart';
+import 'package:secure_chat/pages/register_page_component.dart';
 import 'package:secure_chat/pages/rooms_page_component.dart';
 
 class Routes {
   static String login = "/";
+  static String register = "/register";
   static String rooms = "/rooms";
   static String singleRoom = "/rooms/:id";
 
@@ -29,13 +31,15 @@ class Routes {
           return LoginPageComponent();
         }));
 
-
+    router.define(register, handler: new Handler(
+        handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+          return RegisterPageComponent();
+        }));
 
     router.define(rooms, handler: new Handler(
         handlerFunc: (BuildContext context, Map<String, List<String>> params) {
           return RoomsPageComponent();
         }));
-
 
     router.define(singleRoom, handler: new Handler(
         handlerFunc: (BuildContext context, Map<String, List<String>> params) {
