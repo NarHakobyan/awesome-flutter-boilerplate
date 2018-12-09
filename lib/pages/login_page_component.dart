@@ -35,6 +35,8 @@ class _LoginPageComponentState extends State<LoginPageComponent> {
 
     try {
       await _auth.signInWithEmailAndPassword(email: loginModel.email, password: loginModel.password);
+
+      Application.router.navigateTo(context, Routes.rooms);
     } catch (e) {
       Fluttertoast.showToast(
           msg: "Email or password is incorrect".toUpperCase(),
@@ -153,7 +155,8 @@ class _LoginPageComponentState extends State<LoginPageComponent> {
           Container(
             child: FlatButton(
               onPressed: () {
-                  Application.router.navigateTo(context, Routes.register, replace: true, transition: TransitionType.nativeModal);
+                Application.router
+                    .navigateTo(context, Routes.register, replace: true, transition: TransitionType.nativeModal);
               },
               child: Text(
                 'sign up for an account'.toUpperCase(),
