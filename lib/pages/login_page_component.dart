@@ -10,6 +10,11 @@ import 'package:secure_chat/routes.dart';
 class NewLoginModel {
   String email;
   String password;
+
+  @override
+  String toString() {
+      return 'NewLoginModel{email: $email, password: $password}';
+  }
 }
 
 class LoginPageComponent extends StatefulWidget {
@@ -36,7 +41,7 @@ class _LoginPageComponentState extends State<LoginPageComponent> {
     try {
       await _auth.signInWithEmailAndPassword(email: loginModel.email, password: loginModel.password);
 
-      Application.router.navigateTo(context, Routes.rooms);
+      Application.router.navigateTo(context, Routes.rooms, clearStack: true);
     } catch (e) {
       Fluttertoast.showToast(
           msg: "Email or password is incorrect".toUpperCase(),
@@ -53,42 +58,74 @@ class _LoginPageComponentState extends State<LoginPageComponent> {
     var themeData = Theme.of(context);
 
     return Scaffold(
-        key: _scaffoldKey,
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            new Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                FlutterLogo(
-                  size: 100,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 30),
-                  child: Text(
-                    'Welcome to your secure chat'.toUpperCase(),
-                    style: TextStyle(fontSize: 22, color: themeData.primaryColor),
+      key: _scaffoldKey,
+      body: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints viewportConstraints) {
+          return SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: 30),
+            child: new ConstrainedBox(
+              constraints: new BoxConstraints(
+                minHeight: viewportConstraints.maxHeight,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(top: 40),
+                    child: new Column(
+                      children: <Widget>[
+                        FlutterLogo(size: 100),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 30),
+                          child: new Text(
+                            'Welcome to your secure chat'.toUpperCase(),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 22, color: themeData.primaryColor),
+                          ),
+                        ),
+                        new Text('Secure communication for the 21st century'.toUpperCase(),
+                            textAlign: TextAlign.center, style: TextStyle(color: Colors.grey[400]))
+                      ],
+                    ),
                   ),
-                ),
-                Text('Secure communication for the 21st century'.toUpperCase(),
-                    style: TextStyle(color: Colors.grey[400]))
-              ],
+                  _buildForm(),
+                  new Column(
+                    children: <Widget>[
+                      new Padding(
+                        padding: EdgeInsets.symmetric(vertical: 10),
+                        child: ButtonComponent(
+                          colors: <Color>[themeData.primaryColor, themeData.primaryColorDark],
+                          onTap: _loginHandler,
+                          child: Text(
+                            'Sign in'.toUpperCase(),
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                      FlatButton(
+                        onPressed: () {
+                          Application.router.navigateTo(context, Routes.register, transition: TransitionType.nativeModal);
+                        },
+                        child: Text(
+                          'sign up for an account'.toUpperCase(),
+                          style: TextStyle(fontSize: 19),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
             ),
-            new Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
-              child: _buildForm(),
-            ),
-          ],
-        ));
+          );
+        },
+      ),
+    );
   }
 
   _buildForm() {
     const textFieldLabelStyle = const TextStyle(letterSpacing: 2);
-    var themeData = Theme.of(context);
 
     final FocusNode _emailFocus = FocusNode();
     final FocusNode _passwordFocus = FocusNode();
@@ -140,29 +177,6 @@ class _LoginPageComponentState extends State<LoginPageComponent> {
             },
             decoration: InputDecoration(labelText: 'password'.toUpperCase(), labelStyle: textFieldLabelStyle),
             obscureText: true,
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(vertical: 20),
-            child: ButtonComponent(
-              colors: <Color>[themeData.primaryColor, themeData.primaryColorDark],
-              onTap: _loginHandler,
-              child: Text(
-                'Sign in'.toUpperCase(),
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-          ),
-          Container(
-            child: FlatButton(
-              onPressed: () {
-                Application.router
-                    .navigateTo(context, Routes.register, replace: true, transition: TransitionType.nativeModal);
-              },
-              child: Text(
-                'sign up for an account'.toUpperCase(),
-                style: TextStyle(fontSize: 19),
-              ),
-            ),
           ),
         ],
       ),

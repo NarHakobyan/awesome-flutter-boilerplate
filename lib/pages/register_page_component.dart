@@ -14,10 +14,8 @@ class NewRegisterModel {
 
   @override
   String toString() {
-      return 'NewRegisterModel{displayName: $displayName, email: $email, password: $password}';
+    return 'NewRegisterModel{displayName: $displayName, email: $email, password: $password}';
   }
-
-
 }
 
 class RegisterPageComponent extends StatefulWidget {
@@ -55,7 +53,7 @@ class _RegisterPageComponentState extends State<RegisterPageComponent> {
           backgroundColor: Colors.green,
           textColor: Colors.white);
 
-      Application.router.navigateTo(context, Routes.rooms);
+      Application.router.navigateTo(context, Routes.rooms, clearStack: true);
     } catch (e) {
       Fluttertoast.showToast(
           msg: e.details.toUpperCase(),
@@ -69,27 +67,64 @@ class _RegisterPageComponentState extends State<RegisterPageComponent> {
 
   @override
   Widget build(BuildContext context) {
+    var themeData = Theme.of(context);
+
     return Scaffold(
-        key: _scaffoldKey,
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            new FlutterLogo(
-              size: 100,
+      key: _scaffoldKey,
+      body: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints viewportConstraints) {
+          return SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: 30),
+            child: new ConstrainedBox(
+              constraints: new BoxConstraints(
+                minHeight: viewportConstraints.maxHeight,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(top: 40),
+                    child: FlutterLogo(size: 100),
+                  ),
+                  _buildForm(),
+                  new Column(
+                    children: <Widget>[
+                      new Padding(
+                        padding: EdgeInsets.symmetric(vertical: 20),
+                        child: ButtonComponent(
+                          colors: <Color>[themeData.primaryColor, themeData.primaryColorDark],
+                          onTap: _registerHandler,
+                          child: Text(
+                            'Sign up'.toUpperCase(),
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                      new FlatButton(
+                        onPressed: () {
+                          Application.router
+                              .navigateTo(context, Routes.login, replace: true, transition: TransitionType.nativeModal);
+                        },
+                        child: Text(
+                          'already have an account?'.toUpperCase(),
+                          style: TextStyle(fontSize: 19),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
             ),
-            new Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
-              child: _buildForm(),
-            ),
-          ],
-        ));
+          );
+        },
+      ),
+    );
   }
 
   _buildForm() {
     const textFieldLabelStyle = const TextStyle(letterSpacing: 2);
-    var themeData = Theme.of(context);
 
     final FocusNode _displayNameFocus = FocusNode();
     final FocusNode _emailFocus = FocusNode();
@@ -160,28 +195,6 @@ class _RegisterPageComponentState extends State<RegisterPageComponent> {
             },
             decoration: InputDecoration(labelText: 'password'.toUpperCase(), labelStyle: textFieldLabelStyle),
             obscureText: true,
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(vertical: 20),
-            child: ButtonComponent(
-              colors: <Color>[themeData.primaryColor, themeData.primaryColorDark],
-              onTap: _registerHandler,
-              child: Text(
-                'Sign up'.toUpperCase(),
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-          ),
-          Container(
-            child: FlatButton(
-              onPressed: () {
-                Application.router.navigateTo(context, Routes.login, replace: true, transition: TransitionType.nativeModal);
-              },
-              child: Text(
-                'already have an account?'.toUpperCase(),
-                style: TextStyle(fontSize: 19),
-              ),
-            ),
           ),
         ],
       ),
