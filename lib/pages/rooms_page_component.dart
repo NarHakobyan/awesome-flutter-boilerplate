@@ -1,7 +1,10 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:secure_chat/config/application.dart';
-import 'package:secure_chat/models/Room.dart';
+import 'package:secure_chat/models/room.dart';
 
 class RoomsPageComponent extends StatefulWidget {
   @override
@@ -9,8 +12,11 @@ class RoomsPageComponent extends StatefulWidget {
 }
 
 class _RoomsPageComponentState extends State<RoomsPageComponent> {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
   Widget build(BuildContext context) {
     return new Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text(
           "Channels",
@@ -21,7 +27,7 @@ class _RoomsPageComponentState extends State<RoomsPageComponent> {
           IconButton(
               icon: Icon(Icons.add),
               onPressed: () {
-                print('add');
+                _createChannelDialog(context);
               })
         ],
         backgroundColor: Colors.white,
@@ -83,4 +89,78 @@ class _RoomsPageComponentState extends State<RoomsPageComponent> {
       onTap: () => Application.router.navigateTo(context, '/rooms/${record.id}'),
     );
   }
+
+  Future<void> _createChannelDialog(BuildContext context) async {
+    String channelKey = await showDialog<String>(
+        context: context,
+        builder: (BuildContext context) {
+          var _channelNameKey = GlobalKey<FormFieldState>();
+
+          return AlertDialog(
+            title: Text('Create new channel!'),
+            content: TextFormField(
+              key: _channelNameKey,
+              validator: (String value) {
+                if (value.isEmpty) {
+                  return 'please fill the field'.toUpperCase();
+                }
+              },
+              maxLines: 1,
+              decoration: InputDecoration(hintText: 'Channel name...'),
+            ),
+            actions: <Widget>[
+              FlatButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Cancel')),
+              FlatButton(
+                  onPressed: () async {
+                    final field = _channelNameKey.currentState;
+                    if (field.validate()) {
+                      String _channelName = field.value;
+                      String channelKey = await _createChannel(_channelName);
+                      Navigator.of(context).pop(channelKey);
+                    }
+                  },
+                  child: Text('Create'))
+            ],
+          );
+        });
+
+    print('channelKey, $channelKey');
+    _scaffoldKey.currentState.showSnackBar(SnackBar(
+      content: Text('Save your secret key: $channelKey'),
+      action: SnackBarAction(
+          label: 'Copy',
+          onPressed: () {
+            Clipboard.setData(new ClipboardData(text: channelKey));
+          }),
+    ));
+  }
+
+  String _generateRandomKey() {
+    var key = '';
+    var rnd = new Random();
+    for (var i = 0; i < 6; i++) {
+      key = key + rnd.nextInt(9).toString();
+    }
+    return key;
+  }
+
+  _createChannel(String channelName) async {
+    String channelId = _generateRandomKey();
+
+    Room room = Room(id: channelId, name: channelName, createdAt: DateTime.now());
+
+    DocumentReference documentReference = await Firestore.instance.collection('rooms').add(room.toJson());
+
+    room.reference = documentReference;
+
+    print(room);
+
+    return channelId;
+  }
+
+  _RoomsPageComponentState();
 }

@@ -5,6 +5,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:secure_chat/components/button_component.dart';
 import 'package:secure_chat/config/application.dart';
 import 'package:secure_chat/helpers/validators.dart';
+import 'package:secure_chat/mixins/Loading.dart';
+import 'package:secure_chat/mixins/keyboard.dart';
 import 'package:secure_chat/routes.dart';
 
 class NewLoginModel {
@@ -13,7 +15,7 @@ class NewLoginModel {
 
   @override
   String toString() {
-      return 'NewLoginModel{email: $email, password: $password}';
+    return 'NewLoginModel{email: $email, password: $password}';
   }
 }
 
@@ -22,19 +24,22 @@ class LoginPageComponent extends StatefulWidget {
   _LoginPageComponentState createState() => _LoginPageComponentState();
 }
 
-class _LoginPageComponentState extends State<LoginPageComponent> {
+class _LoginPageComponentState extends State<LoginPageComponent> with Keyboard, Loading<LoginPageComponent> {
   final _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   final loginModel = NewLoginModel();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  _loginHandler() async {
+  _loginHandler(context) async {
     final FormState form = _formKey.currentState;
 
     if (form.validate() == false) {
       return;
     }
+
+    hideKeyboard();
+    startLoading();
 
     form.save();
 
@@ -51,6 +56,7 @@ class _LoginPageComponentState extends State<LoginPageComponent> {
           backgroundColor: Colors.red,
           textColor: Colors.white);
     }
+    stopLoading();
   }
 
   @override
@@ -59,72 +65,82 @@ class _LoginPageComponentState extends State<LoginPageComponent> {
 
     return Scaffold(
       key: _scaffoldKey,
-      body: LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints viewportConstraints) {
-          return SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: 30),
-            child: new ConstrainedBox(
-              constraints: new BoxConstraints(
-                minHeight: viewportConstraints.maxHeight,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(top: 40),
-                    child: new Column(
-                      children: <Widget>[
-                        FlutterLogo(size: 100),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 30),
-                          child: new Text(
-                            'Welcome to your secure chat'.toUpperCase(),
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 22, color: themeData.primaryColor),
-                          ),
-                        ),
-                        new Text('Secure communication for the 21st century'.toUpperCase(),
-                            textAlign: TextAlign.center, style: TextStyle(color: Colors.grey[400]))
-                      ],
-                    ),
-                  ),
-                  _buildForm(),
-                  new Column(
-                    children: <Widget>[
-                      new Padding(
-                        padding: EdgeInsets.symmetric(vertical: 10),
-                        child: ButtonComponent(
-                          colors: <Color>[themeData.primaryColor, themeData.primaryColorDark],
-                          onTap: _loginHandler,
-                          child: Text(
-                            'Sign in'.toUpperCase(),
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ),
-                      FlatButton(
-                        onPressed: () {
-                          Application.router.navigateTo(context, Routes.register, transition: TransitionType.nativeModal);
-                        },
-                        child: Text(
-                          'sign up for an account'.toUpperCase(),
-                          style: TextStyle(fontSize: 19),
-                        ),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            ),
-          );
+      body: GestureDetector(
+        onTap: () {
+          hideKeyboard();
         },
+        child: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints viewportConstraints) {
+            return SingleChildScrollView(
+              padding: EdgeInsets.symmetric(horizontal: 30),
+              child: new ConstrainedBox(
+                constraints: new BoxConstraints(
+                  minHeight: viewportConstraints.maxHeight,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(top: 40),
+                      child: new Column(
+                        children: <Widget>[
+                          FlutterLogo(size: 100),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 30),
+                            child: new Text(
+                              'Welcome to your secure chat'.toUpperCase(),
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 22, color: themeData.primaryColor),
+                            ),
+                          ),
+                          new Text('Secure communication for the 21st century'.toUpperCase(),
+                              textAlign: TextAlign.center, style: TextStyle(color: Colors.grey[400]))
+                        ],
+                      ),
+                    ),
+                    _buildForm(context),
+                    new Column(
+                      children: <Widget>[
+                        new Padding(
+                          padding: EdgeInsets.symmetric(vertical: 10),
+                          child: isLoading
+                              ? Center(
+                                  child: CircularProgressIndicator(),
+                                )
+                              : ButtonComponent(
+                                  colors: <Color>[themeData.primaryColor, themeData.primaryColorDark],
+                                  onTap: () => _loginHandler(context),
+                                  child: Text(
+                                    'Sign in'.toUpperCase(),
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                        ),
+                        FlatButton(
+                          onPressed: () {
+                            Application.router
+                                .navigateTo(context, Routes.register, transition: TransitionType.nativeModal);
+                          },
+                          child: Text(
+                            'sign up for an account'.toUpperCase(),
+                            style: TextStyle(fontSize: 19),
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
       ),
     );
   }
 
-  _buildForm() {
+  _buildForm(context) {
     const textFieldLabelStyle = const TextStyle(letterSpacing: 2);
 
     final FocusNode _emailFocus = FocusNode();
@@ -162,7 +178,7 @@ class _LoginPageComponentState extends State<LoginPageComponent> {
             onFieldSubmitted: (_) {
               _passwordFocus.unfocus();
 
-              _loginHandler();
+              _loginHandler(context);
             },
             validator: (String value) {
               if (value.isEmpty) {
