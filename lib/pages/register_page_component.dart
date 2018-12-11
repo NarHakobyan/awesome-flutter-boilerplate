@@ -53,6 +53,8 @@ class _RegisterPageComponentState extends State<RegisterPageComponent> {
           backgroundColor: Colors.green,
           textColor: Colors.white);
 
+      Application.currentUser = user;
+
       Application.router.navigateTo(context, Routes.rooms, clearStack: true);
     } catch (e) {
       Fluttertoast.showToast(
