@@ -28,6 +28,8 @@ class _LoginPageComponentState extends State<LoginPageComponent> with Keyboard, 
   final _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
+  bool autoValidate = false;
+
   final loginModel = NewLoginModel();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -35,6 +37,9 @@ class _LoginPageComponentState extends State<LoginPageComponent> with Keyboard, 
     final FormState form = _formKey.currentState;
 
     if (form.validate() == false) {
+        setState(() {
+            autoValidate = true;
+        });
       return;
     }
 
@@ -148,6 +153,7 @@ class _LoginPageComponentState extends State<LoginPageComponent> with Keyboard, 
 
     return Form(
       key: _formKey,
+      autovalidate: autoValidate,
       child: Column(
         children: <Widget>[
           TextFormField(
