@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:secure_chat/config/application.dart';
 import 'package:secure_chat/models/room.dart';
 
@@ -24,6 +25,11 @@ class _RoomsPageComponentState extends State<RoomsPageComponent> {
         ),
         centerTitle: true,
         actions: <Widget>[
+          IconButton(
+              icon: Icon(Icons.chat),
+              onPressed: () {
+                _connectChannelDialog(context);
+              }),
           IconButton(
               icon: Icon(Icons.add),
               onPressed: () {
@@ -91,6 +97,62 @@ class _RoomsPageComponentState extends State<RoomsPageComponent> {
     );
   }
 
+  Future<void> _connectChannelDialog(BuildContext context) async {
+      final _channelFieldKey = GlobalKey<FormFieldState>();
+
+      String channelKey = await showDialog<String>(
+          context: context,
+          builder: (BuildContext context) {
+              return AlertDialog(
+                  title: Text('Fill channel key!'),
+                  content: TextFormField(
+                      key: _channelFieldKey,
+                      validator: (String value) {
+                          if (value.isEmpty) {
+                              return 'please fill the field'.toUpperCase();
+                          }
+                      },
+                      maxLines: 1,
+                      decoration: InputDecoration(hintText: 'Channel key...'),
+                  ),
+                  actions: <Widget>[
+                      FlatButton(
+                          onPressed: () {
+                              Navigator.of(context).pop();
+                          },
+                          child: Text('Cancel')),
+                      FlatButton(
+                          onPressed: () async {
+                              final field = _channelFieldKey.currentState;
+                              if (field.validate()) {
+                                  Navigator.of(context).pop(field.value);
+                              }
+                          },
+                          child: Text('Connect'))
+                  ],
+              );
+          });
+
+      if (channelKey == null) {
+          return;
+      }
+
+      final QuerySnapshot room = await Firestore.instance.collection('rooms').where('key', isEqualTo: channelKey).getDocuments();
+
+      if(room.documents.isEmpty) {
+          Fluttertoast.showToast(
+              msg: "Channel not found".toUpperCase(),
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIos: 1,
+              backgroundColor: Colors.red,
+              textColor: Colors.white);
+          return;
+      }
+
+      Application.router.navigateTo(context, '/rooms/$channelKey');
+
+  }
   Future<void> _createChannelDialog(BuildContext context) async {
     final _channelNameKey = GlobalKey<FormFieldState>();
 

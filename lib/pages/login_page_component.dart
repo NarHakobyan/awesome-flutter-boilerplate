@@ -53,7 +53,7 @@ class _LoginPageComponentState extends State<LoginPageComponent> with Keyboard, 
 
       Application.router.navigateTo(context, Routes.rooms, clearStack: true);
     } catch (e) {
-      Fluttertoast.showToast(
+        Fluttertoast.showToast(
           msg: "Email or password is incorrect".toUpperCase(),
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.BOTTOM,
