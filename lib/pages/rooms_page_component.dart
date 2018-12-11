@@ -90,69 +90,76 @@ class _RoomsPageComponentState extends State<RoomsPageComponent> {
   Widget _buildListItem(BuildContext context, DocumentSnapshot data) {
     final record = Room.fromSnapshot(data);
     return ListTile(
+      leading: CircleAvatar(
+        child: Icon(Icons.supervised_user_circle),
+      ),
       key: ValueKey(record.name),
-      title: Text(record.name),
-      subtitle: Text(record.key, style: TextStyle(color: Colors.grey[400]),),
+      title: Text(record.name, style: TextStyle(fontWeight: FontWeight.bold),),
+      subtitle: Text(
+        record.key,
+        style: TextStyle(color: Colors.grey[400]),
+      ),
       onTap: () => Application.router.navigateTo(context, '/rooms/${record.key}'),
     );
   }
 
   Future<void> _connectChannelDialog(BuildContext context) async {
-      final _channelFieldKey = GlobalKey<FormFieldState>();
+    final _channelFieldKey = GlobalKey<FormFieldState>();
 
-      String channelKey = await showDialog<String>(
-          context: context,
-          builder: (BuildContext context) {
-              return AlertDialog(
-                  title: Text('Fill channel key!'),
-                  content: TextFormField(
-                      key: _channelFieldKey,
-                      validator: (String value) {
-                          if (value.isEmpty) {
-                              return 'please fill the field'.toUpperCase();
-                          }
-                      },
-                      maxLines: 1,
-                      decoration: InputDecoration(hintText: 'Channel key...'),
-                  ),
-                  actions: <Widget>[
-                      FlatButton(
-                          onPressed: () {
-                              Navigator.of(context).pop();
-                          },
-                          child: Text('Cancel')),
-                      FlatButton(
-                          onPressed: () async {
-                              final field = _channelFieldKey.currentState;
-                              if (field.validate()) {
-                                  Navigator.of(context).pop(field.value);
-                              }
-                          },
-                          child: Text('Connect'))
-                  ],
-              );
-          });
+    String channelKey = await showDialog<String>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Fill channel key!'),
+            content: TextFormField(
+              key: _channelFieldKey,
+              validator: (String value) {
+                if (value.isEmpty) {
+                  return 'please fill the field'.toUpperCase();
+                }
+              },
+              maxLines: 1,
+              decoration: InputDecoration(hintText: 'Channel key...'),
+            ),
+            actions: <Widget>[
+              FlatButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Cancel')),
+              FlatButton(
+                  onPressed: () async {
+                    final field = _channelFieldKey.currentState;
+                    if (field.validate()) {
+                      Navigator.of(context).pop(field.value);
+                    }
+                  },
+                  child: Text('Connect'))
+            ],
+          );
+        });
 
-      if (channelKey == null) {
-          return;
-      }
+    if (channelKey == null) {
+      return;
+    }
 
-      final QuerySnapshot room = await Firestore.instance.collection('rooms').where('key', isEqualTo: channelKey).getDocuments();
+    final QuerySnapshot room =
+        await Firestore.instance.collection('rooms').where('key', isEqualTo: channelKey).getDocuments();
 
-      if(room.documents.isEmpty) {
-          Fluttertoast.showToast(
-              msg: "Channel not found".toUpperCase(),
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.BOTTOM,
-              timeInSecForIos: 1,
-              backgroundColor: Colors.red,
-              textColor: Colors.white);
-          return;
-      }
+    if (room.documents.isEmpty) {
+      Fluttertoast.showToast(
+          msg: "Channel not found".toUpperCase(),
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIos: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white);
+      return;
+    }
 
-      Application.router.navigateTo(context, '/rooms/$channelKey');
-
+    Application.router.navigateTo(context, '/rooms/$channelKey');
   }
+
   Future<void> _createChannelDialog(BuildContext context) async {
     final _channelNameKey = GlobalKey<FormFieldState>();
 
@@ -217,7 +224,6 @@ class _RoomsPageComponentState extends State<RoomsPageComponent> {
     String channelKey = _generateRandomKey();
 
     Room room = Room(key: channelKey, owner: Application.currentUser.uid, name: channelName, createdAt: DateTime.now());
-
 
     DocumentReference documentReference = await Firestore.instance.collection('rooms').add(room.toJson());
 
