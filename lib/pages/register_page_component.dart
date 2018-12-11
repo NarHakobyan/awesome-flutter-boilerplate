@@ -27,6 +27,11 @@ class _RegisterPageComponentState extends State<RegisterPageComponent> {
   final _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
+
+  final _displayNameFocus = FocusNode();
+  final _emailFocus = FocusNode();
+  final _passwordFocus = FocusNode();
+
   final registerModel = NewRegisterModel();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -127,10 +132,6 @@ class _RegisterPageComponentState extends State<RegisterPageComponent> {
 
   _buildForm() {
     const textFieldLabelStyle = const TextStyle(letterSpacing: 2);
-
-    final FocusNode _displayNameFocus = FocusNode();
-    final FocusNode _emailFocus = FocusNode();
-    final FocusNode _passwordFocus = FocusNode();
 
     return Form(
       key: _formKey,

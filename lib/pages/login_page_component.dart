@@ -27,6 +27,8 @@ class LoginPageComponent extends StatefulWidget {
 class _LoginPageComponentState extends State<LoginPageComponent> with Keyboard, Loading<LoginPageComponent> {
   final _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+  final _emailFocus = FocusNode();
+  final _passwordFocus = FocusNode();
 
   bool autoValidate = false;
 
@@ -147,9 +149,6 @@ class _LoginPageComponentState extends State<LoginPageComponent> with Keyboard, 
 
   _buildForm(context) {
     const textFieldLabelStyle = const TextStyle(letterSpacing: 2);
-
-    final FocusNode _emailFocus = FocusNode();
-    final FocusNode _passwordFocus = FocusNode();
 
     return Form(
       key: _formKey,
