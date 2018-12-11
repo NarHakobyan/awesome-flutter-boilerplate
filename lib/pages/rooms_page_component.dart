@@ -62,7 +62,7 @@ class _RoomsPageComponentState extends State<RoomsPageComponent> {
 
   Widget _buildChannelList(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: Firestore.instance.collection('rooms').snapshots(),
+      stream: Firestore.instance.collection('rooms').where('owner', isEqualTo: Application.currentUser.uid).snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (!snapshot.hasData) return LinearProgressIndicator();
 
@@ -86,16 +86,17 @@ class _RoomsPageComponentState extends State<RoomsPageComponent> {
     return ListTile(
       key: ValueKey(record.name),
       title: Text(record.name),
-      onTap: () => Application.router.navigateTo(context, '/rooms/${record.id}'),
+      subtitle: Text(record.key, style: TextStyle(color: Colors.grey[400]),),
+      onTap: () => Application.router.navigateTo(context, '/rooms/${record.key}'),
     );
   }
 
   Future<void> _createChannelDialog(BuildContext context) async {
+    final _channelNameKey = GlobalKey<FormFieldState>();
+
     String channelKey = await showDialog<String>(
         context: context,
         builder: (BuildContext context) {
-          var _channelNameKey = GlobalKey<FormFieldState>();
-
           return AlertDialog(
             title: Text('Create new channel!'),
             content: TextFormField(
@@ -128,7 +129,9 @@ class _RoomsPageComponentState extends State<RoomsPageComponent> {
           );
         });
 
-    print('channelKey, $channelKey');
+    if (channelKey == null) {
+      return;
+    }
     _scaffoldKey.currentState.showSnackBar(SnackBar(
       content: Text('Save your secret key: $channelKey'),
       action: SnackBarAction(
@@ -149,17 +152,16 @@ class _RoomsPageComponentState extends State<RoomsPageComponent> {
   }
 
   _createChannel(String channelName) async {
-    String channelId = _generateRandomKey();
+    String channelKey = _generateRandomKey();
 
-    Room room = Room(id: channelId, name: channelName, createdAt: DateTime.now());
+    Room room = Room(key: channelKey, owner: Application.currentUser.uid, name: channelName, createdAt: DateTime.now());
+
 
     DocumentReference documentReference = await Firestore.instance.collection('rooms').add(room.toJson());
 
     room.reference = documentReference;
 
-    print(room);
-
-    return channelId;
+    return channelKey;
   }
 
   _RoomsPageComponentState();

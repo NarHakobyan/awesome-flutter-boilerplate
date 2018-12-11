@@ -49,7 +49,7 @@ class _LoginPageComponentState extends State<LoginPageComponent> with Keyboard, 
     form.save();
 
     try {
-      await _auth.signInWithEmailAndPassword(email: loginModel.email, password: loginModel.password);
+        Application.currentUser = await _auth.signInWithEmailAndPassword(email: loginModel.email, password: loginModel.password);
 
       Application.router.navigateTo(context, Routes.rooms, clearStack: true);
     } catch (e) {
