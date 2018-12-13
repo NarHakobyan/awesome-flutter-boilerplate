@@ -35,10 +35,15 @@ class _RegisterPageComponentState extends State<RegisterPageComponent> {
   final registerModel = NewRegisterModel();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
+  bool autoValidate = false;
+
   _registerHandler() async {
     final FormState form = _formKey.currentState;
 
     if (form.validate() == false) {
+      setState(() {
+        autoValidate = true;
+      });
       return;
     }
 
@@ -112,13 +117,15 @@ class _RegisterPageComponentState extends State<RegisterPageComponent> {
                       new FlatButton(
                         onPressed: () {
                           Application.router
-                              .navigateTo(context, Routes.login, replace: true, transition: TransitionType.nativeModal);
+                              .navigateTo(context, Routes.login, clearStack: true, transition: TransitionType.nativeModal);
                         },
                         child: Text(
                           'already have an account?'.toUpperCase(),
                           style: TextStyle(fontSize: 19),
+                          textAlign: TextAlign.center,
                         ),
                       ),
+                      SizedBox(height: 10,)
                     ],
                   )
                 ],
@@ -135,6 +142,7 @@ class _RegisterPageComponentState extends State<RegisterPageComponent> {
 
     return Form(
       key: _formKey,
+      autovalidate: autoValidate,
       child: Column(
         children: <Widget>[
           TextFormField(

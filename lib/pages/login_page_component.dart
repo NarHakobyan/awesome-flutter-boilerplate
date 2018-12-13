@@ -39,9 +39,9 @@ class _LoginPageComponentState extends State<LoginPageComponent> with Keyboard, 
     final FormState form = _formKey.currentState;
 
     if (form.validate() == false) {
-        setState(() {
-            autoValidate = true;
-        });
+      setState(() {
+        autoValidate = true;
+      });
       return;
     }
 
@@ -51,11 +51,12 @@ class _LoginPageComponentState extends State<LoginPageComponent> with Keyboard, 
     form.save();
 
     try {
-        Application.currentUser = await _auth.signInWithEmailAndPassword(email: loginModel.email, password: loginModel.password);
+      Application.currentUser =
+          await _auth.signInWithEmailAndPassword(email: loginModel.email, password: loginModel.password);
 
       Application.router.navigateTo(context, Routes.rooms, clearStack: true);
     } catch (e) {
-        Fluttertoast.showToast(
+      Fluttertoast.showToast(
           msg: "Email or password is incorrect".toUpperCase(),
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.BOTTOM,
@@ -133,8 +134,12 @@ class _LoginPageComponentState extends State<LoginPageComponent> with Keyboard, 
                           child: Text(
                             'sign up for an account'.toUpperCase(),
                             style: TextStyle(fontSize: 19),
+                            textAlign: TextAlign.center,
                           ),
                         ),
+                        SizedBox(
+                          height: 10,
+                        )
                       ],
                     )
                   ],
