@@ -77,7 +77,7 @@ class _LoginPageComponentState extends State<LoginPageComponent> with Keyboard, 
         onTap: () {
           hideKeyboard();
         },
-        child: LayoutBuilder(
+        child: new LayoutBuilder(
           builder: (BuildContext context, BoxConstraints viewportConstraints) {
             return SingleChildScrollView(
               padding: EdgeInsets.symmetric(horizontal: 30),
