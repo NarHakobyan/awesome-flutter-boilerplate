@@ -23,6 +23,10 @@ dependencies:
   fluro: 1.4.0
   fluttertoast: 3.1.0
   image_picker: 0.6.0+8
+  dio: ^2.1.6
+  get_it: ^1.0.3+1
+  flutter_form_builder: ^3.1.2
+  json_annotation: ^2.0.0
 
 dev_dependencies:
   flutter_test:
@@ -31,6 +35,8 @@ dev_dependencies:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec
+  build_runner: ^1.0.0
+  json_serializable: ^2.0.0
 
 # The following section is specific to Flutter.
 flutter:

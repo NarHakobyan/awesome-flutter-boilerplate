@@ -6,7 +6,6 @@ class Room {
   String name;
   String owner;
   DateTime createdAt;
-//  DocumentReference reference;
 
   Room({@required this.key, @required this.name, this.createdAt, this.owner});
 
@@ -14,10 +13,10 @@ class Room {
     return Room(
         key: json['key'],
         name: json['name'],
-        createdAt: json['createdAt'] != null ? DateTime.parse(json['createdAt'] as String) : null);
+        createdAt: json['createdAt'] != null
+            ? DateTime.parse(json['createdAt'] as String)
+            : null);
   }
-
-//  factory Room.fromSnapshot(DocumentSnapshot snapshot) => Room.fromMap(snapshot.data, snapshot.reference);
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{

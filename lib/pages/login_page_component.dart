@@ -1,41 +1,29 @@
-import 'package:fluro/fluro.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:secure_chat/routes.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:secure_chat/components/button_component.dart';
-import 'package:secure_chat/config/application.dart';
-import 'package:secure_chat/helpers/validators.dart';
 import 'package:secure_chat/mixins/Loading.dart';
 import 'package:secure_chat/mixins/keyboard.dart';
-import 'package:secure_chat/routes.dart';
-
-class NewLoginModel {
-  String email;
-  String password;
-
-  @override
-  String toString() {
-    return 'NewLoginModel{email: $email, password: $password}';
-  }
-}
+import 'package:secure_chat/providers/get_it.dart';
+import 'package:secure_chat/models/user/user.dart';
+import 'package:secure_chat/config/application.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:secure_chat/components/button_component.dart';
 
 class LoginPageComponent extends StatefulWidget {
   @override
   _LoginPageComponentState createState() => _LoginPageComponentState();
 }
 
-class _LoginPageComponentState extends State<LoginPageComponent> with Keyboard, Loading<LoginPageComponent> {
-  final _formKey = GlobalKey<FormState>();
+class _LoginPageComponentState extends State<LoginPageComponent>
+    with Loading<LoginPageComponent> {
+  final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  final _emailFocus = FocusNode();
-  final _passwordFocus = FocusNode();
-
   bool autoValidate = false;
 
-  final loginModel = NewLoginModel();
-//  final FirebaseAuth _auth = FirebaseAuth.instance;
-
   _loginHandler(context) async {
-    final FormState form = _formKey.currentState;
+    final form = _fbKey.currentState;
+    final dio = getIt<Dio>();
 
     if (form.validate() == false) {
       setState(() {
@@ -44,19 +32,20 @@ class _LoginPageComponentState extends State<LoginPageComponent> with Keyboard, 
       return;
     }
 
-    hideKeyboard();
-    startLoading();
-
     form.save();
 
     try {
-//      Application.currentUser =
-//          await _auth.signInWithEmailAndPassword(email: loginModel.email, password: loginModel.password);
+      Keyboard.hideKeyboard();
+      startLoading();
+      final response = await dio.post('/auth/login', data: form.value);
+
+      // Store current [] info
+      final user = User.fromJson(response.data);
 
       Application.router.navigateTo(context, Routes.rooms, clearStack: true);
-    } catch (e) {
+    } on DioError catch (e) {
       Fluttertoast.showToast(
-          msg: "Email or password is incorrect".toUpperCase(),
+          msg: e.response.data['message'].toUpperCase(),
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.BOTTOM,
           timeInSecForIos: 1,
@@ -74,7 +63,7 @@ class _LoginPageComponentState extends State<LoginPageComponent> with Keyboard, 
       key: _scaffoldKey,
       body: GestureDetector(
         onTap: () {
-          hideKeyboard();
+          Keyboard.hideKeyboard();
         },
         child: new LayoutBuilder(
           builder: (BuildContext context, BoxConstraints viewportConstraints) {
@@ -99,11 +88,15 @@ class _LoginPageComponentState extends State<LoginPageComponent> with Keyboard, 
                             child: new Text(
                               'Welcome to your secure chat'.toUpperCase(),
                               textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 22, color: themeData.primaryColor),
+                              style: TextStyle(
+                                  fontSize: 22, color: themeData.primaryColor),
                             ),
                           ),
-                          new Text('Secure communication for the 21st century'.toUpperCase(),
-                              textAlign: TextAlign.center, style: TextStyle(color: Colors.grey[400]))
+                          new Text(
+                              'Secure communication for the 21st century'
+                                  .toUpperCase(),
+                              textAlign: TextAlign.center,
+                              style: TextStyle(color: Colors.grey[400]))
                         ],
                       ),
                     ),
@@ -117,7 +110,10 @@ class _LoginPageComponentState extends State<LoginPageComponent> with Keyboard, 
                                   child: CircularProgressIndicator(),
                                 )
                               : ButtonComponent(
-                                  colors: <Color>[themeData.primaryColor, themeData.primaryColorDark],
+                                  colors: <Color>[
+                                    themeData.primaryColor,
+                                    themeData.primaryColorDark
+                                  ],
                                   onTap: () => _loginHandler(context),
                                   child: Text(
                                     'Sign in'.toUpperCase(),
@@ -128,7 +124,7 @@ class _LoginPageComponentState extends State<LoginPageComponent> with Keyboard, 
                         FlatButton(
                           onPressed: () {
                             Application.router
-                                .navigateTo(context, Routes.register, transition: TransitionType.nativeModal);
+                                .navigateTo(context, Routes.register);
                           },
                           child: Text(
                             'sign up for an account'.toUpperCase(),
@@ -152,56 +148,28 @@ class _LoginPageComponentState extends State<LoginPageComponent> with Keyboard, 
   }
 
   _buildForm(context) {
-    const textFieldLabelStyle = const TextStyle(letterSpacing: 2);
-
-    return Form(
-      key: _formKey,
+    return FormBuilder(
+      key: _fbKey,
       autovalidate: autoValidate,
       child: Column(
         children: <Widget>[
-          TextFormField(
+          FormBuilderTextField(
+              attribute: 'email',
               keyboardType: TextInputType.emailAddress,
-              maxLines: 1,
               textInputAction: TextInputAction.next,
-              focusNode: _emailFocus,
-              onFieldSubmitted: (_) {
-                _emailFocus.unfocus();
-                print(_passwordFocus.hasFocus);
-                FocusScope.of(context).requestFocus(_passwordFocus);
-              },
-              validator: (String value) {
-                if (value.isEmpty) {
-                  return 'please fill the field'.toUpperCase();
-                }
-                if (!Validators.isValidEmail(value)) {
-                  return 'please fill a valid email address'.toUpperCase();
-                }
-              },
-              onSaved: (email) {
-                loginModel.email = email;
-              },
-              decoration: InputDecoration(labelText: 'email'.toUpperCase(), labelStyle: textFieldLabelStyle)),
-          TextFormField(
-            maxLines: 1,
-            focusNode: _passwordFocus,
-            onFieldSubmitted: (_) {
-              _passwordFocus.unfocus();
-
-              _loginHandler(context);
-            },
-            validator: (String value) {
-              if (value.isEmpty) {
-                return 'please fill the field'.toUpperCase();
-              }
-              if (value.length < 6) {
-                return 'field must be more then 6 symbols'.toUpperCase();
-              }
-            },
-            onSaved: (password) {
-              loginModel.password = password;
-            },
-            decoration: InputDecoration(labelText: 'password'.toUpperCase(), labelStyle: textFieldLabelStyle),
+              validators: [
+                FormBuilderValidators.email(),
+                FormBuilderValidators.required(),
+              ],
+              decoration: InputDecoration(labelText: 'email'.toUpperCase())),
+          FormBuilderTextField(
+            attribute: 'password',
+            decoration: InputDecoration(labelText: 'password'.toUpperCase()),
             obscureText: true,
+            validators: [
+              FormBuilderValidators.minLength(6),
+              FormBuilderValidators.required(),
+            ],
           ),
         ],
       ),
