@@ -21,27 +21,27 @@ class Routes {
   static String singleRoom = "/rooms/:id";
 
   static void configureRoutes(Router router) {
-    router.notFoundHandler = new Handler(
+    router.notFoundHandler = Handler(
         handlerFunc: (BuildContext context, Map<String, List<String>> params) {
             return Scaffold(body: Center(child: Text('Not found'),),);
     });
 
-    router.define(login, handler: new Handler(
+    router.define(login, handler: Handler(
         handlerFunc: (BuildContext context, Map<String, List<String>> params) {
           return LoginPageComponent();
         }));
 
-    router.define(register, handler: new Handler(
+    router.define(register, handler: Handler(
         handlerFunc: (BuildContext context, Map<String, List<String>> params) {
           return RegisterPageComponent();
         }));
 
-    router.define(rooms, handler: new Handler(
+    router.define(rooms, handler: Handler(
         handlerFunc: (BuildContext context, Map<String, List<String>> params) {
           return RoomsPageComponent();
         }));
 
-    router.define(singleRoom, handler: new Handler(
+    router.define(singleRoom, handler: Handler(
         handlerFunc: (BuildContext context, Map<String, List<String>> params) {
           return ChatPageComponent(roomId: params['id'][0],);
         }));

@@ -54,7 +54,8 @@ class _ChatPageComponentState extends State<ChatPageComponent>
 
   getImage(ImageSource imageSource) => () async {
         File image = await ImagePicker.pickImage(source: imageSource);
-        final String displayName = Application.currentUser.displayName;
+//        final String displayName = Application.currentUser.displayName;
+        final String displayName = 'displayName';
 
         if (image != null) {
           ChatMessage message = new ChatMessage(
@@ -132,7 +133,7 @@ class _ChatPageComponentState extends State<ChatPageComponent>
       return;
     }
     _textController.clear();
-    final displayName = Application.currentUser.displayName;
+    final displayName = 'displayName';
 
     ChatMessage message = new ChatMessage(
       text: text,

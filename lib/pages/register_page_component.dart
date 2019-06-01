@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -33,7 +32,7 @@ class _RegisterPageComponentState extends State<RegisterPageComponent> {
   final _passwordFocus = FocusNode();
 
   final registerModel = NewRegisterModel();
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+//  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   bool autoValidate = false;
 
@@ -50,10 +49,10 @@ class _RegisterPageComponentState extends State<RegisterPageComponent> {
     form.save();
 
     try {
-      FirebaseUser user =
-          await _auth.createUserWithEmailAndPassword(email: registerModel.email, password: registerModel.password);
-      UserUpdateInfo userUpdateInfo = UserUpdateInfo()..displayName = registerModel.displayName;
-      await user.updateProfile(userUpdateInfo);
+//      FirebaseUser user =
+//          await _auth.createUserWithEmailAndPassword(email: registerModel.email, password: registerModel.password);
+//      UserUpdateInfo userUpdateInfo = UserUpdateInfo()..displayName = registerModel.displayName;
+//      await user.updateProfile(userUpdateInfo);
 
       Fluttertoast.showToast(
           msg: "you have successfully registered.".toUpperCase(),
@@ -63,7 +62,7 @@ class _RegisterPageComponentState extends State<RegisterPageComponent> {
           backgroundColor: Colors.green,
           textColor: Colors.white);
 
-      Application.currentUser = user;
+//      Application.currentUser = user;
 
       Application.router.navigateTo(context, Routes.rooms, clearStack: true);
     } catch (e) {

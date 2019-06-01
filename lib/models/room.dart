@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+//import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class Room {
@@ -6,19 +6,18 @@ class Room {
   String name;
   String owner;
   DateTime createdAt;
-  DocumentReference reference;
+//  DocumentReference reference;
 
-  Room({@required this.key, @required this.name, this.createdAt, this.owner, this.reference});
+  Room({@required this.key, @required this.name, this.createdAt, this.owner});
 
   factory Room.fromMap(Map<String, dynamic> json, reference) {
     return Room(
         key: json['key'],
         name: json['name'],
-        reference: reference,
         createdAt: json['createdAt'] != null ? DateTime.parse(json['createdAt'] as String) : null);
   }
 
-  factory Room.fromSnapshot(DocumentSnapshot snapshot) => Room.fromMap(snapshot.data, snapshot.reference);
+//  factory Room.fromSnapshot(DocumentSnapshot snapshot) => Room.fromMap(snapshot.data, snapshot.reference);
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
@@ -31,6 +30,6 @@ class Room {
 
   @override
   String toString() {
-    return 'Room{key: $key, name: $name, owner: $owner, createdAt: $createdAt, reference: $reference}';
+    return 'Room{key: $key, name: $name, owner: $owner, createdAt: $createdAt}';
   }
 }

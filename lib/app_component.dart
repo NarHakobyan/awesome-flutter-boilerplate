@@ -2,7 +2,7 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 
 import 'package:secure_chat/config/application.dart';
-import 'package:secure_chat/routes.dart';
+import './routes.dart';
 
 class AppComponent extends StatefulWidget {
   @override

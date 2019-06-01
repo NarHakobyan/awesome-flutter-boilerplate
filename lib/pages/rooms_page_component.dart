@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -46,7 +45,7 @@ class _RoomsPageComponentState extends State<RoomsPageComponent> {
 
   Widget _buildBody(BuildContext context) {
     return Column(
-      children: <Widget>[_buildSearchBar(context), Expanded(child: _buildChannelList(context))],
+      children: <Widget>[_buildSearchBar(context), /*Expanded(child: _buildChannelList(context))*/],
     );
   }
 
@@ -67,42 +66,42 @@ class _RoomsPageComponentState extends State<RoomsPageComponent> {
     );
   }
 
-  Widget _buildChannelList(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-      stream: Firestore.instance.collection('rooms').where('owner', isEqualTo: Application.currentUser.uid).snapshots(),
-      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        if (!snapshot.hasData) return LinearProgressIndicator();
+//  Widget _buildChannelList(BuildContext context) {
+//    return StreamBuilder<QuerySnapshot>(
+//      stream: Firestore.instance.collection('rooms').where('owner', isEqualTo: Application.currentUser.uid).snapshots(),
+//      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+//        if (!snapshot.hasData) return LinearProgressIndicator();
+//
+//        return _buildList(context, snapshot.data.documents);
+//      },
+//    );
+//  }
 
-        return _buildList(context, snapshot.data.documents);
-      },
-    );
-  }
+//  Widget _buildList(BuildContext context, List<DocumentSnapshot> snapshot) {
+//    return ListView.separated(
+//      itemCount: snapshot.length,
+//      itemBuilder: (BuildContext context, int index) => _buildListItem(context, snapshot[index]),
+//      separatorBuilder: (BuildContext context, int index) => Divider(
+//            height: 1,
+//          ),
+//    );
+//  }
 
-  Widget _buildList(BuildContext context, List<DocumentSnapshot> snapshot) {
-    return ListView.separated(
-      itemCount: snapshot.length,
-      itemBuilder: (BuildContext context, int index) => _buildListItem(context, snapshot[index]),
-      separatorBuilder: (BuildContext context, int index) => Divider(
-            height: 1,
-          ),
-    );
-  }
-
-  Widget _buildListItem(BuildContext context, DocumentSnapshot data) {
-    final record = Room.fromSnapshot(data);
-    return ListTile(
-      leading: CircleAvatar(
-        child: Icon(Icons.supervised_user_circle),
-      ),
-      key: ValueKey(record.name),
-      title: Text(record.name, style: TextStyle(fontWeight: FontWeight.bold),),
-      subtitle: Text(
-        record.key,
-        style: TextStyle(color: Colors.grey[400]),
-      ),
-      onTap: () => Application.router.navigateTo(context, '/rooms/${record.key}'),
-    );
-  }
+//  Widget _buildListItem(BuildContext context, DocumentSnapshot data) {
+//    final record = Room.fromSnapshot(data);
+//    return ListTile(
+//      leading: CircleAvatar(
+//        child: Icon(Icons.supervised_user_circle),
+//      ),
+//      key: ValueKey(record.name),
+//      title: Text(record.name, style: TextStyle(fontWeight: FontWeight.bold),),
+//      subtitle: Text(
+//        record.key,
+//        style: TextStyle(color: Colors.grey[400]),
+//      ),
+//      onTap: () => Application.router.navigateTo(context, '/rooms/${record.key}'),
+//    );
+//  }
 
   Future<void> _connectChannelDialog(BuildContext context) async {
     final _channelFieldKey = GlobalKey<FormFieldState>();
@@ -144,19 +143,19 @@ class _RoomsPageComponentState extends State<RoomsPageComponent> {
       return;
     }
 
-    final QuerySnapshot room =
-        await Firestore.instance.collection('rooms').where('key', isEqualTo: channelKey).getDocuments();
+//    final QuerySnapshot room =
+//        await Firestore.instance.collection('rooms').where('key', isEqualTo: channelKey).getDocuments();
 
-    if (room.documents.isEmpty) {
-      Fluttertoast.showToast(
-          msg: "Channel not found".toUpperCase(),
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIos: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white);
-      return;
-    }
+//    if (room.documents.isEmpty) {
+//      Fluttertoast.showToast(
+//          msg: "Channel not found".toUpperCase(),
+//          toastLength: Toast.LENGTH_SHORT,
+//          gravity: ToastGravity.BOTTOM,
+//          timeInSecForIos: 1,
+//          backgroundColor: Colors.red,
+//          textColor: Colors.white);
+//      return;
+//    }
 
     Application.router.navigateTo(context, '/rooms/$channelKey');
   }
@@ -223,12 +222,12 @@ class _RoomsPageComponentState extends State<RoomsPageComponent> {
 
   _createChannel(String channelName) async {
     String channelKey = _generateRandomKey();
-
-    Room room = Room(key: channelKey, owner: Application.currentUser.uid, name: channelName, createdAt: DateTime.now());
-
-    DocumentReference documentReference = await Firestore.instance.collection('rooms').add(room.toJson());
-
-    room.reference = documentReference;
+//
+//    Room room = Room(key: channelKey, owner: Application.currentUser.uid, name: channelName, createdAt: DateTime.now());
+//
+//    DocumentReference documentReference = await Firestore.instance.collection('rooms').add(room.toJson());
+//
+//    room.reference = documentReference;
 
     return channelKey;
   }

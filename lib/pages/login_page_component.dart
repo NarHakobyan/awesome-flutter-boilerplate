@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -33,7 +32,7 @@ class _LoginPageComponentState extends State<LoginPageComponent> with Keyboard, 
   bool autoValidate = false;
 
   final loginModel = NewLoginModel();
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+//  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   _loginHandler(context) async {
     final FormState form = _formKey.currentState;
@@ -51,8 +50,8 @@ class _LoginPageComponentState extends State<LoginPageComponent> with Keyboard, 
     form.save();
 
     try {
-      Application.currentUser =
-          await _auth.signInWithEmailAndPassword(email: loginModel.email, password: loginModel.password);
+//      Application.currentUser =
+//          await _auth.signInWithEmailAndPassword(email: loginModel.email, password: loginModel.password);
 
       Application.router.navigateTo(context, Routes.rooms, clearStack: true);
     } catch (e) {
