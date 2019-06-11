@@ -1,5 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:secure_chat/config/application.dart';
+import 'package:secure_chat/constants/preferences.dart';
+import 'package:secure_chat/data/local/app_database.dart';
+import 'package:secure_chat/data/local/datasources/post/post_datasource.dart';
+import 'package:secure_chat/helpers/shared_preference_helper.dart';
+import 'package:secure_chat/store/auth/auth_store.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 GetIt getIt = new GetIt();
 
@@ -9,26 +16,33 @@ void registerGetIt() {
       baseUrl: "http://localhost:3000",
       connectTimeout: 5000,
       receiveTimeout: 3000,
+      headers: {'Content-Type': 'application/json; charset=utf-8'},
     );
 
-    final Dio dio = Dio(options);
+    final Dio dio = Dio(options)
+      ..interceptors.addAll([
+        LogInterceptor(responseBody: true, error: true),
+        InterceptorsWrapper(onRequest: (RequestOptions options) async {
+          // getting shared pref instance
+          var prefs = await SharedPreferences.getInstance();
 
-    dio.interceptors
-        .add(InterceptorsWrapper(onRequest: (RequestOptions options) {
-      // Do something before request is sent
-      return options; //continue
-      // If you want to resolve the request with some custom data，
-      // you can return a `Response` object or return `dio.resolve(data)`.
-      // If you want to reject the request with a error message,
-      // you can return a `DioError` object or return `dio.reject(errMsg)`
-    }, onResponse: (Response response) {
-      // Do something with response data
-      return response; // continue
-    }, onError: (DioError e) {
-      // Do something with response error
-      return e; //continue
-    }));
+          // getting token
+          var token = prefs.getString(Preferences.auth_token);
+
+          if (token != null) {
+            options.headers.putIfAbsent('Authorization', () => token);
+          } else {
+            print('Auth token is null');
+          }
+        })
+      ]);
 
     return dio;
   });
+
+  getIt.registerSingleton(Application());
+  getIt.registerSingleton(AppDatabase());
+  getIt.registerSingleton(SharedPreferenceHelper());
+  getIt.registerSingleton(PostDataSource());
+  getIt.registerSingleton(AuthStore());
 }

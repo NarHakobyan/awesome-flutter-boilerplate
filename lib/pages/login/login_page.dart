@@ -8,24 +8,27 @@ import 'package:secure_chat/providers/get_it.dart';
 import 'package:secure_chat/models/user/user.dart';
 import 'package:secure_chat/config/application.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:secure_chat/components/button_component.dart';
+import 'package:secure_chat/widget/button_component.dart';
+import 'package:secure_chat/store/auth/auth_store.dart';
 
-class LoginPageComponent extends StatefulWidget {
+final application = getIt<Application>();
+
+class LoginPage extends StatefulWidget {
   @override
-  _LoginPageComponentState createState() => _LoginPageComponentState();
+  _LoginPageState createState() => _LoginPageState();
 }
 
-class _LoginPageComponentState extends State<LoginPageComponent>
-    with Loading<LoginPageComponent> {
+class _LoginPageState extends State<LoginPage> with Loading<LoginPage> {
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   bool autoValidate = false;
+  final authState = getIt<AuthStore>();
+  final dio = getIt<Dio>();
 
   _loginHandler(context) async {
     final form = _fbKey.currentState;
-    final dio = getIt<Dio>();
 
-    if (form.validate() == false) {
+    if (!form.validate()) {
       setState(() {
         autoValidate = true;
       });
@@ -37,12 +40,14 @@ class _LoginPageComponentState extends State<LoginPageComponent>
     try {
       Keyboard.hideKeyboard();
       startLoading();
-      final response = await dio.post('/auth/login', data: form.value);
+//      final response = await dio.post('/auth/login', data: form.value);
 
       // Store current [] info
-      final user = User.fromJson(response.data);
+//      final user = User.fromJson(response.data['user']);
 
-      Application.router.navigateTo(context, Routes.rooms, clearStack: true);
+      authState.setCurrentUser(User(firstName: 'Narek', lastName: 'Hakobyan'));
+
+      application.router.navigateTo(context, Routes.rooms, clearStack: true);
     } on DioError catch (e) {
       Fluttertoast.showToast(
           msg: e.response.data['message'].toUpperCase(),
@@ -65,12 +70,12 @@ class _LoginPageComponentState extends State<LoginPageComponent>
         onTap: () {
           Keyboard.hideKeyboard();
         },
-        child: new LayoutBuilder(
+        child: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints viewportConstraints) {
             return SingleChildScrollView(
               padding: EdgeInsets.symmetric(horizontal: 30),
-              child: new ConstrainedBox(
-                constraints: new BoxConstraints(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
                   minHeight: viewportConstraints.maxHeight,
                 ),
                 child: Column(
@@ -80,19 +85,19 @@ class _LoginPageComponentState extends State<LoginPageComponent>
                   children: <Widget>[
                     Padding(
                       padding: const EdgeInsets.only(top: 40),
-                      child: new Column(
+                      child: Column(
                         children: <Widget>[
                           FlutterLogo(size: 100),
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 30),
-                            child: new Text(
+                            child: Text(
                               'Welcome to your secure chat'.toUpperCase(),
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   fontSize: 22, color: themeData.primaryColor),
                             ),
                           ),
-                          new Text(
+                          Text(
                               'Secure communication for the 21st century'
                                   .toUpperCase(),
                               textAlign: TextAlign.center,
@@ -101,9 +106,9 @@ class _LoginPageComponentState extends State<LoginPageComponent>
                       ),
                     ),
                     _buildForm(context),
-                    new Column(
+                    Column(
                       children: <Widget>[
-                        new Padding(
+                        Padding(
                           padding: EdgeInsets.symmetric(vertical: 10),
                           child: isLoading
                               ? Center(
@@ -123,7 +128,7 @@ class _LoginPageComponentState extends State<LoginPageComponent>
                         ),
                         FlatButton(
                           onPressed: () {
-                            Application.router
+                            application.router
                                 .navigateTo(context, Routes.register);
                           },
                           child: Text(

@@ -3,22 +3,23 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:secure_chat/components/button_component.dart';
+import 'package:secure_chat/widget/button_component.dart';
 import 'package:secure_chat/config/application.dart';
 import 'package:secure_chat/mixins/keyboard.dart';
 import 'package:secure_chat/models/user/user.dart';
 import 'package:secure_chat/providers/get_it.dart';
 import 'package:secure_chat/routes.dart';
 
-class RegisterPageComponent extends StatefulWidget {
+class RegisterPage extends StatefulWidget {
   @override
-  _RegisterPageComponentState createState() => _RegisterPageComponentState();
+  _RegisterPageState createState() => _RegisterPageState();
 }
 
-class _RegisterPageComponentState extends State<RegisterPageComponent> {
+class _RegisterPageState extends State<RegisterPage> {
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   bool autovalidate = false;
+  final application = getIt<Application>();
 
   _registerHandler() async {
     final dio = getIt<Dio>();
@@ -49,7 +50,7 @@ class _RegisterPageComponentState extends State<RegisterPageComponent> {
           backgroundColor: Colors.green,
           textColor: Colors.white);
 
-      Application.router.navigateTo(context, Routes.rooms, clearStack: true);
+      application.router.navigateTo(context, Routes.rooms, clearStack: true);
     } on DioError catch (e) {
       if (e.response.statusCode == 409) {
         Fluttertoast.showToast(
@@ -111,7 +112,7 @@ class _RegisterPageComponentState extends State<RegisterPageComponent> {
                         ),
                         FlatButton(
                           onPressed: () {
-                            Application.router.navigateTo(context, Routes.login,
+                            application.router.navigateTo(context, Routes.login,
                                 clearStack: true,
                                 transition: TransitionType.nativeModal);
                           },

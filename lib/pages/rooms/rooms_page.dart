@@ -3,24 +3,27 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:secure_chat/config/application.dart';
-import 'package:secure_chat/models/room.dart';
+import 'package:secure_chat/providers/get_it.dart';
+import 'package:secure_chat/store/auth/auth_store.dart';
 
-class RoomsPageComponent extends StatefulWidget {
+class RoomsPage extends StatefulWidget {
   @override
-  _RoomsPageComponentState createState() => _RoomsPageComponentState();
+  _RoomsPageState createState() => _RoomsPageState();
 }
 
-class _RoomsPageComponentState extends State<RoomsPageComponent> {
+class _RoomsPageState extends State<RoomsPage> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+  final authState = getIt<AuthStore>();
+  final application = getIt<Application>();
 
   Widget build(BuildContext context) {
     return new Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
         title: Text(
-          "Channels",
+          'Channels',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
@@ -45,7 +48,21 @@ class _RoomsPageComponentState extends State<RoomsPageComponent> {
 
   Widget _buildBody(BuildContext context) {
     return Column(
-      children: <Widget>[_buildSearchBar(context), /*Expanded(child: _buildChannelList(context))*/],
+      children: <Widget>[
+        _buildSearchBar(context),
+        /*Expanded(child: _buildChannelList(context))*/
+        Observer(
+          builder: (_) => GestureDetector(
+                onTap: () {
+                  authState.changeUserName();
+                },
+                child: Text(
+                  '${authState.currentUser.firstName}',
+                  style: Theme.of(context).textTheme.display1,
+                ),
+              ),
+        ),
+      ],
     );
   }
 
@@ -157,7 +174,7 @@ class _RoomsPageComponentState extends State<RoomsPageComponent> {
 //      return;
 //    }
 
-    Application.router.navigateTo(context, '/rooms/$channelKey');
+    application.router.navigateTo(context, '/rooms/$channelKey');
   }
 
   Future<void> _createChannelDialog(BuildContext context) async {
@@ -231,6 +248,4 @@ class _RoomsPageComponentState extends State<RoomsPageComponent> {
 
     return channelKey;
   }
-
-  _RoomsPageComponentState();
 }

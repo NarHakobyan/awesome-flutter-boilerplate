@@ -1,20 +1,22 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:secure_chat/config/application.dart';
-import 'package:secure_chat/providers/get_it.dart' show registerGetIt;
+import 'package:secure_chat/providers/get_it.dart' show getIt, registerGetIt;
 import 'package:secure_chat/routes.dart';
 
-class AppComponent extends StatefulWidget {
+final application = getIt<Application>();
+
+class App extends StatefulWidget {
   @override
-  _AppComponentState createState() => _AppComponentState();
+  _AppState createState() => _AppState();
 }
 
-class _AppComponentState extends State<AppComponent> {
-  _AppComponentState() {
+class _AppState extends State<App> {
+  _AppState() {
     registerGetIt();
-    final router = new Router();
+    final router = Router();
     Routes.configureRoutes(router);
-    Application.router = router;
+    application.router = router;
   }
 
   @override
@@ -23,7 +25,7 @@ class _AppComponentState extends State<AppComponent> {
       title: 'Secure chat',
       theme:
           ThemeData(primarySwatch: Colors.lightBlue, fontFamily: 'ProximaNova'),
-      onGenerateRoute: Application.router.generator,
+      onGenerateRoute: application.router.generator,
     );
     print("initial route = ${app.initialRoute}");
     return app;
