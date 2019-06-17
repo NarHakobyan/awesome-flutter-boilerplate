@@ -1,8 +1,8 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:secure_chat/constants/preferences.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:secure_chat/data/network/auth/auth_api.dart';
+import 'package:secure_chat/helpers/shared_preference_helper.dart';
+import 'package:secure_chat/providers/get_it.dart';
+import 'package:secure_chat/store/auth/auth_store.dart';
 
 import '../../routes.dart';
 
@@ -12,10 +12,14 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  final authApi = getIt<AuthApi>();
+  final authStore = getIt<AuthStore>();
+  final sharedPreferenceHelper = getIt<SharedPreferenceHelper>();
+
   @override
   void initState() {
     super.initState();
-    startTimer();
+    getAuthUser();
   }
 
   @override
@@ -25,17 +29,20 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 
-  startTimer() {
-    return Timer(Duration(milliseconds: 5000), navigate);
+  getAuthUser() async {
+    final token = await sharedPreferenceHelper.getAuthToken();
+
+    if (token != null && token.isNotEmpty) {
+      final authUser = await authApi.getCurrentUser();
+      authStore.setCurrentUser(authUser);
+    }
+    await navigate();
   }
 
   navigate() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
+    bool isLoggedIn = await sharedPreferenceHelper.isLoggedIn();
 
-    if (preferences.getBool(Preferences.is_logged_in) ?? false) {
-      Navigator.of(context).pushReplacementNamed(Routes.rooms);
-    } else {
-      Navigator.of(context).pushReplacementNamed(Routes.login);
-    }
+    Navigator.of(context)
+        .pushReplacementNamed(isLoggedIn ? Routes.rooms : Routes.login);
   }
 }

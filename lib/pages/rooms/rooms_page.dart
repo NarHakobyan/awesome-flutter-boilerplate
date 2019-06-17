@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:secure_chat/config/application.dart';
 import 'package:secure_chat/providers/get_it.dart';
 import 'package:secure_chat/store/auth/auth_store.dart';
 
@@ -16,7 +16,7 @@ class RoomsPage extends StatefulWidget {
 class _RoomsPageState extends State<RoomsPage> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final authState = getIt<AuthStore>();
-  final application = getIt<Application>();
+  final router = getIt<Router>();
 
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -30,14 +30,10 @@ class _RoomsPageState extends State<RoomsPage> {
         actions: <Widget>[
           IconButton(
               icon: Icon(Icons.chat),
-              onPressed: () {
-                _connectChannelDialog(context);
-              }),
+              onPressed: () => _connectChannelDialog(context)),
           IconButton(
               icon: Icon(Icons.add),
-              onPressed: () {
-                _createChannelDialog(context);
-              })
+              onPressed: () => _createChannelDialog(context))
         ],
         backgroundColor: Colors.white,
         elevation: 0,
@@ -116,7 +112,7 @@ class _RoomsPageState extends State<RoomsPage> {
 //        record.key,
 //        style: TextStyle(color: Colors.grey[400]),
 //      ),
-//      onTap: () => Application.router.navigateTo(context, '/rooms/${record.key}'),
+//      onTap: () => router.navigateTo(context, '/rooms/${record.key}'),
 //    );
 //  }
 
@@ -174,7 +170,7 @@ class _RoomsPageState extends State<RoomsPage> {
 //      return;
 //    }
 
-    application.router.navigateTo(context, '/rooms/$channelKey');
+    router.navigateTo(context, '/rooms/$channelKey');
   }
 
   Future<void> _createChannelDialog(BuildContext context) async {

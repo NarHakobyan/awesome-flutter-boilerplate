@@ -7,8 +7,8 @@ class ErrorStore = _ErrorStore with _$ErrorStore;
 abstract class _ErrorStore with Store {
   // store variables:-----------------------------------------------------------
   @observable
-  String errorMessage;
+  String error;
 
   @observable
-  bool showError = false;
+  bool hasError = false;
 }

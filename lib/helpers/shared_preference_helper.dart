@@ -1,11 +1,12 @@
 import 'dart:async';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:secure_chat/constants/preferences.dart';
 
 class SharedPreferenceHelper {
   // General Methods: ----------------------------------------------------------
-  Future<String> get authToken async {
+  Future<String> getAuthToken() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     return preferences.getString(Preferences.auth_token);
   }
@@ -20,8 +21,15 @@ class SharedPreferenceHelper {
     preferences.remove(Preferences.auth_token);
   }
 
-  Future<bool> get isLoggedIn async {
+  Future<bool> isLoggedIn() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     return preferences.getString(Preferences.auth_token) ?? false;
+  }
+
+  Future<Brightness> getBrightness() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    return (preferences.getBool("isDark") ?? false)
+        ? Brightness.dark
+        : Brightness.light;
   }
 }

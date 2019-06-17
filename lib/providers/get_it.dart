@@ -1,11 +1,15 @@
 import 'package:dio/dio.dart';
+import 'package:fluro/fluro.dart';
 import 'package:get_it/get_it.dart';
 import 'package:secure_chat/config/application.dart';
 import 'package:secure_chat/constants/preferences.dart';
 import 'package:secure_chat/data/local/app_database.dart';
 import 'package:secure_chat/data/local/datasources/post/post_datasource.dart';
+import 'package:secure_chat/data/local/post_repository.dart';
+import 'package:secure_chat/data/network/auth/auth_api.dart';
+import 'package:secure_chat/data/network/post/post_api.dart';
 import 'package:secure_chat/helpers/shared_preference_helper.dart';
-import 'package:secure_chat/store/auth/auth_store.dart';
+import 'package:secure_chat/routes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 GetIt getIt = new GetIt();
@@ -40,9 +44,26 @@ void registerGetIt() {
     return dio;
   });
 
+  getIt.registerLazySingleton<Router>(() {
+    final router = Router();
+    Routes.configureRoutes(router);
+
+    return router;
+  });
+
   getIt.registerSingleton(Application());
   getIt.registerSingleton(AppDatabase());
   getIt.registerSingleton(SharedPreferenceHelper());
   getIt.registerSingleton(PostDataSource());
-  getIt.registerSingleton(AuthStore());
+  registerPostApi();
+  registerAuthApi();
+}
+
+void registerPostApi() {
+  getIt.registerSingleton(PostApi());
+  getIt.registerSingleton(PostRepository());
+}
+
+void registerAuthApi() {
+  getIt.registerSingleton(AuthApi());
 }

@@ -25,36 +25,6 @@ mixin _$PostStore on _PostStore, Store {
     _$postsListAtom.reportChanged();
   }
 
-  final _$successAtom = Atom(name: '_PostStore.success');
-
-  @override
-  bool get success {
-    _$successAtom.reportObserved();
-    return super.success;
-  }
-
-  @override
-  set success(bool value) {
-    _$successAtom.context.checkIfStateModificationsAreAllowed(_$successAtom);
-    super.success = value;
-    _$successAtom.reportChanged();
-  }
-
-  final _$loadingAtom = Atom(name: '_PostStore.loading');
-
-  @override
-  bool get loading {
-    _$loadingAtom.reportObserved();
-    return super.loading;
-  }
-
-  @override
-  set loading(bool value) {
-    _$loadingAtom.context.checkIfStateModificationsAreAllowed(_$loadingAtom);
-    super.loading = value;
-    _$loadingAtom.reportChanged();
-  }
-
   final _$getPostsAsyncAction = AsyncAction('getPosts');
 
   @override

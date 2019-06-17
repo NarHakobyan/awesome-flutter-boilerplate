@@ -19,7 +19,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   bool autovalidate = false;
-  final application = getIt<Application>();
+  final router = getIt<Router>();
 
   _registerHandler() async {
     final dio = getIt<Dio>();
@@ -50,7 +50,7 @@ class _RegisterPageState extends State<RegisterPage> {
           backgroundColor: Colors.green,
           textColor: Colors.white);
 
-      application.router.navigateTo(context, Routes.rooms, clearStack: true);
+      router.navigateTo(context, Routes.rooms, clearStack: true);
     } on DioError catch (e) {
       if (e.response.statusCode == 409) {
         Fluttertoast.showToast(
@@ -112,7 +112,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                         FlatButton(
                           onPressed: () {
-                            application.router.navigateTo(context, Routes.login,
+                            router.navigateTo(context, Routes.login,
                                 clearStack: true,
                                 transition: TransitionType.nativeModal);
                           },

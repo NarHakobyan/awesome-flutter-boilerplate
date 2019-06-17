@@ -126,12 +126,12 @@ abstract class _FormStore with Store {
     Future.delayed(Duration(milliseconds: 2000)).then((future) {
       loading = false;
       success = true;
-      errorStore.showError = false;
+      errorStore.hasError = false;
     }).catchError((e) {
       loading = false;
       success = false;
-      errorStore.showError = true;
-      errorStore.errorMessage = e.toString().contains("ERROR_USER_NOT_FOUND")
+      errorStore.hasError = true;
+      errorStore.error = e.toString().contains("ERROR_USER_NOT_FOUND")
           ? "Username and password doesn't match"
           : "Something went wrong, please check your internet connection and try again";
       print(e);

@@ -1,17 +1,15 @@
 import 'package:dio/dio.dart';
+import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
-import 'package:secure_chat/routes.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:secure_chat/mixins/Loading.dart';
 import 'package:secure_chat/mixins/keyboard.dart';
-import 'package:secure_chat/providers/get_it.dart';
 import 'package:secure_chat/models/user/user.dart';
-import 'package:secure_chat/config/application.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:secure_chat/widget/button_component.dart';
+import 'package:secure_chat/providers/get_it.dart';
+import 'package:secure_chat/routes.dart';
 import 'package:secure_chat/store/auth/auth_store.dart';
-
-final application = getIt<Application>();
+import 'package:secure_chat/widget/button_component.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -24,6 +22,7 @@ class _LoginPageState extends State<LoginPage> with Loading<LoginPage> {
   bool autoValidate = false;
   final authState = getIt<AuthStore>();
   final dio = getIt<Dio>();
+  final router = getIt<Router>();
 
   _loginHandler(context) async {
     final form = _fbKey.currentState;
@@ -47,7 +46,7 @@ class _LoginPageState extends State<LoginPage> with Loading<LoginPage> {
 
       authState.setCurrentUser(User(firstName: 'Narek', lastName: 'Hakobyan'));
 
-      application.router.navigateTo(context, Routes.rooms, clearStack: true);
+      router.navigateTo(context, Routes.rooms, clearStack: true);
     } on DioError catch (e) {
       Fluttertoast.showToast(
           msg: e.response.data['message'].toUpperCase(),
@@ -128,8 +127,7 @@ class _LoginPageState extends State<LoginPage> with Loading<LoginPage> {
                         ),
                         FlatButton(
                           onPressed: () {
-                            application.router
-                                .navigateTo(context, Routes.register);
+                            router.navigateTo(context, Routes.register);
                           },
                           child: Text(
                             'sign up for an account'.toUpperCase(),
