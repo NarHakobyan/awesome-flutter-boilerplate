@@ -63,4 +63,3 @@ dependencies {
 configurations {
     all*.exclude group: 'com.google.guava', module: 'listenablefuture'
 }
-apply plugin: 'com.google.gms.google-services'
