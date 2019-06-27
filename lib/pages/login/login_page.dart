@@ -3,8 +3,8 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:secure_chat/mixins/Loading.dart';
-import 'package:secure_chat/mixins/keyboard.dart';
+import 'package:secure_chat/mixins/loading_mixin.dart';
+import 'package:secure_chat/utils/keyboard.dart';
 import 'package:secure_chat/models/user/user.dart';
 import 'package:secure_chat/providers/get_it.dart';
 import 'package:secure_chat/routes.dart';
@@ -16,7 +16,7 @@ class LoginPage extends StatefulWidget {
   _LoginPageState createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> with Loading<LoginPage> {
+class _LoginPageState extends State<LoginPage> with LoadingMixin<LoginPage> {
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   bool autoValidate = false;
@@ -37,12 +37,8 @@ class _LoginPageState extends State<LoginPage> with Loading<LoginPage> {
     form.save();
 
     try {
-      Keyboard.hideKeyboard();
+      KeyboardUtil.hideKeyboard();
       startLoading();
-//      final response = await dio.post('/auth/login', data: form.value);
-
-      // Store current [] info
-//      final user = User.fromJson(response.data['user']);
 
       authState.setCurrentUser(User(firstName: 'Narek', lastName: 'Hakobyan'));
 
@@ -67,7 +63,7 @@ class _LoginPageState extends State<LoginPage> with Loading<LoginPage> {
       key: _scaffoldKey,
       body: GestureDetector(
         onTap: () {
-          Keyboard.hideKeyboard();
+          KeyboardUtil.hideKeyboard();
         },
         child: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints viewportConstraints) {

@@ -1,6 +1,6 @@
 import 'package:flutter/services.dart';
 
-class Keyboard {
+class KeyboardUtil {
   static hideKeyboard() {
     SystemChannels.textInput.invokeMethod('TextInput.hide');
   }

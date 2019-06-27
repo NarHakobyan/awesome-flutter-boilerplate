@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:secure_chat/widget/button_component.dart';
-import 'package:secure_chat/config/application.dart';
-import 'package:secure_chat/mixins/keyboard.dart';
+import 'package:secure_chat/utils/keyboard.dart';
 import 'package:secure_chat/models/user/user.dart';
 import 'package:secure_chat/providers/get_it.dart';
 import 'package:secure_chat/routes.dart';
@@ -74,7 +73,7 @@ class _RegisterPageState extends State<RegisterPage> {
       key: _scaffoldKey,
       body: GestureDetector(
         onTap: () {
-          Keyboard.hideKeyboard();
+          KeyboardUtil.hideKeyboard();
         },
         child: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints viewportConstraints) {

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:fluro/fluro.dart';
 import 'package:get_it/get_it.dart';
@@ -34,7 +36,8 @@ void registerGetIt() {
           var token = prefs.getString(Preferences.auth_token);
 
           if (token != null) {
-            options.headers.putIfAbsent('Authorization', () => token);
+            options.headers
+                .putIfAbsent(HttpHeaders.authorizationHeader, () => token);
           } else {
             print('Auth token is null');
           }
