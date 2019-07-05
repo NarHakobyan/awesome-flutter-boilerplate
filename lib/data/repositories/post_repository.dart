@@ -1,27 +1,25 @@
 import 'dart:async';
 
-import 'package:sembast/sembast.dart';
-
-import 'package:secure_chat/data/local/datasources/post/post_datasource.dart';
-import 'package:secure_chat/data/network/post/post_api.dart';
-import 'package:secure_chat/helpers/shared_preference_helper.dart';
+import 'package:dio/dio.dart';
 import 'package:secure_chat/constants/db_constants.dart';
+import 'package:secure_chat/data/datasources/post/post_datasource.dart';
 import 'package:secure_chat/models/post/post.dart';
 import 'package:secure_chat/models/post_list/post_list.dart';
 import 'package:secure_chat/providers/get_it.dart';
+import 'package:sembast/sembast.dart';
+
 
 class PostRepository {
   // database object
   final _postDataSource = getIt<PostDataSource>();
-
-  // api objects
-  final _postApi = getIt<PostApi>();
-
-  // shared pref object
-  final _sharedPrefsHelper = getIt<SharedPreferenceHelper>();
+  final _dioClient = getIt<Dio>();
 
   // Post: ---------------------------------------------------------------------
-  Future<PostsList> getPosts() => _postApi.getPosts();
+  Future<PostsList> getPosts() {
+    return _dioClient
+        .get<dynamic>('/posts')
+        .then((res) => PostsList.fromJson(res.data));
+  }
 
   Future<List<Post>> findPostById(int id) {
     //creating filter

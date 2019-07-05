@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:secure_chat/data/network/auth/auth_api.dart';
+import 'package:secure_chat/data/repositories/auth_repository.dart';
 import 'package:secure_chat/helpers/shared_preference_helper.dart';
 import 'package:secure_chat/providers/get_it.dart';
 import 'package:secure_chat/store/auth/auth_store.dart';
@@ -12,9 +12,8 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  final authApi = getIt<AuthApi>();
+  final authRepository = getIt<AuthRepository>();
   final authStore = getIt<AuthStore>();
-  final sharedPreferenceHelper = getIt<SharedPreferenceHelper>();
 
   @override
   void initState() {
@@ -30,17 +29,17 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   getAuthUser() async {
-    final token = await sharedPreferenceHelper.getAuthToken();
+    final token = await SharedPreferenceHelper.getAuthToken();
 
     if (token != null && token.isNotEmpty) {
-      final authUser = await authApi.getCurrentUser();
+      final authUser = await authRepository.getCurrentUser();
       authStore.setCurrentUser(authUser);
     }
     await navigate();
   }
 
   navigate() async {
-    bool isLoggedIn = await sharedPreferenceHelper.isLoggedIn();
+    bool isLoggedIn = await SharedPreferenceHelper.isLoggedIn();
 
     Navigator.of(context)
         .pushReplacementNamed(isLoggedIn ? Routes.rooms : Routes.login);

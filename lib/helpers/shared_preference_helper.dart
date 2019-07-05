@@ -6,27 +6,27 @@ import 'package:secure_chat/constants/preferences.dart';
 
 class SharedPreferenceHelper {
   // General Methods: ----------------------------------------------------------
-  Future<String> getAuthToken() async {
+  static Future<String> getAuthToken() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     return preferences.getString(Preferences.auth_token);
   }
 
-  Future<void> saveAuthToken(String authToken) async {
+  static Future<void> saveAuthToken(String authToken) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     preferences.setString(Preferences.auth_token, authToken);
   }
 
-  Future<void> removeAuthToken() async {
+  static Future<void> removeAuthToken() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     preferences.remove(Preferences.auth_token);
   }
 
-  Future<bool> isLoggedIn() async {
+  static Future<bool> isLoggedIn() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     return preferences.getString(Preferences.auth_token) ?? false;
   }
 
-  Future<Brightness> getBrightness() async {
+  static Future<Brightness> getBrightness() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     return (preferences.getBool("isDark") ?? false)
         ? Brightness.dark

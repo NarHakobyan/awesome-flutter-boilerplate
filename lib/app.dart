@@ -2,7 +2,6 @@ import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:secure_chat/constants/strings.dart';
-import 'package:secure_chat/helpers/shared_preference_helper.dart';
 import 'package:secure_chat/pages/splash/splash.dart';
 import 'package:secure_chat/providers/get_it.dart' show getIt, registerGetIt;
 
@@ -17,7 +16,6 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final router = getIt<Router>();
-  final sharedPreferenceHelper = getIt<SharedPreferenceHelper>();
 
   @override
   Widget build(BuildContext context) {

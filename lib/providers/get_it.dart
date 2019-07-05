@@ -5,12 +5,9 @@ import 'package:fluro/fluro.dart';
 import 'package:get_it/get_it.dart';
 import 'package:secure_chat/config/application.dart';
 import 'package:secure_chat/constants/preferences.dart';
-import 'package:secure_chat/data/local/app_database.dart';
-import 'package:secure_chat/data/local/datasources/post/post_datasource.dart';
-import 'package:secure_chat/data/local/post_repository.dart';
-import 'package:secure_chat/data/network/auth/auth_api.dart';
-import 'package:secure_chat/data/network/post/post_api.dart';
-import 'package:secure_chat/helpers/shared_preference_helper.dart';
+import 'package:secure_chat/data/app_database.dart';
+import 'package:secure_chat/data/repositories/auth_repository.dart';
+import 'package:secure_chat/data/repositories/post_repository.dart';
 import 'package:secure_chat/routes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -35,7 +32,7 @@ void registerGetIt() {
           // getting token
           var token = prefs.getString(Preferences.auth_token);
 
-          if (token != null) {
+          if (token != null && token.isNotEmpty) {
             options.headers
                 .putIfAbsent(HttpHeaders.authorizationHeader, () => token);
           } else {
@@ -56,17 +53,8 @@ void registerGetIt() {
 
   getIt.registerSingleton(Application());
   getIt.registerSingleton(AppDatabase());
-  getIt.registerSingleton(SharedPreferenceHelper());
-  getIt.registerSingleton(PostDataSource());
-  registerPostApi();
-  registerAuthApi();
-}
 
-void registerPostApi() {
-  getIt.registerSingleton(PostApi());
+  // Repositories
   getIt.registerSingleton(PostRepository());
-}
-
-void registerAuthApi() {
-  getIt.registerSingleton(AuthApi());
+  getIt.registerSingleton(AuthRepository());
 }

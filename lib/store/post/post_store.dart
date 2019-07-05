@@ -1,5 +1,5 @@
 import 'package:mobx/mobx.dart';
-import 'package:secure_chat/data/local/post_repository.dart';
+import 'package:secure_chat/data/repositories/post_repository.dart';
 import 'package:secure_chat/models/post_list/post_list.dart';
 import 'package:secure_chat/providers/get_it.dart';
 import 'package:secure_chat/store/error/error_store.dart';

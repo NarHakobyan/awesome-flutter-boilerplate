@@ -9,8 +9,7 @@ void main() async {
   registerGetIt();
   registerStoreGetIt();
 
-  final sharedPreferenceHelper = getIt<SharedPreferenceHelper>();
-  final brightness = await sharedPreferenceHelper.getBrightness();
+  final brightness = await SharedPreferenceHelper.getBrightness();
 
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,

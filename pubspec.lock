@@ -99,22 +99,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.2"
-  chopper:
-    dependency: "direct main"
-    description:
-      name: chopper
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.4.1"
-  chopper_generator:
-    dependency: "direct dev"
-    description:
-      path: chopper_generator
-      ref: HEAD
-      resolved-ref: "376618ac41b8fe90d1d1cf3886b800f73d38c954"
-      url: "https://github.com/NarHakobyan/chopper"
-    source: git
-    version: "2.4.1"
   code_builder:
     dependency: transitive
     description:
@@ -205,7 +189,7 @@ packages:
       name: fluro
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.4.0"
+    version: "1.5.0"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -232,20 +216,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.3.0+1"
-  flutter_responsive_screen:
-    dependency: "direct main"
-    description:
-      name: flutter_responsive_screen
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.0"
-  flutter_svg:
-    dependency: "direct main"
-    description:
-      name: flutter_svg
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.13.0+2"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -440,20 +410,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.6.2"
-  path_drawing:
-    dependency: transitive
-    description:
-      name: path_drawing
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.4.1"
-  path_parsing:
-    dependency: transitive
-    description:
-      name: path_parsing
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.4"
   path_provider:
     dependency: "direct main"
     description:
@@ -468,13 +424,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.7.0"
-  petitparser:
-    dependency: transitive
-    description:
-      name: petitparser
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.3.0"
   pool:
     dependency: transitive
     description:
@@ -655,13 +604,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.13"
-  xml:
-    dependency: transitive
-    description:
-      name: xml
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.5.0"
   yaml:
     dependency: transitive
     description:
@@ -670,5 +612,5 @@ packages:
     source: hosted
     version: "2.1.16"
 sdks:
-  dart: ">=2.3.0 <3.0.0"
-  flutter: ">=1.5.9-pre.94 <2.0.0"
+  dart: ">=2.3.0-dev.0.1 <3.0.0"
+  flutter: ">=1.5.0 <2.0.0"

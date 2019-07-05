@@ -1,11 +1,11 @@
 import 'dart:async';
 
+import 'package:sembast/sembast.dart';
+
 import 'package:secure_chat/constants/db_constants.dart';
 import 'package:secure_chat/models/post/post.dart';
 import 'package:secure_chat/providers/get_it.dart';
-import 'package:sembast/sembast.dart';
-
-import '../../app_database.dart';
+import 'package:secure_chat/data/app_database.dart';
 
 class PostDataSource {
   final _postsStore = intMapStoreFactory.store(DBConstants.STORE_NAME);
