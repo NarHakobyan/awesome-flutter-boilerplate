@@ -13,16 +13,17 @@ mixin _$AuthStore on _AuthStore, Store {
 
   @override
   User get currentUser {
+    _$currentUserAtom.context.enforceReadPolicy(_$currentUserAtom);
     _$currentUserAtom.reportObserved();
     return super.currentUser;
   }
 
   @override
   set currentUser(User value) {
-    _$currentUserAtom.context
-        .checkIfStateModificationsAreAllowed(_$currentUserAtom);
-    super.currentUser = value;
-    _$currentUserAtom.reportChanged();
+    _$currentUserAtom.context.conditionallyRunInAction(() {
+      super.currentUser = value;
+      _$currentUserAtom.reportChanged();
+    }, _$currentUserAtom, name: '${_$currentUserAtom.name}_set');
   }
 
   final _$_AuthStoreActionController = ActionController(name: '_AuthStore');

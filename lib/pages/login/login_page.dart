@@ -2,24 +2,29 @@ import 'package:dio/dio.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:secure_chat/mixins/loading_mixin.dart';
+import 'package:secure_chat/store/form/form_store.dart';
+import 'package:secure_chat/store/loading/loading_store.dart';
 import 'package:secure_chat/utils/keyboard.dart';
 import 'package:secure_chat/models/user/user.dart';
 import 'package:secure_chat/providers/get_it.dart';
 import 'package:secure_chat/routes.dart';
 import 'package:secure_chat/store/auth/auth_store.dart';
-import 'package:secure_chat/widget/button_component.dart';
+import 'package:secure_chat/widget/clip_shadow_path.dart';
+import 'package:secure_chat/widget/green_clipper.dart';
 
 class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> with LoadingMixin<LoginPage> {
+class _LoginPageState extends State<LoginPage> {
+  bool remmeberMe = false;
+
+  final formState = FormStore();
+  final loadingStore = LoadingStore();
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
-  bool autoValidate = false;
   final authState = getIt<AuthStore>();
   final dio = getIt<Dio>();
   final router = getIt<Router>();
@@ -28,9 +33,7 @@ class _LoginPageState extends State<LoginPage> with LoadingMixin<LoginPage> {
     final form = _fbKey.currentState;
 
     if (!form.validate()) {
-      setState(() {
-        autoValidate = true;
-      });
+      formState.setAutoValidate(autoValidate: true);
       return;
     }
 
@@ -38,7 +41,7 @@ class _LoginPageState extends State<LoginPage> with LoadingMixin<LoginPage> {
 
     try {
       KeyboardUtil.hideKeyboard();
-      startLoading();
+      loadingStore.startLoading();
 
       authState.setCurrentUser(User(firstName: 'Narek', lastName: 'Hakobyan'));
 
@@ -52,126 +55,192 @@ class _LoginPageState extends State<LoginPage> with LoadingMixin<LoginPage> {
           backgroundColor: Colors.red,
           textColor: Colors.white);
     }
-    stopLoading();
+    loadingStore.stopLoading();
   }
 
   @override
   Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-
+    final size = MediaQuery.of(context).size;
     return Scaffold(
-      key: _scaffoldKey,
-      body: GestureDetector(
-        onTap: () {
-          KeyboardUtil.hideKeyboard();
-        },
-        child: LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints viewportConstraints) {
-            return SingleChildScrollView(
-              padding: EdgeInsets.symmetric(horizontal: 30),
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  minHeight: viewportConstraints.maxHeight,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        body: GestureDetector(
+      onTap: () {
+        KeyboardUtil.hideKeyboard();
+      },
+      child: SingleChildScrollView(
+        child: Container(
+          height: size.height,
+          child: Column(
+            children: <Widget>[
+              Expanded(
+                child: Stack(
                   children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(top: 40),
-                      child: Column(
-                        children: <Widget>[
-                          FlutterLogo(size: 100),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 30),
-                            child: Text(
-                              'Welcome to your secure chat'.toUpperCase(),
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: 22, color: themeData.primaryColor),
-                            ),
-                          ),
-                          Text(
-                              'Secure communication for the 21st century'
-                                  .toUpperCase(),
-                              textAlign: TextAlign.center,
-                              style: TextStyle(color: Colors.grey[400]))
-                        ],
-                      ),
-                    ),
-                    _buildForm(context),
+                    buildGradientClipPath(),
                     Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: 10),
-                          child: isLoading
-                              ? Center(
-                                  child: CircularProgressIndicator(),
-                                )
-                              : ButtonComponent(
-                                  colors: <Color>[
-                                    themeData.primaryColor,
-                                    themeData.primaryColorDark
-                                  ],
-                                  onTap: () => _loginHandler(context),
-                                  child: Text(
-                                    'Sign in'.toUpperCase(),
-                                    style: TextStyle(color: Colors.white),
+                        Image.asset(
+                          'assets/images/logo-white.png',
+                          width: 400,
+                        ),
+                        Container(
+                          margin: EdgeInsets.symmetric(horizontal: 40),
+                          child: Column(
+                            children: <Widget>[
+                              _buildForm(context),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Row(
+                                    children: <Widget>[
+                                      Theme(
+                                        data: Theme.of(context).copyWith(
+                                            unselectedWidgetColor:
+                                                Colors.white),
+                                        child: Checkbox(
+                                          value: remmeberMe,
+                                          onChanged: (v) {
+                                            setState(() {
+                                              remmeberMe = v;
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                      InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            remmeberMe = !remmeberMe;
+                                          });
+                                        },
+                                        child: Text(
+                                          'Remember Me',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      )
+                                    ],
                                   ),
+                                  FlatButton(
+                                    onPressed: () => print('pressed'),
+                                    child: Text(
+                                      'Forgot password?',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              RaisedButton(
+                                color: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30.0)),
+                                onPressed: () => _loginHandler(context),
+                                elevation: 0,
+                                child: Text(
+                                  'Sign In'.toUpperCase(),
+                                  style: TextStyle(
+                                      color: Color(0xFF83A4D4), fontSize: 16),
                                 ),
-                        ),
-                        FlatButton(
-                          onPressed: () {
-                            router.navigateTo(context, Routes.register);
-                          },
-                          child: Text(
-                            'sign up for an account'.toUpperCase(),
-                            style: TextStyle(fontSize: 19),
-                            textAlign: TextAlign.center,
+                              )
+                            ],
                           ),
-                        ),
-                        SizedBox(
-                          height: 10,
                         )
                       ],
                     )
                   ],
                 ),
               ),
-            );
-          },
+              Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text('Don’t have an account?'),
+                    FlatButton(
+                      onPressed: () =>
+                          router.navigateTo(context, Routes.register),
+                      child: Text('Sign Up'),
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    ));
+  }
+
+  ClipShadowPath buildGradientClipPath() {
+    return ClipShadowPath(
+      clipper: GreenClipper(),
+      shadow: Shadow(blurRadius: 5, color: Colors.grey),
+      child: Container(
+        decoration: BoxDecoration(
+          // Box decoration takes a gradient
+          gradient: LinearGradient(
+            // Where the linear gradient begins and ends
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            // Add one stop for each color. Stops should increase from 0 to 1
+            stops: [0, 0.2, 1],
+            colors: [
+              // Colors are easy thanks to Flutter's Colors class.
+              Color(0xFF7196CD),
+              Color(0xFF83A4D4),
+              Color(0xFFA1D7ED),
+            ],
+          ),
         ),
       ),
     );
   }
 
   _buildForm(context) {
-    return FormBuilder(
-      key: _fbKey,
-      autovalidate: autoValidate,
-      child: Column(
-        children: <Widget>[
-          FormBuilderTextField(
-              attribute: 'email',
-              keyboardType: TextInputType.emailAddress,
-              textInputAction: TextInputAction.next,
-              validators: [
-                FormBuilderValidators.email(),
-                FormBuilderValidators.required(),
-              ],
-              decoration: InputDecoration(labelText: 'email'.toUpperCase())),
-          FormBuilderTextField(
-            attribute: 'password',
-            decoration: InputDecoration(labelText: 'password'.toUpperCase()),
-            obscureText: true,
-            validators: [
-              FormBuilderValidators.minLength(6),
-              FormBuilderValidators.required(),
-            ],
-          ),
-        ],
+    return Observer(
+      builder: (_) => FormBuilder(
+        key: _fbKey,
+        autovalidate: formState.autoValidate,
+        child: Column(
+          children: <Widget>[
+            formBuilderTextField(
+                attribute: 'email',
+                hintText: 'Email',
+                validators: [
+                  FormBuilderValidators.email(),
+                  FormBuilderValidators.required(),
+                ]),
+            formBuilderTextField(
+                attribute: 'password',
+                hintText: 'Password',
+                obscureText: true,
+                validators: [
+                  FormBuilderValidators.minLength(6),
+                  FormBuilderValidators.required(),
+                ]),
+          ],
+        ),
       ),
+    );
+  }
+
+  FormBuilderTextField formBuilderTextField(
+      {@required String attribute,
+      @required String hintText,
+      bool obscureText = false,
+      List<FormFieldValidator> validators}) {
+    return FormBuilderTextField(
+      attribute: attribute,
+      cursorColor: Colors.white,
+      style: TextStyle(color: Colors.white),
+      decoration: InputDecoration(
+          hintText: hintText,
+          border: UnderlineInputBorder(),
+          enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.white.withOpacity(0.2))),
+          focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Color(0xFFA1D7ED))),
+          hintStyle:
+              TextStyle(fontWeight: FontWeight.w400, color: Colors.white)),
+      obscureText: obscureText,
+      validators: validators,
     );
   }
 }

@@ -13,15 +13,17 @@ mixin _$LoadingStore on _LoadingStore, Store {
 
   @override
   bool get loading {
+    _$loadingAtom.context.enforceReadPolicy(_$loadingAtom);
     _$loadingAtom.reportObserved();
     return super.loading;
   }
 
   @override
   set loading(bool value) {
-    _$loadingAtom.context.checkIfStateModificationsAreAllowed(_$loadingAtom);
-    super.loading = value;
-    _$loadingAtom.reportChanged();
+    _$loadingAtom.context.conditionallyRunInAction(() {
+      super.loading = value;
+      _$loadingAtom.reportChanged();
+    }, _$loadingAtom, name: '${_$loadingAtom.name}_set');
   }
 
   final _$_LoadingStoreActionController =

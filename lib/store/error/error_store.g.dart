@@ -13,29 +13,33 @@ mixin _$ErrorStore on _ErrorStore, Store {
 
   @override
   String get error {
+    _$errorAtom.context.enforceReadPolicy(_$errorAtom);
     _$errorAtom.reportObserved();
     return super.error;
   }
 
   @override
   set error(String value) {
-    _$errorAtom.context.checkIfStateModificationsAreAllowed(_$errorAtom);
-    super.error = value;
-    _$errorAtom.reportChanged();
+    _$errorAtom.context.conditionallyRunInAction(() {
+      super.error = value;
+      _$errorAtom.reportChanged();
+    }, _$errorAtom, name: '${_$errorAtom.name}_set');
   }
 
   final _$hasErrorAtom = Atom(name: '_ErrorStore.hasError');
 
   @override
   bool get hasError {
+    _$hasErrorAtom.context.enforceReadPolicy(_$hasErrorAtom);
     _$hasErrorAtom.reportObserved();
     return super.hasError;
   }
 
   @override
   set hasError(bool value) {
-    _$hasErrorAtom.context.checkIfStateModificationsAreAllowed(_$hasErrorAtom);
-    super.hasError = value;
-    _$hasErrorAtom.reportChanged();
+    _$hasErrorAtom.context.conditionallyRunInAction(() {
+      super.hasError = value;
+      _$hasErrorAtom.reportChanged();
+    }, _$hasErrorAtom, name: '${_$hasErrorAtom.name}_set');
   }
 }

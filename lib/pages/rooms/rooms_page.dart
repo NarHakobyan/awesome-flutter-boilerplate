@@ -130,6 +130,7 @@ class _RoomsPageState extends State<RoomsPage> {
                 if (value.isEmpty) {
                   return 'please fill the field'.toUpperCase();
                 }
+                return null;
               },
               maxLines: 1,
               decoration: InputDecoration(hintText: 'Channel key...'),
@@ -187,6 +188,7 @@ class _RoomsPageState extends State<RoomsPage> {
                 if (value.isEmpty) {
                   return 'please fill the field'.toUpperCase();
                 }
+                return null;
               },
               maxLines: 1,
               decoration: InputDecoration(hintText: 'Channel name...'),

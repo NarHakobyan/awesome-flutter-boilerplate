@@ -23,7 +23,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return DynamicTheme(
       defaultBrightness: widget.brightness,
-      data: (brightness) => new ThemeData(
+      data: (brightness) => ThemeData(
             primarySwatch: Colors.blue,
             brightness: brightness,
           ),

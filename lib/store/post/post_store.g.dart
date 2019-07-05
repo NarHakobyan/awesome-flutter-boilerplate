@@ -13,16 +13,17 @@ mixin _$PostStore on _PostStore, Store {
 
   @override
   PostsList get postsList {
+    _$postsListAtom.context.enforceReadPolicy(_$postsListAtom);
     _$postsListAtom.reportObserved();
     return super.postsList;
   }
 
   @override
   set postsList(PostsList value) {
-    _$postsListAtom.context
-        .checkIfStateModificationsAreAllowed(_$postsListAtom);
-    super.postsList = value;
-    _$postsListAtom.reportChanged();
+    _$postsListAtom.context.conditionallyRunInAction(() {
+      super.postsList = value;
+      _$postsListAtom.reportChanged();
+    }, _$postsListAtom, name: '${_$postsListAtom.name}_set');
   }
 
   final _$getPostsAsyncAction = AsyncAction('getPosts');
