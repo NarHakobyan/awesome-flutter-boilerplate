@@ -3,7 +3,7 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:secure_chat/constants/strings.dart';
 import 'package:secure_chat/pages/splash/splash.dart';
-import 'package:secure_chat/providers/get_it.dart' show getIt, registerGetIt;
+import 'package:secure_chat/providers/get_it.dart';
 
 class MyApp extends StatefulWidget {
   final Brightness brightness;
@@ -22,18 +22,16 @@ class _MyAppState extends State<MyApp> {
     return DynamicTheme(
       defaultBrightness: widget.brightness,
       data: (brightness) => ThemeData(
-            primarySwatch: Colors.blue,
-            brightness: brightness,
-          ),
-      themedWidgetBuilder: (context, theme) {
-        return MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: Strings.appName,
-          theme: theme,
-          onGenerateRoute: router.generator,
-          home: SplashScreen(),
-        );
-      },
+        primarySwatch: Colors.blue,
+        brightness: brightness,
+      ),
+      themedWidgetBuilder: (context, theme) => MaterialApp(
+        debugShowCheckedModeBanner: true,
+        title: Strings.appName,
+        theme: theme,
+        onGenerateRoute: router.generator,
+        home: SplashScreen(),
+      ),
     );
   }
 }

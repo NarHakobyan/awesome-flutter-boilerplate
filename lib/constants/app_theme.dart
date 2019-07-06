@@ -23,7 +23,7 @@
 
 import 'package:flutter/material.dart';
 
-final ThemeData themeData = new ThemeData(
+final ThemeData themeData = ThemeData(
     fontFamily: 'ProductSans',
     brightness: Brightness.light,
     primarySwatch: MaterialColor(AppColors.green[500].value, AppColors.green),

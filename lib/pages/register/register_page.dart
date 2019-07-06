@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:secure_chat/data/repositories/auth_repository.dart';
+import 'package:secure_chat/helpers/keyboard_helper.dart';
 import 'package:secure_chat/store/form/form_store.dart';
 import 'package:secure_chat/store/loading/loading_store.dart';
-import 'package:secure_chat/utils/keyboard.dart';
-import 'package:secure_chat/models/user/user.dart';
 import 'package:secure_chat/providers/get_it.dart';
 import 'package:secure_chat/routes.dart';
 
@@ -24,7 +24,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final loadingStore = LoadingStore();
 
   _registerHandler() async {
-    final dio = getIt<Dio>();
+    final authRepository = getIt<AuthRepository>();
 
     final form = _fbKey.currentState;
 
@@ -37,10 +37,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
     try {
       //TODO move to service folder
-      final response = await dio.post('/auth/register', data: form.value);
-
-      // Store current [] info
-      final user = User.fromJson(response.data);
+      final user = await authRepository.registerUser(form.value);
 
       Fluttertoast.showToast(
           msg: "you have successfully registered.".toUpperCase(),
@@ -68,13 +65,11 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-
     return Scaffold(
       key: _scaffoldKey,
       body: GestureDetector(
         onTap: () {
-          KeyboardUtil.hideKeyboard();
+          KeyboardHelper.hideKeyboard();
         },
         child: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints viewportConstraints) {

@@ -10,15 +10,15 @@ import 'package:secure_chat/data/app_database.dart';
 class PostDataSource {
   final _postsStore = intMapStoreFactory.store(DBConstants.STORE_NAME);
 
-  Future<Database> get _db async => await getIt<AppDatabase>().database;
+  Future<Database> _getDatabase() async => await getIt<AppDatabase>().getDatabase();
 
   Future<int> insert(Post post) async {
-    return await _postsStore.add(await _db, post.toJson());
+    return await _postsStore.add(await _getDatabase(), post.toJson());
   }
 
   Future<int> update(Post post) async {
     return await _postsStore.update(
-      await _db,
+      await _getDatabase(),
       post.toJson(),
       finder: Finder(filter: Filter.byKey(post.id)),
     );
@@ -26,14 +26,14 @@ class PostDataSource {
 
   Future<int> delete(Post post) async {
     return await _postsStore.delete(
-      await _db,
+      await _getDatabase(),
       finder: Finder(filter: Filter.byKey(post.id)),
     );
   }
 
   Future deleteAll() async {
     await _postsStore.drop(
-      await _db,
+      await _getDatabase(),
     );
   }
 
@@ -43,7 +43,7 @@ class PostDataSource {
         sortOrders: [SortOrder(DBConstants.FIELD_ID)]);
 
     final recordSnapshots = await _postsStore.find(
-      await _db,
+      await _getDatabase(),
       finder: finder,
     );
 
@@ -56,7 +56,7 @@ class PostDataSource {
 
   Future<List<Post>> getAllPosts() async {
     final recordSnapshots = await _postsStore.find(
-      await _db,
+      await _getDatabase(),
     );
 
     return recordSnapshots.map((snapshot) {

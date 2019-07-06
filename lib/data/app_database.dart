@@ -15,7 +15,7 @@ class AppDatabase {
   var encryptionKey = "";
 
   // Database object accessor
-  Future<Database> get database async {
+  Future<Database> getDatabase() async {
     // If completer is null, AppDatabaseClass is newly instantiated, so database is not yet opened
     if (_dbOpenCompleter == null) {
       _dbOpenCompleter = Completer();

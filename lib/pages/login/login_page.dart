@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:secure_chat/helpers/keyboard_helper.dart';
 import 'package:secure_chat/store/form/form_store.dart';
 import 'package:secure_chat/store/loading/loading_store.dart';
-import 'package:secure_chat/utils/keyboard.dart';
 import 'package:secure_chat/models/user/user.dart';
 import 'package:secure_chat/providers/get_it.dart';
 import 'package:secure_chat/routes.dart';
@@ -40,7 +40,7 @@ class _LoginPageState extends State<LoginPage> {
     form.save();
 
     try {
-      KeyboardUtil.hideKeyboard();
+      KeyboardHelper.hideKeyboard();
       loadingStore.startLoading();
 
       authState.setCurrentUser(User(firstName: 'Narek', lastName: 'Hakobyan'));
@@ -64,7 +64,7 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
         body: GestureDetector(
       onTap: () {
-        KeyboardUtil.hideKeyboard();
+        KeyboardHelper.hideKeyboard();
       },
       child: SingleChildScrollView(
         child: Container(

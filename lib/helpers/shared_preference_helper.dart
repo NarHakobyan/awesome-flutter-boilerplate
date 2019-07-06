@@ -2,7 +2,11 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:secure_chat/constants/preferences.dart';
+class Preferences {
+  Preferences._();
+
+  static const String auth_token = "authToken";
+}
 
 class SharedPreferenceHelper {
   // General Methods: ----------------------------------------------------------
@@ -11,7 +15,7 @@ class SharedPreferenceHelper {
     return preferences.getString(Preferences.auth_token);
   }
 
-  static Future<void> saveAuthToken(String authToken) async {
+  static Future<void> setAuthToken(String authToken) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     preferences.setString(Preferences.auth_token, authToken);
   }
