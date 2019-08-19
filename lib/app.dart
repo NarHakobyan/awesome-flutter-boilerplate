@@ -1,27 +1,22 @@
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:secure_chat/constants/strings.dart';
 import 'package:secure_chat/pages/splash/splash.dart';
-import 'package:secure_chat/providers/get_it.dart';
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
+  final router = GetIt.I<Router>();
   final Brightness brightness;
 
-  @override
-  _MyAppState createState() => _MyAppState();
 
-  MyApp({@required this.brightness});
-}
-
-class _MyAppState extends State<MyApp> {
-  final router = getIt<Router>();
+  MyApp({this.brightness});
 
   @override
   Widget build(BuildContext context) {
     return DynamicTheme(
-      defaultBrightness: widget.brightness,
-      data: (brightness) => ThemeData(
+      defaultBrightness: brightness,
+      data: (Brightness brightness) => ThemeData(
         primarySwatch: Colors.blue,
         brightness: brightness,
       ),

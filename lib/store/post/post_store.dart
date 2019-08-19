@@ -1,7 +1,7 @@
+import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 import 'package:secure_chat/data/repositories/post_repository.dart';
 import 'package:secure_chat/models/post_list/post_list.dart';
-import 'package:secure_chat/providers/get_it.dart';
 import 'package:secure_chat/store/error/error_store.dart';
 import 'package:secure_chat/store/loading/loading_store.dart';
 import 'package:secure_chat/utils/dio/dio_error_util.dart';
@@ -19,7 +19,7 @@ abstract class _PostStore with Store {
   @observable
   PostsList postsList;
 
-  final postRepository = getIt<PostRepository>();
+  final postRepository = GetIt.I<PostRepository>();
 
   // actions:-------------------------------------------------------------------
   @action

@@ -1,16 +1,17 @@
 import 'package:dio/dio.dart';
 import 'package:fluro/fluro.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get_it/get_it.dart';
 import 'package:secure_chat/helpers/keyboard_helper.dart';
-import 'package:secure_chat/store/form/form_store.dart';
-import 'package:secure_chat/store/loading/loading_store.dart';
 import 'package:secure_chat/models/user/user.dart';
-import 'package:secure_chat/providers/get_it.dart';
 import 'package:secure_chat/routes.dart';
 import 'package:secure_chat/store/auth/auth_store.dart';
+import 'package:secure_chat/store/form/form_store.dart';
+import 'package:secure_chat/store/loading/loading_store.dart';
 import 'package:secure_chat/widget/clip_shadow_path.dart';
 import 'package:secure_chat/widget/green_clipper.dart';
 
@@ -20,14 +21,16 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  bool remmeberMe = false;
+  bool rememberMe = false;
 
   final formState = FormStore();
   final loadingStore = LoadingStore();
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
-  final authState = getIt<AuthStore>();
-  final dio = getIt<Dio>();
-  final router = getIt<Router>();
+  final authState = GetIt.I<AuthStore>();
+  final dio = GetIt.I<Dio>();
+  final router = GetIt.I<Router>();
+
+  var _textEditingController = TextEditingController();
 
   _loginHandler(context) async {
     final form = _fbKey.currentState;
@@ -98,10 +101,10 @@ class _LoginPageState extends State<LoginPage> {
                                             unselectedWidgetColor:
                                                 Colors.white),
                                         child: Checkbox(
-                                          value: remmeberMe,
+                                          value: rememberMe,
                                           onChanged: (v) {
                                             setState(() {
-                                              remmeberMe = v;
+                                              rememberMe = v;
                                             });
                                           },
                                         ),
@@ -109,7 +112,7 @@ class _LoginPageState extends State<LoginPage> {
                                       InkWell(
                                         onTap: () {
                                           setState(() {
-                                            remmeberMe = !remmeberMe;
+                                            rememberMe = !rememberMe;
                                           });
                                         },
                                         child: Text(
@@ -149,17 +152,26 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text('Don’t have an account?'),
-                    FlatButton(
-                      onPressed: () =>
-                          router.navigateTo(context, Routes.register),
-                      child: Text('Sign Up'),
-                    )
-                  ],
-                ),
+                margin: EdgeInsets.only(bottom: 20),
+                child: RichText(
+                    text: TextSpan(
+                        style: TextStyle(
+                          color: Colors.black,
+                        ),
+                        children: [
+                      TextSpan(text: 'Don’t have an account? '),
+                      TextSpan(
+                        text: 'Sign Up',
+                        style: TextStyle(
+                          color: Colors.blue,
+                          decoration: TextDecoration.underline
+                        ),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            router.navigateTo(context, Routes.register);
+                          },
+                      ),
+                    ])),
               )
             ],
           ),

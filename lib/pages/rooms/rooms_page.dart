@@ -5,7 +5,7 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:secure_chat/providers/get_it.dart';
+import 'package:get_it/get_it.dart';
 import 'package:secure_chat/store/auth/auth_store.dart';
 
 class RoomsPage extends StatefulWidget {
@@ -15,8 +15,8 @@ class RoomsPage extends StatefulWidget {
 
 class _RoomsPageState extends State<RoomsPage> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  final authState = getIt<AuthStore>();
-  final router = getIt<Router>();
+  final authState = GetIt.I<AuthStore>();
+  final router = GetIt.I<Router>();
 
   Widget build(BuildContext context) {
     return new Scaffold(

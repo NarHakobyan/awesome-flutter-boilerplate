@@ -1,11 +1,11 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
+import 'package:get_it/get_it.dart';
 import 'package:secure_chat/models/user/user.dart';
-import 'package:secure_chat/providers/get_it.dart';
 
 class AuthRepository {
-  final _dioClient = getIt<Dio>();
+  final _dioClient = GetIt.I<Dio>();
 
   Future<User> getCurrentUser() {
     return _dioClient

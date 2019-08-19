@@ -8,23 +8,21 @@ import 'package:secure_chat/data/repositories/post_repository.dart';
 import 'package:secure_chat/providers/application_provider.dart';
 import 'package:secure_chat/routes.dart';
 
-GetIt getIt = GetIt();
-
 void registerGetIt() {
-  getIt.registerSingleton(dio);
+  GetIt.I.registerSingleton(dio);
 
-  getIt.registerLazySingleton<Router>(() {
+  GetIt.I.registerLazySingleton<Router>(() {
     final router = Router();
     Routes.configureRoutes(router);
 
     return router;
   });
 
-  getIt.registerSingleton(ApplicationProvider());
-  getIt.registerSingleton(AppDatabase());
+  GetIt.I.registerSingleton(ApplicationProvider());
+  GetIt.I.registerSingleton(AppDatabase());
 
   // Repositories
-  getIt.registerSingleton(PostDataSource());
-  getIt.registerSingleton(PostRepository());
-  getIt.registerSingleton(AuthRepository());
+  GetIt.I.registerSingleton(PostDataSource());
+  GetIt.I.registerSingleton(PostRepository());
+  GetIt.I.registerSingleton(AuthRepository());
 }

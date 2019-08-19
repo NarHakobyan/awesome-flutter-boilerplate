@@ -15,23 +15,23 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  auto_size_text: ^2.0.1
+  auto_size_text: ^2.1.0
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
-  pull_to_refresh: ^1.4.4
+  pull_to_refresh: ^1.5.4
   fluro: 1.5.0
   fluttertoast: 3.1.0
   image_picker: 0.6.0+8
-  dio: ^2.1.7
-  get_it: ^1.0.3+1
-  flutter_form_builder: ^3.2.0
-  json_annotation: ^2.4.0
+  dio: ^2.1.13
+  get_it: ^2.0.1
+  flutter_form_builder: ^3.3.4
+  json_annotation: ^3.0.0
   mobx: 0.3.3+1
-  flutter_mobx: ^0.3.0
-  shared_preferences: ^0.5.3+1
-  path_provider: ^1.1.0
-  sembast: ^1.15.4+1
+  flutter_mobx: ^0.3.0+1
+  shared_preferences: ^0.5.3+4
+  path_provider: ^1.2.0
+  sembast: ^2.0.1
   dynamic_theme: ^1.0.1
 
 dev_dependencies:
@@ -41,9 +41,9 @@ dev_dependencies:
 
   # For information on the generic Dart part of this file, see the
   # following page: https://www.dartlang.org/tools/pub/pubspec
-  build_runner: ^1.5.2
-  json_serializable: ^3.0.0
-  mobx_codegen: ^0.3.3
+  build_runner: ^1.6.6
+  json_serializable: ^3.2.0
+  mobx_codegen: ^0.3.4
 
 # The following section is specific to Flutter.
 flutter:

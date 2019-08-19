@@ -1,18 +1,18 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
+import 'package:get_it/get_it.dart';
 import 'package:secure_chat/constants/db_constants.dart';
 import 'package:secure_chat/data/datasources/post/post_datasource.dart';
 import 'package:secure_chat/models/post/post.dart';
 import 'package:secure_chat/models/post_list/post_list.dart';
-import 'package:secure_chat/providers/get_it.dart';
 import 'package:sembast/sembast.dart';
 
 
 class PostRepository {
   // database object
-  final _postDataSource = getIt<PostDataSource>();
-  final _dioClient = getIt<Dio>();
+  final _postDataSource = GetIt.I<PostDataSource>();
+  final _dioClient = GetIt.I<Dio>();
 
   // Post: ---------------------------------------------------------------------
   Future<PostsList> getPosts() {

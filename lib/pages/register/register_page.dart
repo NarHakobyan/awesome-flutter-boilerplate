@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get_it/get_it.dart';
 import 'package:secure_chat/data/repositories/auth_repository.dart';
 import 'package:secure_chat/helpers/keyboard_helper.dart';
+import 'package:secure_chat/routes.dart';
 import 'package:secure_chat/store/form/form_store.dart';
 import 'package:secure_chat/store/loading/loading_store.dart';
-import 'package:secure_chat/providers/get_it.dart';
-import 'package:secure_chat/routes.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -19,12 +19,12 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  final router = getIt<Router>();
+  final router = GetIt.I<Router>();
   final formState = FormStore();
   final loadingStore = LoadingStore();
 
   _registerHandler() async {
-    final authRepository = getIt<AuthRepository>();
+    final authRepository = GetIt.I<AuthRepository>();
 
     final form = _fbKey.currentState;
 
