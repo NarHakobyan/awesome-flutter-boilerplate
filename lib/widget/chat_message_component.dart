@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
+@immutable
 class ChatMessage extends StatelessWidget {
   ChatMessage(
       {this.text,
@@ -35,23 +36,23 @@ class ChatMessage extends StatelessWidget {
 
   Widget build(BuildContext context) {
     var list = <Widget>[
-      new Container(
+      Container(
         margin: const EdgeInsets.only(right: 16.0),
-        child: new CircleAvatar(
+        child: CircleAvatar(
             backgroundColor: self ? Colors.grey : null,
             foregroundColor: self ? Colors.white : null,
-            child: new Text(name[0].toUpperCase())),
+            child: Text(name[0].toUpperCase())),
       ),
-      new Expanded(
+      Expanded(
         child: Container(),
       ),
-      new Column(
+      Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          new SizedBox(
+          SizedBox(
             height: 20,
           ),
-          new Container(
+          Container(
             margin: EdgeInsets.symmetric(horizontal: 20),
             child: _buildContent(),
           ),
@@ -59,13 +60,13 @@ class ChatMessage extends StatelessWidget {
       )
     ];
 
-    return new SizeTransition(
-        sizeFactor: new CurvedAnimation(
+    return SizeTransition(
+        sizeFactor: CurvedAnimation(
             parent: animationController, curve: Curves.easeOut),
         axisAlignment: 0.0,
-        child: new Container(
+        child: Container(
           margin: const EdgeInsets.symmetric(vertical: 10.0),
-          child: new Row(
+          child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: self ? list.reversed.toList() : list,
           ),

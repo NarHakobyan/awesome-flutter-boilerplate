@@ -6,6 +6,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_it/get_it.dart';
+import 'package:secure_chat/constants/app_theme.dart';
 import 'package:secure_chat/helpers/keyboard_helper.dart';
 import 'package:secure_chat/models/user/user.dart';
 import 'package:secure_chat/routes.dart';
@@ -101,6 +102,8 @@ class _LoginPageState extends State<LoginPage> {
                                             unselectedWidgetColor:
                                                 Colors.white),
                                         child: Checkbox(
+                                          activeColor: Colors.white,
+                                          checkColor: AppColors.primaryColor,
                                           value: rememberMe,
                                           onChanged: (v) {
                                             setState(() {
