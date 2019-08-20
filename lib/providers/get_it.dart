@@ -5,7 +5,6 @@ import 'package:secure_chat/data/datasources/post/post_datasource.dart';
 import 'package:secure_chat/data/dio.dart';
 import 'package:secure_chat/data/repositories/auth_repository.dart';
 import 'package:secure_chat/data/repositories/post_repository.dart';
-import 'package:secure_chat/providers/application_provider.dart';
 import 'package:secure_chat/routes.dart';
 
 void registerGetIt() {
@@ -18,7 +17,6 @@ void registerGetIt() {
     return router;
   });
 
-  GetIt.I.registerSingleton(ApplicationProvider());
   GetIt.I.registerSingleton(AppDatabase());
 
   // Repositories
