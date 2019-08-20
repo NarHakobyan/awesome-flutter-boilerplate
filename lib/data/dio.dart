@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:secure_chat/helpers/shared_preference_helper.dart';
-import 'package:secure_chat/utils/dio/dio_error_util.dart';
 
 final options = BaseOptions(
   baseUrl: "http://localhost:3000",
@@ -21,8 +20,5 @@ final Dio dio = Dio(options)
         options.headers
             .putIfAbsent(HttpHeaders.authorizationHeader, () => token);
       }
-    }, onError: (dynamic dioError) {
-      /// show [error] in toast
-      final error = DioErrorUtil.handleError(dioError);
     })
   ]);
