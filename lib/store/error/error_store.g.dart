@@ -6,7 +6,7 @@ part of 'error_store.dart';
 // StoreGenerator
 // **************************************************************************
 
-// ignore_for_file: non_constant_identifier_names, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars
+// ignore_for_file: non_constant_identifier_names, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$ErrorStore on _ErrorStore, Store {
   final _$errorAtom = Atom(name: '_ErrorStore.error');
@@ -24,22 +24,5 @@ mixin _$ErrorStore on _ErrorStore, Store {
       super.error = value;
       _$errorAtom.reportChanged();
     }, _$errorAtom, name: '${_$errorAtom.name}_set');
-  }
-
-  final _$hasErrorAtom = Atom(name: '_ErrorStore.hasError');
-
-  @override
-  bool get hasError {
-    _$hasErrorAtom.context.enforceReadPolicy(_$hasErrorAtom);
-    _$hasErrorAtom.reportObserved();
-    return super.hasError;
-  }
-
-  @override
-  set hasError(bool value) {
-    _$hasErrorAtom.context.conditionallyRunInAction(() {
-      super.hasError = value;
-      _$hasErrorAtom.reportChanged();
-    }, _$hasErrorAtom, name: '${_$hasErrorAtom.name}_set');
   }
 }

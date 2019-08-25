@@ -13,6 +13,7 @@ import 'package:secure_chat/routes.dart';
 import 'package:secure_chat/store/auth/auth_store.dart';
 import 'package:secure_chat/store/form/form_store.dart';
 import 'package:secure_chat/store/loading/loading_store.dart';
+import 'package:secure_chat/store/login/login_store.dart';
 import 'package:secure_chat/widget/clip_shadow_path.dart';
 import 'package:secure_chat/widget/green_clipper.dart';
 
@@ -22,16 +23,13 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  bool rememberMe = false;
-
+  final loginStore = LoginStore();
   final formState = FormStore();
   final loadingStore = LoadingStore();
-  final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
+  final _fbKey = GlobalKey<FormBuilderState>();
   final authState = GetIt.I<AuthStore>();
   final dio = GetIt.I<Dio>();
   final router = GetIt.I<Router>();
-
-  var _textEditingController = TextEditingController();
 
   _loginHandler(context) async {
     final form = _fbKey.currentState;
@@ -58,8 +56,9 @@ class _LoginPageState extends State<LoginPage> {
           timeInSecForIos: 1,
           backgroundColor: Colors.red,
           textColor: Colors.white);
+    } finally {
+      loadingStore.stopLoading();
     }
-    loadingStore.stopLoading();
   }
 
   @override
@@ -99,23 +98,29 @@ class _LoginPageState extends State<LoginPage> {
                                     children: <Widget>[
                                       Theme(
                                         data: Theme.of(context).copyWith(
-                                            unselectedWidgetColor:
-                                                Colors.white),
-                                        child: Checkbox(
-                                          activeColor: Colors.white,
-                                          checkColor: AppColors.primaryColor,
-                                          value: rememberMe,
-                                          onChanged: (v) {
-                                            setState(() {
-                                              rememberMe = v;
-                                            });
+                                          unselectedWidgetColor: Colors.white,
+                                        ),
+                                        child: Observer(
+                                          builder: (BuildContext context) {
+                                            return Checkbox(
+                                              activeColor: Colors.white,
+                                              checkColor:
+                                                  AppColors.primaryColor,
+                                              value: loginStore.rememberMe,
+                                              onChanged: (v) {
+                                                loginStore.setRememberMe(
+                                                    rememberMe: v);
+                                              },
+                                            );
                                           },
                                         ),
                                       ),
-                                      InkWell(
+                                      GestureDetector(
                                         onTap: () {
                                           setState(() {
-                                            rememberMe = !rememberMe;
+                                            loginStore.setRememberMe(
+                                                rememberMe:
+                                                    !loginStore.rememberMe);
                                           });
                                         },
                                         child: Text(
@@ -166,9 +171,8 @@ class _LoginPageState extends State<LoginPage> {
                       TextSpan(
                         text: 'Sign Up',
                         style: TextStyle(
-                          color: Colors.blue,
-                          decoration: TextDecoration.underline
-                        ),
+                            color: Colors.blue,
+                            decoration: TextDecoration.underline),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
                             router.navigateTo(context, Routes.register);
@@ -240,20 +244,21 @@ class _LoginPageState extends State<LoginPage> {
       {@required String attribute,
       @required String hintText,
       bool obscureText = false,
+        Color color = Colors.white,
       List<FormFieldValidator> validators}) {
     return FormBuilderTextField(
       attribute: attribute,
-      cursorColor: Colors.white,
-      style: TextStyle(color: Colors.white),
+      cursorColor: color,
+      style: TextStyle(color: color),
       decoration: InputDecoration(
           hintText: hintText,
           border: UnderlineInputBorder(),
           enabledBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: Colors.white.withOpacity(0.2))),
+              borderSide: BorderSide(color: color.withOpacity(0.2))),
           focusedBorder: UnderlineInputBorder(
               borderSide: BorderSide(color: Color(0xFFA1D7ED))),
           hintStyle:
-              TextStyle(fontWeight: FontWeight.w400, color: Colors.white)),
+              TextStyle(fontWeight: FontWeight.w400, color: color)),
       obscureText: obscureText,
       validators: validators,
     );

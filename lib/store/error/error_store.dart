@@ -5,10 +5,10 @@ part 'error_store.g.dart';
 class ErrorStore = _ErrorStore with _$ErrorStore;
 
 abstract class _ErrorStore with Store {
-  // store variables:-----------------------------------------------------------
   @observable
   String error;
 
-  @observable
-  bool hasError = false;
+  bool get hasError {
+    return this.error != null && this.error.isNotEmpty;
+  }
 }

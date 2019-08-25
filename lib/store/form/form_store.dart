@@ -14,15 +14,6 @@ abstract class _FormStore with Store {
   @observable
   bool autoValidate = false;
 
-  @observable
-  bool loading = false;
-
-  // actions:-------------------------------------------------------------------
-  @action
-  Future setLoading({@required bool loading}) async {
-    this.loading = loading;
-  }
-
   @action
   setAutoValidate({@required bool autoValidate}) {
     this.autoValidate = autoValidate;
