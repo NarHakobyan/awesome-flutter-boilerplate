@@ -6,7 +6,7 @@ enum ContrastPreference {
     dark,
 }
 
-class ColorHelpers {
+class ColorHelper {
     static int fromHexString(String argbHexString) {
         String useString = argbHexString;
         if (useString.startsWith("#")) {

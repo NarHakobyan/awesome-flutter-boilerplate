@@ -8,6 +8,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_it/get_it.dart';
 import 'package:secure_chat/constants/app_theme.dart';
 import 'package:secure_chat/helpers/keyboard_helper.dart';
+import 'package:secure_chat/helpers/toast_helper.dart';
 import 'package:secure_chat/models/user/user.dart';
 import 'package:secure_chat/routes.dart';
 import 'package:secure_chat/store/auth/auth_store.dart';
@@ -49,13 +50,8 @@ class _LoginPageState extends State<LoginPage> {
 
       router.navigateTo(context, Routes.rooms, clearStack: true);
     } on DioError catch (e) {
-      Fluttertoast.showToast(
-          msg: e.response.data['message'].toUpperCase(),
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIos: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white);
+      String message = e.response?.data['message'];
+      ToastHelper.showErrorToast(message.toUpperCase());
     } finally {
       loadingStore.stopLoading();
     }
@@ -65,126 +61,121 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
-        body: GestureDetector(
-      onTap: () {
-        KeyboardHelper.hideKeyboard();
-      },
-      child: SingleChildScrollView(
-        child: Container(
-          height: size.height,
-          child: Column(
-            children: <Widget>[
-              Expanded(
-                child: Stack(
-                  children: <Widget>[
-                    buildGradientClipPath(),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Image.asset(
-                          'assets/images/logo-white.png',
-                          width: 400,
-                        ),
-                        Container(
-                          margin: EdgeInsets.symmetric(horizontal: 40),
-                          child: Column(
-                            children: <Widget>[
-                              _buildForm(context),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Row(
-                                    children: <Widget>[
-                                      Theme(
-                                        data: Theme.of(context).copyWith(
-                                          unselectedWidgetColor: Colors.white,
-                                        ),
-                                        child: Observer(
-                                          builder: (BuildContext context) {
-                                            return Checkbox(
-                                              activeColor: Colors.white,
-                                              checkColor:
-                                                  AppColors.primaryColor,
-                                              value: loginStore.rememberMe,
-                                              onChanged: (v) {
-                                                loginStore.setRememberMe(
-                                                    rememberMe: v);
-                                              },
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          setState(() {
-                                            loginStore.setRememberMe(
-                                                rememberMe:
-                                                    !loginStore.rememberMe);
-                                          });
-                                        },
-                                        child: Text(
-                                          'Remember Me',
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                  FlatButton(
-                                    onPressed: () => print('pressed'),
-                                    child: Text(
-                                      'Forgot password?',
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              RaisedButton(
-                                color: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(30.0)),
-                                onPressed: () => _loginHandler(context),
-                                elevation: 0,
-                                child: Text(
-                                  'Sign In'.toUpperCase(),
-                                  style: TextStyle(
-                                      color: Color(0xFF83A4D4), fontSize: 16),
-                                ),
-                              )
-                            ],
+        body: SingleChildScrollView(
+          child: Container(
+            height: size.height,
+            child: Column(
+              children: <Widget>[
+                Expanded(
+                  child: Stack(
+                    children: <Widget>[
+                      buildGradientClipPath(),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Image.asset(
+                            'assets/images/logo-white.png',
+                            width: 400,
                           ),
-                        )
-                      ],
-                    )
-                  ],
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: 40),
+                            child: Column(
+                              children: <Widget>[
+                                _buildForm(context),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Row(
+                                      children: <Widget>[
+                                        Theme(
+                                          data: Theme.of(context).copyWith(
+                                            unselectedWidgetColor: Colors.white,
+                                          ),
+                                          child: Observer(
+                                            builder: (BuildContext context) {
+                                              return Checkbox(
+                                                activeColor: Colors.white,
+                                                checkColor:
+                                                    AppColors.primaryColor,
+                                                value: loginStore.rememberMe,
+                                                onChanged: (v) {
+                                                  loginStore.setRememberMe(
+                                                      rememberMe: v);
+                                                },
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              loginStore.setRememberMe(
+                                                  rememberMe:
+                                                      !loginStore.rememberMe);
+                                            });
+                                          },
+                                          child: Text(
+                                            'Remember Me',
+                                            style: TextStyle(color: Colors.white),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    FlatButton(
+                                      onPressed: () => print('pressed'),
+                                      child: Text(
+                                        'Forgot password?',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                RaisedButton(
+                                  color: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(30.0)),
+                                  onPressed: () => _loginHandler(context),
+                                  elevation: 0,
+                                  child: Text(
+                                    'Sign In'.toUpperCase(),
+                                    style: TextStyle(
+                                        color: Color(0xFF83A4D4), fontSize: 16),
+                                  ),
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
                 ),
-              ),
-              Container(
-                margin: EdgeInsets.only(bottom: 20),
-                child: RichText(
-                    text: TextSpan(
-                        style: TextStyle(
-                          color: Colors.black,
+                Container(
+                  margin: EdgeInsets.only(bottom: 20),
+                  child: RichText(
+                      text: TextSpan(
+                          style: TextStyle(
+                            color: Colors.black,
+                          ),
+                          children: [
+                        TextSpan(text: 'Don’t have an account? '),
+                        TextSpan(
+                          text: 'Sign Up',
+                          style: TextStyle(
+                              color: Colors.blue,
+                              decoration: TextDecoration.underline),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              router.navigateTo(context, Routes.register);
+                            },
                         ),
-                        children: [
-                      TextSpan(text: 'Don’t have an account? '),
-                      TextSpan(
-                        text: 'Sign Up',
-                        style: TextStyle(
-                            color: Colors.blue,
-                            decoration: TextDecoration.underline),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            router.navigateTo(context, Routes.register);
-                          },
-                      ),
-                    ])),
-              )
-            ],
+                      ])),
+                )
+              ],
+            ),
           ),
-        ),
-      ),
-    ));
+        ));
   }
 
   ClipShadowPath buildGradientClipPath() {
