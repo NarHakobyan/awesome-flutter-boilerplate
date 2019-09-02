@@ -29,7 +29,7 @@ mixin _$PostStore on _PostStore, Store {
   final _$getPostsAsyncAction = AsyncAction('getPosts');
 
   @override
-  Future<dynamic> getPosts() {
+  Future getPosts() {
     return _$getPostsAsyncAction.run(() => super.getPosts());
   }
 }

@@ -1,5 +1,6 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
 import 'package:secure_chat/pages/chat/chat_page.dart';
 import 'package:secure_chat/pages/login/login_page.dart';
@@ -7,6 +8,9 @@ import 'package:secure_chat/pages/register/register_page.dart';
 import 'package:secure_chat/pages/rooms/rooms_page.dart';
 
 class Routes {
+
+  static get I => GetIt.I<Router>();
+
   static String login = "/login";
   static String register = "/register";
   static String rooms = "/rooms";

@@ -29,11 +29,13 @@ class _RoomsPageState extends State<RoomsPage> {
         centerTitle: true,
         actions: <Widget>[
           IconButton(
-              icon: Icon(Icons.chat),
-              onPressed: () => _connectChannelDialog(context)),
+            icon: Icon(Icons.chat),
+            onPressed: () => _connectChannelDialog(context),
+          ),
           IconButton(
-              icon: Icon(Icons.add),
-              onPressed: () => _createChannelDialog(context))
+            icon: Icon(Icons.add),
+            onPressed: () => _createChannelDialog(context),
+          )
         ],
         backgroundColor: Colors.white,
         elevation: 0,
@@ -49,14 +51,14 @@ class _RoomsPageState extends State<RoomsPage> {
         /*Expanded(child: _buildChannelList(context))*/
         Observer(
           builder: (_) => GestureDetector(
-                onTap: () {
-                  authState.changeUserName();
-                },
-                child: Text(
-                  '${authState.currentUser.firstName}',
-                  style: Theme.of(context).textTheme.display1,
-                ),
-              ),
+            onTap: () {
+              authState.changeUserName();
+            },
+            child: Text(
+              '${authState.currentUser.firstName}',
+              style: Theme.of(context).textTheme.display1,
+            ),
+          ),
         ),
       ],
     );

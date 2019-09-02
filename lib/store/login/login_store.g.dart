@@ -29,7 +29,7 @@ mixin _$LoginStore on _LoginStore, Store {
   final _$_LoginStoreActionController = ActionController(name: '_LoginStore');
 
   @override
-  dynamic setRememberMe({bool rememberMe}) {
+  dynamic setRememberMe({@required bool rememberMe}) {
     final _$actionInfo = _$_LoginStoreActionController.startAction();
     try {
       return super.setRememberMe(rememberMe: rememberMe);

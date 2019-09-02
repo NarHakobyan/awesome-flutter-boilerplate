@@ -29,7 +29,7 @@ mixin _$FormStore on _FormStore, Store {
   final _$_FormStoreActionController = ActionController(name: '_FormStore');
 
   @override
-  dynamic setAutoValidate({bool autoValidate}) {
+  dynamic setAutoValidate({@required bool autoValidate}) {
     final _$actionInfo = _$_FormStoreActionController.startAction();
     try {
       return super.setAutoValidate(autoValidate: autoValidate);
