@@ -14,12 +14,13 @@ class RoomsPage extends StatefulWidget {
 }
 
 class _RoomsPageState extends State<RoomsPage> {
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
-  final authState = GetIt.I<AuthStore>();
-  final router = GetIt.I<Router>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final AuthStore authState = GetIt.I<AuthStore>();
+  final Router router = GetIt.I<Router>();
 
+  @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
         title: Text(
@@ -51,9 +52,7 @@ class _RoomsPageState extends State<RoomsPage> {
         /*Expanded(child: _buildChannelList(context))*/
         Observer(
           builder: (_) => GestureDetector(
-            onTap: () {
-              authState.changeUserName();
-            },
+            onTap: authState.changeUserName,
             child: Text(
               '${authState.currentUser.firstName}',
               style: Theme.of(context).textTheme.display1,
@@ -119,13 +118,13 @@ class _RoomsPageState extends State<RoomsPage> {
 //  }
 
   Future<void> _connectChannelDialog(BuildContext context) async {
-    final _channelFieldKey = GlobalKey<FormFieldState>();
+    final GlobalKey<FormFieldState<String>> _channelFieldKey = GlobalKey<FormFieldState<String>>();
 
-    String channelKey = await showDialog<String>(
+    final String channelKey = await showDialog<String>(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Fill channel key!'),
+            title: const Text('Fill channel key!'),
             content: TextFormField(
               key: _channelFieldKey,
               validator: (String value) {
@@ -142,15 +141,15 @@ class _RoomsPageState extends State<RoomsPage> {
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: Text('Cancel')),
+                  child: const Text('Cancel')),
               FlatButton(
                   onPressed: () async {
-                    final field = _channelFieldKey.currentState;
+                    final FormFieldState<String> field = _channelFieldKey.currentState;
                     if (field.validate()) {
                       Navigator.of(context).pop(field.value);
                     }
                   },
-                  child: Text('Connect'))
+                  child: const Text('Connect'))
             ],
           );
         });
@@ -173,17 +172,17 @@ class _RoomsPageState extends State<RoomsPage> {
 //      return;
 //    }
 
-    router.navigateTo(context, '/rooms/$channelKey');
+    await router.navigateTo(context, '/rooms/$channelKey');
   }
 
   Future<void> _createChannelDialog(BuildContext context) async {
-    final _channelNameKey = GlobalKey<FormFieldState>();
+    final GlobalKey<FormFieldState<String>> _channelNameKey = GlobalKey<FormFieldState<String>>();
 
-    String channelKey = await showDialog<String>(
+    final String channelKey = await showDialog<String>(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Create new channel!'),
+            title: const Text('Create new channel!'),
             content: TextFormField(
               key: _channelNameKey,
               validator: (String value) {
@@ -200,17 +199,17 @@ class _RoomsPageState extends State<RoomsPage> {
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: Text('Cancel')),
+                  child: const Text('Cancel')),
               FlatButton(
                   onPressed: () async {
-                    final field = _channelNameKey.currentState;
+                    final FormFieldState<String> field = _channelNameKey.currentState;
                     if (field.validate()) {
-                      String _channelName = field.value;
-                      String channelKey = await _createChannel(_channelName);
+                      final String _channelName = field.value;
+                      final String channelKey = _createChannel(_channelName);
                       Navigator.of(context).pop(channelKey);
                     }
                   },
-                  child: Text('Create'))
+                  child: const Text('Create'))
             ],
           );
         });
@@ -223,22 +222,22 @@ class _RoomsPageState extends State<RoomsPage> {
       action: SnackBarAction(
           label: 'Copy',
           onPressed: () {
-            Clipboard.setData(new ClipboardData(text: channelKey));
+            Clipboard.setData(ClipboardData(text: channelKey));
           }),
     ));
   }
 
   String _generateRandomKey() {
-    var key = '';
-    var rnd = new Random();
-    for (var i = 0; i < 6; i++) {
-      key = key + rnd.nextInt(9).toString();
+    final StringBuffer buffer = StringBuffer();
+    final Random rnd = Random();
+    for (int i = 0; i < 6; i++) {
+      buffer.write(rnd.nextInt(9).toString());
     }
-    return key;
+    return buffer.toString();
   }
 
-  _createChannel(String channelName) async {
-    String channelKey = _generateRandomKey();
+  String _createChannel(String channelName) {
+    final String channelKey = _generateRandomKey();
 //
 //    Room room = Room(key: channelKey, owner: Application.currentUser.uid, name: channelName, createdAt: DateTime.now());
 //

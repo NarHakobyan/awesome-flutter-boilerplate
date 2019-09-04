@@ -12,7 +12,7 @@ void registerGetIt() {
   GetIt.I.registerSingleton<Dio>(dio);
 
   GetIt.I.registerLazySingleton<Router>(() {
-    final router = Router();
+    final Router router = Router();
     Routes.configureRoutes(router);
 
     return router;

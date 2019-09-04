@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
@@ -12,16 +13,16 @@ class AppDatabase {
   Completer<Database> _dbOpenCompleter;
 
   // Key for encryption
-  var encryptionKey = "";
+  String encryptionKey = '';
 
   // Database object accessor
   Future<Database> getDatabase() async {
     // If completer is null, AppDatabaseClass is newly instantiated, so database is not yet opened
     if (_dbOpenCompleter == null) {
-      _dbOpenCompleter = Completer();
+      _dbOpenCompleter = Completer<Database>();
 
       // Calling _openDatabase will also complete the completer with database instance
-      _openDatabase();
+      await _openDatabase();
     }
     // If the database is already opened, awaiting the future will happen instantly.
     // Otherwise, awaiting the returned future will take some time - until complete() is called
@@ -29,19 +30,19 @@ class AppDatabase {
     return _dbOpenCompleter.future;
   }
 
-  Future _openDatabase() async {
+  Future<void> _openDatabase() async {
     // Get a platform-specific directory where persistent app data can be stored
-    final appDocumentDir = await getApplicationDocumentsDirectory();
+    final Directory appDocumentDir = await getApplicationDocumentsDirectory();
 
     // Path with the form: /platform-specific-directory/demo.db
-    final dbPath = join(appDocumentDir.path, DBConstants.DB_NAME);
+    final String dbPath = join(appDocumentDir.path, DBConstants.DB_NAME);
 
     // Check to see if encryption is set, then provide codec
     // else init normal db with path
-    var database;
+    Database database;
     if (encryptionKey.isNotEmpty) {
       // Initialize the encryption codec with a user password
-//      var codec = getXXTeaCodec(password: encryptionKey);
+      // var codec = getXXTeaCodec(password: encryptionKey);
       database = await databaseFactoryIo.openDatabase(
         dbPath, /*codec: codec*/
       );

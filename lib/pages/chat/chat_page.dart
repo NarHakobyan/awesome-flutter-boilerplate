@@ -11,7 +11,7 @@ class ChatPage extends StatefulWidget {
   @override
   _ChatPageState createState() => _ChatPageState();
 
-  ChatPage({@required this.roomId});
+  const ChatPage({@required this.roomId});
 }
 
 class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
@@ -19,6 +19,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
   final TextEditingController _textController = TextEditingController();
   bool _isComposing = false;
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -34,13 +35,13 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
         children: <Widget>[
           Flexible(
             child: ListView.builder(
-              padding: EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(8),
               reverse: true,
               itemBuilder: (_, int index) => _messages[index],
               itemCount: _messages.length,
             ),
           ),
-          Divider(height: 1.0),
+          const Divider(height: 1),
           Container(
             decoration: BoxDecoration(color: Theme.of(context).cardColor),
             child: _buildTextComposer(),
@@ -50,13 +51,13 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
     );
   }
 
-  getImage(ImageSource imageSource) => () async {
-        File image = await ImagePicker.pickImage(source: imageSource);
+  Function getImage(ImageSource imageSource) => () async {
+        final File image = await ImagePicker.pickImage(source: imageSource);
 //        final String displayName = Application.currentUser.displayName;
-        final String displayName = 'displayName';
+        const String displayName = 'displayName';
 
         if (image != null) {
-          ChatMessage message = ChatMessage(
+          final ChatMessage message = ChatMessage(
             image: image,
             name: displayName,
             self: true,
@@ -68,7 +69,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
           setState(() {
             _messages.insert(0, message);
           });
-          message.animationController
+          await message.animationController
               .forward()
               .then((void _) => message.animationController.dispose());
         }
@@ -87,11 +88,11 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
                 onSubmitted: _handleSubmitted,
                 onChanged: (String text) {
                   setState(() {
-                    _isComposing = text.length > 0;
+                    _isComposing = text.isNotEmpty;
                   });
                 },
                 decoration:
-                    InputDecoration.collapsed(hintText: "Send a message"),
+                    InputDecoration.collapsed(hintText: 'Send a message'),
               ),
             ),
             Container(
@@ -99,7 +100,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
               child: Row(
                 children: <Widget>[
                   IconButton(
-                      tooltip: "Photo",
+                      tooltip: 'Photo',
                       icon: Icon(Icons.camera_alt),
                       onPressed: getImage(ImageSource.camera)),
                   IconButton(
@@ -122,7 +123,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
   void _handleSubmitted(String text) {
     if (text.isEmpty) {
       Fluttertoast.showToast(
-          msg: "Message is required",
+          msg: 'Message is required',
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.BOTTOM,
           timeInSecForIos: 1,
@@ -131,9 +132,9 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
       return;
     }
     _textController.clear();
-    final displayName = 'displayName';
+    const String displayName = 'displayName';
 
-    ChatMessage message = ChatMessage(
+    final ChatMessage message = ChatMessage(
       text: text,
       self: true,
       name: displayName,

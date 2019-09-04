@@ -19,15 +19,15 @@ abstract class _PostStore with Store {
   @observable
   PostsList postsList;
 
-  final postRepository = GetIt.I<PostRepository>();
+  final PostRepository postRepository = GetIt.I<PostRepository>();
 
   // actions:-------------------------------------------------------------------
   @action
-  Future getPosts() async {
+  Future<void> getPosts() async {
     loadingStore.loading = true;
 
     try {
-      this.postsList = await postRepository.getPosts();
+      postsList = await postRepository.getPosts();
       errorStore.error = null;
     } catch (e) {
       errorStore.error = DioErrorUtil.handleError(e);

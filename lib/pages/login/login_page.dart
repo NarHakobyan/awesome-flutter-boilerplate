@@ -24,20 +24,20 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final loginStore = LoginStore();
-  final formState = FormStore();
-  final loadingStore = LoadingStore();
-  final _fbKey = GlobalKey<FormBuilderState>();
-  final authState = GetIt.I<AuthStore>();
-  final dio = GetIt.I<Dio>();
-  final router = GetIt.I<Router>();
+  final LoginStore loginStore = LoginStore();
+  final FormStore formState = FormStore();
+  final LoadingStore loadingStore = LoadingStore();
+  final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
+  final AuthStore authState = GetIt.I<AuthStore>();
+  final Dio dio = GetIt.I<Dio>();
+  final Router router = GetIt.I<Router>();
 
-  _loginHandler(context) async {
-    final form = _fbKey.currentState;
+  Future<void> _loginHandler(BuildContext context) async {
+    final FormBuilderState form = _fbKey.currentState;
 
     await ToastHelper.showErrorToast(S.current.title);
 
-    await S.delegate.load(Locale("ru", ""));
+    await S.delegate.load(const Locale('ru', ''));
 
     await ToastHelper.showErrorToast(S.current.title);
 
@@ -49,15 +49,15 @@ class _LoginPageState extends State<LoginPage> {
     form.save();
 
     try {
-      KeyboardHelper.hideKeyboard();
+      await KeyboardHelper.hideKeyboard();
       loadingStore.startLoading();
 
       authState.setCurrentUser(User(firstName: 'Narek', lastName: 'Hakobyan'));
 
-      router.navigateTo(context, Routes.rooms, clearStack: true);
+      await router.navigateTo(context, Routes.rooms, clearStack: true);
     } on DioError catch (e) {
-      String message = e.response?.data['message'];
-      ToastHelper.showErrorToast(message.toUpperCase());
+      final String message = e.response?.data['message'];
+      await ToastHelper.showErrorToast(message.toUpperCase());
     } finally {
       loadingStore.stopLoading();
     }
@@ -65,7 +65,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+    final Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -84,7 +84,7 @@ class _LoginPageState extends State<LoginPage> {
                           width: 400,
                         ),
                         Container(
-                          margin: EdgeInsets.symmetric(horizontal: 40),
+                          margin: const EdgeInsets.symmetric(horizontal: 40),
                           child: Column(
                             children: <Widget>[
                               _buildForm(context),
@@ -105,9 +105,9 @@ class _LoginPageState extends State<LoginPage> {
                                               checkColor:
                                                   AppColors.primaryColor,
                                               value: loginStore.rememberMe,
-                                              onChanged: (v) {
+                                              onChanged: (bool rememberMe) {
                                                 loginStore.setRememberMe(
-                                                  rememberMe: v,
+                                                  rememberMe: rememberMe,
                                                 );
                                               },
                                             );
@@ -142,14 +142,14 @@ class _LoginPageState extends State<LoginPage> {
                               RaisedButton(
                                 color: Colors.white,
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30.0),
+                                  borderRadius: BorderRadius.circular(30),
                                 ),
                                 onPressed: () => _loginHandler(context),
                                 elevation: 0,
                                 child: Text(
                                   'Sign In'.toUpperCase(),
                                   style: TextStyle(
-                                    color: Color(0xFF83A4D4),
+                                    color: const Color(0xFF83A4D4),
                                     fontSize: 16,
                                   ),
                                 ),
@@ -163,14 +163,14 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.only(bottom: 20),
+                margin: const EdgeInsets.only(bottom: 20),
                 child: RichText(
                   text: TextSpan(
                     style: TextStyle(
                       color: Colors.black,
                     ),
-                    children: [
-                      TextSpan(text: 'Don’t have an account? '),
+                    children: <InlineSpan>[
+                      const TextSpan(text: 'Don’t have an account? '),
                       TextSpan(
                         text: 'Sign Up',
                         style: TextStyle(
@@ -207,8 +207,8 @@ class _LoginPageState extends State<LoginPage> {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             // Add one stop for each color. Stops should increase from 0 to 1
-            stops: [0, 0.2, 1],
-            colors: [
+            stops: const <double>[0, 0.2, 1],
+            colors: const <Color>[
               // Colors are easy thanks to Flutter's Colors class.
               Color(0xFF7196CD),
               Color(0xFF83A4D4),
@@ -220,7 +220,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  _buildForm(context) {
+  Observer _buildForm(BuildContext context) {
     return Observer(
       builder: (_) => FormBuilder(
         key: _fbKey,
@@ -230,7 +230,7 @@ class _LoginPageState extends State<LoginPage> {
             formBuilderTextField(
               attribute: 'email',
               hintText: 'Email',
-              validators: [
+              validators: <FormFieldValidator<dynamic>>[
                 FormBuilderValidators.email(),
                 FormBuilderValidators.required(),
               ],
@@ -239,7 +239,7 @@ class _LoginPageState extends State<LoginPage> {
               attribute: 'password',
               hintText: 'Password',
               obscureText: true,
-              validators: [
+              validators: <FormFieldValidator<dynamic>>[
                 FormBuilderValidators.minLength(6),
                 FormBuilderValidators.required(),
               ],
@@ -255,7 +255,7 @@ class _LoginPageState extends State<LoginPage> {
       @required String hintText,
       bool obscureText = false,
       Color color = Colors.white,
-      List<FormFieldValidator> validators}) {
+      List<FormFieldValidator<dynamic>> validators}) {
     return FormBuilderTextField(
       attribute: attribute,
       cursorColor: color,
@@ -270,7 +270,7 @@ class _LoginPageState extends State<LoginPage> {
         ),
         focusedBorder: UnderlineInputBorder(
           borderSide: BorderSide(
-            color: Color(0xFFA1D7ED),
+            color: const Color(0xFFA1D7ED),
           ),
         ),
         hintStyle: TextStyle(fontWeight: FontWeight.w400, color: color),

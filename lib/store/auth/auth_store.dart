@@ -6,7 +6,7 @@ part 'auth_store.g.dart';
 // This is the class used by rest of your codebase
 class AuthStore = _AuthStore with _$AuthStore;
 
-final authStoreState = AuthStore();
+final AuthStore authStoreState = AuthStore();
 
 // The store-class
 abstract class _AuthStore with Store {
@@ -15,13 +15,13 @@ abstract class _AuthStore with Store {
 
   @action
   void setCurrentUser(User user) {
-    this.currentUser = user;
+    currentUser = user;
   }
 
   @action
   void changeUserName() {
-    final draft = this.currentUser.clone()..firstName = 'Narek changed';
+    final User draft = currentUser.clone()..firstName = 'Narek changed';
 
-    this.currentUser = draft;
+    currentUser = draft;
   }
 }

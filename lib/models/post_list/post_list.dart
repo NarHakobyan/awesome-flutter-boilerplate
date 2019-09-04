@@ -8,14 +8,14 @@ part 'post_list.g.dart';
 
 @JsonSerializable()
 class PostsList {
+  PostsList({
+    this.posts,
+  });
+
   factory PostsList.fromJson(Map<String, dynamic> json) =>
       _$PostsListFromJson(json);
 
   Map<String, dynamic> toJson() => _$PostsListToJson(this);
 
   final List<Post> posts;
-
-  PostsList({
-    this.posts,
-  });
 }

@@ -8,46 +8,46 @@ import 'package:secure_chat/pages/register/register_page.dart';
 import 'package:secure_chat/pages/rooms/rooms_page.dart';
 
 class Routes {
+  static final Router I = GetIt.I<Router>();
 
-  static get I => GetIt.I<Router>();
-
-  static String login = "/login";
-  static String register = "/register";
-  static String rooms = "/rooms";
-  static String singleRoom = "/rooms/:id";
+  static String login = '/login';
+  static String register = '/register';
+  static String rooms = '/rooms';
+  static String singleRoom = '/rooms/:id';
 
   static void configureRoutes(Router router) {
-    router.notFoundHandler = Handler(
-        handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-      return Scaffold(
-        body: Center(
-          child: Text('Not found'),
-        ),
-      );
-    });
+    router
+      ..notFoundHandler = Handler(handlerFunc:
+          (BuildContext context, Map<String, List<String>> params) {
+        return Scaffold(
+          body: Center(
+            child: const Text('Not found'),
+          ),
+        );
+      })
 
-    router.define(login, handler: Handler(
-        handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-      return LoginPage();
-    }));
+      ..define(login, handler: Handler(handlerFunc:
+          (BuildContext context, Map<String, List<String>> params) {
+        return LoginPage();
+      }))
 
-    router.define(register, handler: Handler(
-        handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-      return RegisterPage();
-    }));
+      ..define(register, handler: Handler(handlerFunc:
+          (BuildContext context, Map<String, List<String>> params) {
+        return RegisterPage();
+      }))
 
-    router.define(rooms, handler: Handler(
-        handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-      return RoomsPage();
-    }));
+      ..define(rooms, handler: Handler(handlerFunc:
+          (BuildContext context, Map<String, List<String>> params) {
+        return RoomsPage();
+      }))
 
-    router.define(singleRoom, handler: Handler(
-        handlerFunc: (BuildContext context, Map<String, List<String>> params) {
-      return ChatPage(
-        roomId: params['id'][0],
-      );
-    }));
+      ..define(singleRoom, handler: Handler(handlerFunc:
+          (BuildContext context, Map<String, List<String>> params) {
+        return ChatPage(
+          roomId: params['id'][0],
+        );
+      }))
 
-    router.printTree();
+      ..printTree();
   }
 }

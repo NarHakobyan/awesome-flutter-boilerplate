@@ -10,11 +10,11 @@ abstract class _LoadingStore with Store {
 
   @action
   void startLoading() {
-    this.loading = true;
+    loading = true;
   }
 
   @action
   void stopLoading() {
-    this.loading = false;
+    loading = false;
   }
 }

@@ -9,6 +9,6 @@ abstract class _ErrorStore with Store {
   String error;
 
   bool get hasError {
-    return this.error != null && this.error.isNotEmpty;
+    return error != null && error.isNotEmpty;
   }
 }

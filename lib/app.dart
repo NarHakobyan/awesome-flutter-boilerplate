@@ -9,11 +9,10 @@ import 'package:secure_chat/pages/splash/splash.dart';
 import 'generated/i18n.dart';
 
 class MyApp extends StatelessWidget {
-  final router = GetIt.I<Router>();
+  MyApp({ this.brightness });
+
+  final Router router = GetIt.I<Router>();
   final Brightness brightness;
-
-
-  MyApp({this.brightness});
 
   @override
   Widget build(BuildContext context) {
@@ -23,14 +22,14 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         brightness: brightness,
       ),
-      themedWidgetBuilder: (context, theme) => MaterialApp(
-        localizationsDelegates: [
+      themedWidgetBuilder: (BuildContext context, ThemeData theme) => MaterialApp(
+        localizationsDelegates: <LocalizationsDelegate<dynamic>>[
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
           S.delegate
         ],
-        localeResolutionCallback: S.delegate.resolution(fallback: Locale('en')),
+        localeResolutionCallback: S.delegate.resolution(fallback: const Locale('en')),
         supportedLocales: S.delegate.supportedLocales,
         debugShowCheckedModeBanner: true,
         title: Strings.appName,

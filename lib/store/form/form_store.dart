@@ -15,7 +15,7 @@ abstract class _FormStore with Store {
   bool autoValidate = false;
 
   @action
-  setAutoValidate({@required bool autoValidate}) {
+  void setAutoValidate({@required bool autoValidate}) {
     this.autoValidate = autoValidate;
   }
 }

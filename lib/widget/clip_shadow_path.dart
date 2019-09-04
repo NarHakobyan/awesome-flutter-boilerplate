@@ -6,7 +6,7 @@ class ClipShadowPath extends StatelessWidget {
   final CustomClipper<Path> clipper;
   final Widget child;
 
-  ClipShadowPath({
+  const ClipShadowPath({
     @required this.shadow,
     @required this.clipper,
     @required this.child,
@@ -16,10 +16,10 @@ class ClipShadowPath extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomPaint(
       painter: _ClipShadowShadowPainter(
-        clipper: this.clipper,
-        shadow: this.shadow,
+        clipper: clipper,
+        shadow: shadow,
       ),
-      child: ClipPath(child: child, clipper: this.clipper),
+      child: ClipPath(clipper: clipper, child: child),
     );
   }
 }
@@ -32,8 +32,8 @@ class _ClipShadowShadowPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    var paint = shadow.toPaint();
-    var clipPath = clipper.getClip(size).shift(shadow.offset);
+    final Paint paint = shadow.toPaint();
+    final Path clipPath = clipper.getClip(size).shift(shadow.offset);
     canvas.drawPath(clipPath, paint);
   }
 

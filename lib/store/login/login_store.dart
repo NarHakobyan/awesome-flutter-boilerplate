@@ -6,7 +6,7 @@ part 'login_store.g.dart';
 // This is the class used by rest of your codebase
 class LoginStore = _LoginStore with _$LoginStore;
 
-final loginStoreState = LoginStore();
+final LoginStore loginStoreState = LoginStore();
 
 // The store-class
 abstract class _LoginStore with Store {
@@ -14,7 +14,7 @@ abstract class _LoginStore with Store {
   bool rememberMe = false;
 
   @action
-  setRememberMe({@required bool rememberMe}) {
+  void setRememberMe({@required bool rememberMe}) {
     this.rememberMe = rememberMe;
   }
 }
