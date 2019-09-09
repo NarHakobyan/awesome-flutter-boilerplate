@@ -35,12 +35,6 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> _loginHandler(BuildContext context) async {
     final FormBuilderState form = _fbKey.currentState;
 
-    await ToastHelper.showErrorToast(S.current.title);
-
-    await S.delegate.load(const Locale('ru', ''));
-
-    await ToastHelper.showErrorToast(S.current.title);
-
     if (!form.validate()) {
       formState.setAutoValidate(autoValidate: true);
       return;

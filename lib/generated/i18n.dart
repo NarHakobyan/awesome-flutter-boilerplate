@@ -21,7 +21,7 @@ class S implements WidgetsLocalizations {
   @override
   TextDirection get textDirection => TextDirection.ltr;
 
-  String get title => "hello";
+  String get appName => "Boilerplate Project";
 }
 
 class $ru extends S {
@@ -31,7 +31,7 @@ class $ru extends S {
   TextDirection get textDirection => TextDirection.ltr;
 
   @override
-  String get title => "privet";
+  String get appName => "Boilerplate Project Ru";
 }
 
 class $en extends S {

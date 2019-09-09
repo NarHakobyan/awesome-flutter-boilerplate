@@ -3,7 +3,6 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get_it/get_it.dart';
-import 'package:secure_chat/constants/strings.dart';
 import 'package:secure_chat/pages/splash/splash.dart';
 
 import 'generated/i18n.dart';
@@ -32,7 +31,7 @@ class MyApp extends StatelessWidget {
         localeResolutionCallback: S.delegate.resolution(fallback: const Locale('en')),
         supportedLocales: S.delegate.supportedLocales,
         debugShowCheckedModeBanner: true,
-        title: Strings.appName,
+        title: S.current.appName,
         theme: theme,
         onGenerateRoute: router.generator,
         home: SplashScreen(),
