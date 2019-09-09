@@ -5,6 +5,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:secure_chat/pages/splash/splash.dart';
 
+import 'constants/app_theme.dart';
 import 'generated/i18n.dart';
 
 class MyApp extends StatelessWidget {
@@ -17,8 +18,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return DynamicTheme(
       defaultBrightness: brightness,
-      data: (Brightness brightness) => ThemeData(
-        primarySwatch: Colors.blue,
+      data: (Brightness brightness) => themeData.copyWith(
         brightness: brightness,
       ),
       themedWidgetBuilder: (BuildContext context, ThemeData theme) => MaterialApp(
@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
           GlobalCupertinoLocalizations.delegate,
           S.delegate
         ],
-        localeResolutionCallback: S.delegate.resolution(fallback: const Locale('en')),
+        localeResolutionCallback: S.delegate.resolution(fallback: const Locale('en', '')),
         supportedLocales: S.delegate.supportedLocales,
         debugShowCheckedModeBanner: true,
         title: S.current.appName,

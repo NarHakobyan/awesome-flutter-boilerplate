@@ -24,14 +24,15 @@
 import 'package:flutter/material.dart';
 
 final ThemeData themeData = ThemeData(
-    fontFamily: 'ProductSans',
-    brightness: Brightness.light,
-    primarySwatch:
-        MaterialColor(AppColors.primaryColor.value, AppColors.primarySwitch),
-    primaryColor: AppColors.primaryColor,
-    primaryColorBrightness: Brightness.light,
-    accentColor: AppColors.primaryColor,
-    accentColorBrightness: Brightness.light);
+  fontFamily: 'ProductSans',
+  brightness: Brightness.light,
+  primarySwatch:
+      MaterialColor(AppColors.primaryColor.value, AppColors.primarySwitch),
+  primaryColor: AppColors.primaryColor,
+  primaryColorBrightness: Brightness.light,
+  accentColor: AppColors.primaryColor,
+  accentColorBrightness: Brightness.light,
+);
 
 class AppColors {
   AppColors._(); // this basically makes it so you can instantiate this class
