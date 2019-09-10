@@ -6,7 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
-import 'package:secure_chat/store/auth/auth_store.dart';
+import 'package:secure_chat/data/repositories/post_repository.dart';
+import 'package:secure_chat/models/post/post.dart';
+import 'package:secure_chat/store/auth/auth_state.dart';
+import 'package:secure_chat/store/post/post_state.dart';
 
 class RoomsPage extends StatefulWidget {
   @override
@@ -15,8 +18,16 @@ class RoomsPage extends StatefulWidget {
 
 class _RoomsPageState extends State<RoomsPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final AuthStore authState = GetIt.I<AuthStore>();
+  final AuthState authState = GetIt.I<AuthState>();
   final Router router = GetIt.I<Router>();
+  final PostState postStore = PostState();
+
+
+  @override
+  void initState() {
+    super.initState();
+    postStore.getPosts();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +60,7 @@ class _RoomsPageState extends State<RoomsPage> {
     return Column(
       children: <Widget>[
         _buildSearchBar(context),
-        /*Expanded(child: _buildChannelList(context))*/
+        Expanded(child: _buildChannelList(context)),
         Observer(
           builder: (_) => GestureDetector(
             onTap: authState.changeUserName,
@@ -80,42 +91,47 @@ class _RoomsPageState extends State<RoomsPage> {
     );
   }
 
-//  Widget _buildChannelList(BuildContext context) {
-//    return StreamBuilder<QuerySnapshot>(
-//      stream: Firestore.instance.collection('rooms').where('owner', isEqualTo: Application.currentUser.uid).snapshots(),
-//      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-//        if (!snapshot.hasData) return LinearProgressIndicator();
-//
-//        return _buildList(context, snapshot.data.documents);
-//      },
-//    );
-//  }
+  Widget _buildChannelList(BuildContext context) {
+    return Observer(
+      builder: (BuildContext context) {
+        if(!postStore.dataState.hasData) {
+          return const CircularProgressIndicator();
+        }
 
-//  Widget _buildList(BuildContext context, List<DocumentSnapshot> snapshot) {
-//    return ListView.separated(
-//      itemCount: snapshot.length,
-//      itemBuilder: (BuildContext context, int index) => _buildListItem(context, snapshot[index]),
-//      separatorBuilder: (BuildContext context, int index) => Divider(
-//            height: 1,
-//          ),
-//    );
-//  }
+        if(postStore.posts.isEmpty) {
+          return Center(
+            child: const Text('no data'),
+          );
+        }
+        return _buildList(context, postStore.posts);
+      },
+    );
+  }
 
-//  Widget _buildListItem(BuildContext context, DocumentSnapshot data) {
-//    final record = Room.fromSnapshot(data);
-//    return ListTile(
-//      leading: CircleAvatar(
-//        child: Icon(Icons.supervised_user_circle),
-//      ),
-//      key: ValueKey(record.name),
-//      title: Text(record.name, style: TextStyle(fontWeight: FontWeight.bold),),
-//      subtitle: Text(
-//        record.key,
-//        style: TextStyle(color: Colors.grey[400]),
-//      ),
-//      onTap: () => router.navigateTo(context, '/rooms/${record.key}'),
-//    );
-//  }
+  Widget _buildList(BuildContext context, List<Post> posts) {
+    return ListView.separated(
+      itemCount: posts.length,
+      itemBuilder: (BuildContext context, int index) => _buildListItem(context, posts[index]),
+      separatorBuilder: (BuildContext context, int index) => const Divider(
+            height: 1,
+          ),
+    );
+  }
+
+  Widget _buildListItem(BuildContext context, Post post) {
+    return ListTile(
+      leading: CircleAvatar(
+        child: Icon(Icons.supervised_user_circle),
+      ),
+      key: ValueKey(post.id),
+      title: Text(post.title, style: TextStyle(fontWeight: FontWeight.bold),),
+      subtitle: Text(
+        post.id.toString(),
+        style: TextStyle(color: Colors.grey[400]),
+      ),
+      onTap: () => router.navigateTo(context, '/rooms/${post.id}'),
+    );
+  }
 
   Future<void> _connectChannelDialog(BuildContext context) async {
     final GlobalKey<FormFieldState<String>> _channelFieldKey = GlobalKey<FormFieldState<String>>();

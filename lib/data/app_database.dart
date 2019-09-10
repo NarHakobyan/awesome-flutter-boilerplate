@@ -35,7 +35,7 @@ class AppDatabase {
     final Directory appDocumentDir = await getApplicationDocumentsDirectory();
 
     // Path with the form: /platform-specific-directory/demo.db
-    final String dbPath = join(appDocumentDir.path, DBConstants.DB_NAME);
+    final String dbPath = join(appDocumentDir.path, DBConstants.dbName);
 
     // Check to see if encryption is set, then provide codec
     // else init normal db with path

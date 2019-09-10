@@ -1,6 +1,5 @@
 linter:
   rules:
-    - always_specify_types
     - type_annotate_public_apis
     - always_declare_return_types
     - always_put_control_body_on_new_line

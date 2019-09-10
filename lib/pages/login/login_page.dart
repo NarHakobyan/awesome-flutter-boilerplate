@@ -5,16 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
+import 'package:pedantic/pedantic.dart';
 import 'package:secure_chat/constants/app_theme.dart';
-import 'package:secure_chat/generated/i18n.dart';
 import 'package:secure_chat/helpers/keyboard_helper.dart';
 import 'package:secure_chat/helpers/toast_helper.dart';
 import 'package:secure_chat/models/user/user.dart';
 import 'package:secure_chat/routes.dart';
-import 'package:secure_chat/store/auth/auth_store.dart';
-import 'package:secure_chat/store/form/form_store.dart';
-import 'package:secure_chat/store/loading/loading_store.dart';
-import 'package:secure_chat/store/login/login_store.dart';
+import 'package:secure_chat/store/auth/auth_state.dart';
+import 'package:secure_chat/store/data/data_state.dart';
+import 'package:secure_chat/store/form_group/form_group_state.dart';
+import 'package:secure_chat/store/login/login_state.dart';
 import 'package:secure_chat/widget/clip_shadow_path.dart';
 import 'package:secure_chat/widget/green_clipper.dart';
 
@@ -24,11 +24,11 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final LoginStore loginStore = LoginStore();
-  final FormStore formState = FormStore();
-  final LoadingStore loadingStore = LoadingStore();
+  final LoginState loginStore = LoginState();
+  final FormGroupState formState = FormGroupState();
+  final DataState dataState = DataState();
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
-  final AuthStore authState = GetIt.I<AuthStore>();
+  final AuthState authState = GetIt.I<AuthState>();
   final Dio dio = GetIt.I<Dio>();
   final Router router = GetIt.I<Router>();
 
@@ -43,8 +43,8 @@ class _LoginPageState extends State<LoginPage> {
     form.save();
 
     try {
-      await KeyboardHelper.hideKeyboard();
-      loadingStore.startLoading();
+      unawaited(KeyboardHelper.hideKeyboard());
+      dataState.startLoading();
 
       authState.setCurrentUser(User(firstName: 'Narek', lastName: 'Hakobyan'));
 
@@ -53,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
       final String message = e.response?.data['message'];
       await ToastHelper.showErrorToast(message.toUpperCase());
     } finally {
-      loadingStore.stopLoading();
+      dataState.stopLoading();
     }
   }
 
@@ -215,32 +215,37 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Observer _buildForm(BuildContext context) {
+    final FormBuilderTextField emailField = formBuilderTextField(
+      attribute: 'email',
+      hintText: 'Email',
+      validators: <FormFieldValidator<dynamic>>[
+        FormBuilderValidators.email(),
+        FormBuilderValidators.required(),
+      ],
+    );
+    final FormBuilderTextField passwordField = formBuilderTextField(
+      attribute: 'password',
+      hintText: 'Password',
+      obscureText: true,
+      validators: <FormFieldValidator<dynamic>>[
+        FormBuilderValidators.minLength(6),
+        FormBuilderValidators.required(),
+      ],
+    );
+
     return Observer(
-      builder: (_) => FormBuilder(
-        key: _fbKey,
-        autovalidate: formState.autoValidate,
-        child: Column(
-          children: <Widget>[
-            formBuilderTextField(
-              attribute: 'email',
-              hintText: 'Email',
-              validators: <FormFieldValidator<dynamic>>[
-                FormBuilderValidators.email(),
-                FormBuilderValidators.required(),
-              ],
-            ),
-            formBuilderTextField(
-              attribute: 'password',
-              hintText: 'Password',
-              obscureText: true,
-              validators: <FormFieldValidator<dynamic>>[
-                FormBuilderValidators.minLength(6),
-                FormBuilderValidators.required(),
-              ],
-            ),
-          ],
-        ),
-      ),
+      builder: (BuildContext context) {
+        return FormBuilder(
+          key: _fbKey,
+          autovalidate: formState.autoValidate,
+          child: Column(
+            children: <Widget>[
+              emailField,
+              passwordField,
+            ],
+          ),
+        );
+      },
     );
   }
 

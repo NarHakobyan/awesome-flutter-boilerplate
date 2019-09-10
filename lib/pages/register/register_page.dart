@@ -9,8 +9,8 @@ import 'package:secure_chat/helpers/keyboard_helper.dart';
 import 'package:secure_chat/helpers/toast_helper.dart';
 import 'package:secure_chat/models/user/user.dart';
 import 'package:secure_chat/routes.dart';
-import 'package:secure_chat/store/form/form_store.dart';
-import 'package:secure_chat/store/loading/loading_store.dart';
+import 'package:secure_chat/store/data/data_state.dart';
+import 'package:secure_chat/store/form_group/form_group_state.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -21,8 +21,8 @@ class _RegisterPageState extends State<RegisterPage> {
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final Router router = GetIt.I<Router>();
-  final FormStore formState = FormStore();
-  final LoadingStore loadingStore = LoadingStore();
+  final FormGroupState formState = FormGroupState();
+  final DataState loadingStore = DataState();
 
   Future<void> _registerHandler() async {
     final AuthRepository authRepository = GetIt.I<AuthRepository>();

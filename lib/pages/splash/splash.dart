@@ -3,7 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:secure_chat/data/repositories/auth_repository.dart';
 import 'package:secure_chat/helpers/shared_preference_helper.dart';
 import 'package:secure_chat/models/user/user.dart';
-import 'package:secure_chat/store/auth/auth_store.dart';
+import 'package:secure_chat/store/auth/auth_state.dart';
 
 import '../../routes.dart';
 
@@ -14,7 +14,7 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   final AuthRepository authRepository = GetIt.I<AuthRepository>();
-  final AuthStore authStore = GetIt.I<AuthStore>();
+  final AuthState authStore = GetIt.I<AuthState>();
 
   @override
   void initState() {

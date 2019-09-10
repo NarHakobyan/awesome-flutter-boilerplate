@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
-import 'package:secure_chat/store/error/error_store.dart';
+import 'package:secure_chat/store/error/error_state.dart';
 
-part 'form_store.g.dart';
+part 'form_group_state.g.dart';
 
-class FormStore = _FormStore with _$FormStore;
+class FormGroupState = _FormGroupState with _$FormGroupState;
 
-abstract class _FormStore with Store {
+abstract class _FormGroupState with Store {
   // store for handling error messages
-  final ErrorStore errorStore = ErrorStore();
+  final ErrorState errorState = ErrorState();
 
   // store variables:-----------------------------------------------------------
   @observable

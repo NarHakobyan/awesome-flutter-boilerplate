@@ -1,15 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:mobx/mobx.dart';
 
-part 'login_store.g.dart';
+part 'login_state.g.dart';
 
 // This is the class used by rest of your codebase
-class LoginStore = _LoginStore with _$LoginStore;
+class LoginState = _LoginState with _$LoginState;
 
-final LoginStore loginStoreState = LoginStore();
+final LoginState loginStateState = LoginState();
 
 // The store-class
-abstract class _LoginStore with Store {
+abstract class _LoginState with Store {
   @observable
   bool rememberMe = false;
 

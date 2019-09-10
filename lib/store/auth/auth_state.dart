@@ -1,15 +1,15 @@
 import 'package:mobx/mobx.dart';
 import 'package:secure_chat/models/user/user.dart';
 
-part 'auth_store.g.dart';
+part 'auth_state.g.dart';
 
 // This is the class used by rest of your codebase
-class AuthStore = _AuthStore with _$AuthStore;
+class AuthState = _AuthState with _$AuthState;
 
-final AuthStore authStoreState = AuthStore();
+final AuthState authStateState = AuthState();
 
 // The store-class
-abstract class _AuthStore with Store {
+abstract class _AuthState with Store {
   @observable
   User currentUser;
 

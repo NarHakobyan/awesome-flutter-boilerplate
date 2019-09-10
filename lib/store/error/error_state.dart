@@ -1,10 +1,10 @@
 import 'package:mobx/mobx.dart';
 
-part 'error_store.g.dart';
+part 'error_state.g.dart';
 
-class ErrorStore = _ErrorStore with _$ErrorStore;
+class ErrorState = _ErrorState with _$ErrorState;
 
-abstract class _ErrorStore with Store {
+abstract class _ErrorState with Store {
   @observable
   String error;
 

@@ -7,7 +7,7 @@ import 'package:secure_chat/models/post/post.dart';
 import 'package:sembast/sembast.dart';
 
 class PostDataSource {
-  final StoreRef<int, Map<String, dynamic>> _postsStore = intMapStoreFactory.store(DBConstants.STORE_NAME);
+  final StoreRef<int, Map<String, dynamic>> _postsStore = intMapStoreFactory.store(DBConstants.storeName);
 
   Future<Database> _getDatabase() async => GetIt.I<AppDatabase>().getDatabase();
 
@@ -39,7 +39,7 @@ class PostDataSource {
   Future<List<Post>> getAllSortedByFilter({List<Filter> filters}) async {
     final Finder finder = Finder(
         filter: Filter.and(filters),
-        sortOrders: <SortOrder>[SortOrder(DBConstants.FIELD_ID)]);
+        sortOrders: <SortOrder>[SortOrder(DBConstants.idFieldName)]);
 
     final List<RecordSnapshot<int, Map<String, dynamic>>> recordSnapshots = await _postsStore.find(
       await _getDatabase(),
