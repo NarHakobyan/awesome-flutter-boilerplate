@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class ToastHelper {
-    static Future<bool> showToast(String msg, {int timeInSecForIos, Toast toastLength = Toast.LENGTH_SHORT}) {
+    static Future<bool> showToast(String msg, {int timeInSecForIos, Toast toastLength = Toast.LENGTH_SHORT, bool toUpperCase = true}) {
         return Fluttertoast.showToast(
             msg: msg,
             toastLength: toastLength,
@@ -12,7 +12,7 @@ class ToastHelper {
             textColor: Colors.grey[800]);
     }
 
-    static Future<bool> showErrorToast(String msg, {int timeInSecForIos, Toast toastLength = Toast.LENGTH_SHORT}) {
+    static Future<bool> showErrorToast(String msg, {int timeInSecForIos, Toast toastLength = Toast.LENGTH_SHORT, bool toUpperCase = true}) {
         return Fluttertoast.showToast(
             msg: msg,
             toastLength: toastLength,

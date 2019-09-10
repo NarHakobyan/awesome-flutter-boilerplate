@@ -1,16 +1,14 @@
-import 'package:dio/dio.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
-import 'package:secure_chat/data/repositories/auth_repository.dart';
 import 'package:secure_chat/helpers/keyboard_helper.dart';
 import 'package:secure_chat/helpers/toast_helper.dart';
-import 'package:secure_chat/models/user/user.dart';
 import 'package:secure_chat/routes.dart';
 import 'package:secure_chat/store/data/data_state.dart';
 import 'package:secure_chat/store/form_group/form_group_state.dart';
+import 'package:secure_chat/store/register/register_state.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -19,45 +17,30 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final Router router = GetIt.I<Router>();
   final FormGroupState formState = FormGroupState();
+  final RegisterState registerState = RegisterState();
   final DataState loadingStore = DataState();
 
   Future<void> _registerHandler() async {
-    final AuthRepository authRepository = GetIt.I<AuthRepository>();
 
     final FormBuilderState form = _fbKey.currentState;
 
-    if (form.validate() == false) {
+    if (!form.validate()) {
       formState.setAutoValidate(autoValidate: true);
       return;
     }
 
     form.save();
 
-    try {
-      /// FIXME(narek) move [user] to service folder.
-      final User user = await authRepository.registerUser(form.value);
-
-      await ToastHelper.showToast(
-          'you have successfully registered.'.toUpperCase());
-
-      await router.navigateTo(context, Routes.rooms, clearStack: true);
-    } on DioError catch (e) {
-      if (e.response.statusCode == 409) {
-        await ToastHelper.showErrorToast(
-            (e.response.data['message'] as String).toUpperCase());
-        return;
-      }
-      print(e);
-    }
+    await registerState.registerUser(form.value);
+    await ToastHelper.showToast('you have successfully registered.');
+    await router.navigateTo(context, Routes.rooms, clearStack: true);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
       body: GestureDetector(
         onTap: KeyboardHelper.hideKeyboard,
         child: LayoutBuilder(

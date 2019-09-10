@@ -24,7 +24,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final LoginState loginStore = LoginState();
+  final LoginState loginState = LoginState();
   final FormGroupState formState = FormGroupState();
   final DataState dataState = DataState();
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
@@ -51,7 +51,7 @@ class _LoginPageState extends State<LoginPage> {
       await router.navigateTo(context, Routes.rooms, clearStack: true);
     } on DioError catch (e) {
       final String message = e.response?.data['message'];
-      await ToastHelper.showErrorToast(message.toUpperCase());
+      await ToastHelper.showErrorToast(message);
     } finally {
       dataState.stopLoading();
     }
@@ -98,9 +98,9 @@ class _LoginPageState extends State<LoginPage> {
                                               activeColor: Colors.white,
                                               checkColor:
                                                   AppColors.primaryColor,
-                                              value: loginStore.rememberMe,
+                                              value: loginState.rememberMe,
                                               onChanged: (bool rememberMe) {
-                                                loginStore.setRememberMe(
+                                                loginState.setRememberMe(
                                                   rememberMe: rememberMe,
                                                 );
                                               },
@@ -111,9 +111,9 @@ class _LoginPageState extends State<LoginPage> {
                                       GestureDetector(
                                         onTap: () {
                                           setState(() {
-                                            loginStore.setRememberMe(
+                                            loginState.setRememberMe(
                                               rememberMe:
-                                                  !loginStore.rememberMe,
+                                                  !loginState.rememberMe,
                                             );
                                           });
                                         },
