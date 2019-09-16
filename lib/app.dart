@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:secure_chat/pages/splash/splash.dart';
-import 'package:secure_chat/providers/flavor.dart';
+import 'package:secure_chat/providers/flavor_service.dart';
 
 import 'constants/app_theme.dart';
 import 'generated/i18n.dart';
@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
   MyApp({this.brightness});
 
   final Router router = GetIt.I<Router>();
-  final Flavor flavor = GetIt.I<Flavor>();
+  final FlavorService flavor = GetIt.I<FlavorService>();
   final Brightness brightness;
 
   @override

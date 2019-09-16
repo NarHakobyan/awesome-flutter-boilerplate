@@ -9,7 +9,7 @@ import 'package:secure_chat/data/repositories/auth_repository.dart';
 import 'package:secure_chat/data/repositories/post_repository.dart';
 import 'package:secure_chat/routes.dart';
 
-import 'flavor.dart';
+import 'flavor_service.dart';
 
 void registerGetIt(FlavorMode flavorMode) {
   GetIt.I.registerSingleton<Dio>(dio);
@@ -21,7 +21,8 @@ void registerGetIt(FlavorMode flavorMode) {
     return router;
   });
 
-  GetIt.I.registerLazySingleton<Flavor>(() => Flavor(mode: flavorMode));
+  GetIt.I.registerLazySingleton<FlavorService>(
+      () => FlavorService(mode: flavorMode));
 
   GetIt.I.registerSingleton<AppDatabase>(AppDatabase());
 

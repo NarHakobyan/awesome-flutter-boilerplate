@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 import 'package:secure_chat/data/repositories/auth_repository.dart';
@@ -6,7 +5,6 @@ import 'package:secure_chat/models/user/user.dart';
 import 'package:secure_chat/store/auth/auth_state.dart';
 import 'package:secure_chat/store/data/data_state.dart';
 import 'package:secure_chat/store/error/error_state.dart';
-import 'package:secure_chat/utils/dio/dio_error_util.dart';
 
 part 'register_state.g.dart';
 
@@ -15,7 +13,6 @@ class RegisterState = _RegisterState with _$RegisterState;
 
 // The store-class
 abstract class _RegisterState with Store {
-
   final dataState = DataState();
   final errorState = ErrorState();
   final AuthRepository authRepository = GetIt.I<AuthRepository>();
@@ -35,8 +32,6 @@ abstract class _RegisterState with Store {
 
       errorState.error = null;
       return user;
-    } on DioError catch (e) {
-      errorState.error = DioErrorUtil.handleError(e);
     } finally {
       dataState
         ..dataFetched()
