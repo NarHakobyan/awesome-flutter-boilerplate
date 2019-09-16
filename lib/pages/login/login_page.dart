@@ -48,7 +48,12 @@ class _LoginPageState extends State<LoginPage> {
 
       authState.setCurrentUser(User(firstName: 'Narek', lastName: 'Hakobyan'));
 
-      await router.navigateTo(context, Routes.rooms, clearStack: true);
+      await router.navigateTo(
+        context,
+        Routes.rooms,
+        clearStack: true,
+        transition: TransitionType.native,
+      );
     } on DioError catch (e) {
       final String message = e.response?.data['message'];
       await ToastHelper.showErrorToast(message);

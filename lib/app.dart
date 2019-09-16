@@ -4,14 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:secure_chat/pages/splash/splash.dart';
+import 'package:secure_chat/providers/flavor.dart';
 
 import 'constants/app_theme.dart';
 import 'generated/i18n.dart';
 
 class MyApp extends StatelessWidget {
-  MyApp({ this.brightness });
+  MyApp({this.brightness});
 
   final Router router = GetIt.I<Router>();
+  final Flavor flavor = GetIt.I<Flavor>();
   final Brightness brightness;
 
   @override
@@ -21,16 +23,18 @@ class MyApp extends StatelessWidget {
       data: (Brightness brightness) => themeData.copyWith(
         brightness: brightness,
       ),
-      themedWidgetBuilder: (BuildContext context, ThemeData theme) => MaterialApp(
+      themedWidgetBuilder: (BuildContext context, ThemeData theme) =>
+          MaterialApp(
         localizationsDelegates: <LocalizationsDelegate<dynamic>>[
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
           S.delegate
         ],
-        localeResolutionCallback: S.delegate.resolution(fallback: const Locale('en', '')),
+        localeResolutionCallback:
+            S.delegate.resolution(fallback: const Locale('en', '')),
         supportedLocales: S.delegate.supportedLocales,
-        debugShowCheckedModeBanner: true,
+        debugShowCheckedModeBanner: flavor.isDevelopment(),
         title: S.current.appName,
         theme: theme,
         onGenerateRoute: router.generator,

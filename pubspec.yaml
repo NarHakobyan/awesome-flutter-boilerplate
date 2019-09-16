@@ -28,7 +28,9 @@ dependencies:
   image_picker: ^0.6.1+4
   dio: ^2.1.16
   get_it: ^2.0.3
-  flutter_form_builder: ^3.5.2
+  rxdart: ^0.22.2
+  flutter_form_builder:
+    git: git@github.com:NarHakobyan/flutter_form_builder.git
   json_annotation: ^3.0.0
   mobx: ^0.3.7
   flutter_mobx: ^0.3.2

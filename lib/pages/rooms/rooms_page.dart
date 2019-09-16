@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
-import 'package:secure_chat/data/repositories/post_repository.dart';
 import 'package:secure_chat/models/post/post.dart';
 import 'package:secure_chat/store/auth/auth_state.dart';
 import 'package:secure_chat/store/post/post_state.dart';
@@ -21,7 +20,6 @@ class _RoomsPageState extends State<RoomsPage> {
   final AuthState authState = GetIt.I<AuthState>();
   final Router router = GetIt.I<Router>();
   final PostState postStore = PostState();
-
 
   @override
   void initState() {
@@ -47,9 +45,9 @@ class _RoomsPageState extends State<RoomsPage> {
           IconButton(
             icon: Icon(Icons.add),
             onPressed: () => _createChannelDialog(context),
-          )
+          ),
         ],
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.red,
         elevation: 0,
       ),
       body: _buildBody(context),
@@ -61,15 +59,6 @@ class _RoomsPageState extends State<RoomsPage> {
       children: <Widget>[
         _buildSearchBar(context),
         Expanded(child: _buildChannelList(context)),
-        Observer(
-          builder: (_) => GestureDetector(
-            onTap: authState.changeUserName,
-            child: Text(
-              '${authState.currentUser.firstName}',
-              style: Theme.of(context).textTheme.display1,
-            ),
-          ),
-        ),
       ],
     );
   }
@@ -94,11 +83,11 @@ class _RoomsPageState extends State<RoomsPage> {
   Widget _buildChannelList(BuildContext context) {
     return Observer(
       builder: (BuildContext context) {
-        if(!postStore.dataState.hasData) {
+        if (!postStore.dataState.hasData) {
           return const CircularProgressIndicator();
         }
 
-        if(postStore.posts.isEmpty) {
+        if (postStore.posts.isEmpty) {
           return Center(
             child: const Text('no data'),
           );
@@ -111,10 +100,11 @@ class _RoomsPageState extends State<RoomsPage> {
   Widget _buildList(BuildContext context, List<Post> posts) {
     return ListView.separated(
       itemCount: posts.length,
-      itemBuilder: (BuildContext context, int index) => _buildListItem(context, posts[index]),
+      itemBuilder: (BuildContext context, int index) =>
+          _buildListItem(context, posts[index]),
       separatorBuilder: (BuildContext context, int index) => const Divider(
-            height: 1,
-          ),
+        height: 1,
+      ),
     );
   }
 
@@ -124,17 +114,22 @@ class _RoomsPageState extends State<RoomsPage> {
         child: Icon(Icons.supervised_user_circle),
       ),
       key: ValueKey(post.id),
-      title: Text(post.title, style: TextStyle(fontWeight: FontWeight.bold),),
+      title: Text(
+        post.title,
+        style: TextStyle(fontWeight: FontWeight.bold),
+      ),
       subtitle: Text(
         post.id.toString(),
         style: TextStyle(color: Colors.grey[400]),
       ),
-      onTap: () => router.navigateTo(context, '/rooms/${post.id}'),
+      onTap: () => router.navigateTo(context, '/rooms/${post.id}',
+          transition: TransitionType.native),
     );
   }
 
   Future<void> _connectChannelDialog(BuildContext context) async {
-    final GlobalKey<FormFieldState<String>> _channelFieldKey = GlobalKey<FormFieldState<String>>();
+    final GlobalKey<FormFieldState<String>> _channelFieldKey =
+        GlobalKey<FormFieldState<String>>();
 
     final String channelKey = await showDialog<String>(
         context: context,
@@ -154,18 +149,21 @@ class _RoomsPageState extends State<RoomsPage> {
             ),
             actions: <Widget>[
               FlatButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('Cancel')),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('Cancel'),
+              ),
               FlatButton(
-                  onPressed: () async {
-                    final FormFieldState<String> field = _channelFieldKey.currentState;
-                    if (field.validate()) {
-                      Navigator.of(context).pop(field.value);
-                    }
-                  },
-                  child: const Text('Connect'))
+                onPressed: () async {
+                  final FormFieldState<String> field =
+                      _channelFieldKey.currentState;
+                  if (field.validate()) {
+                    Navigator.of(context).pop(field.value);
+                  }
+                },
+                child: const Text('Connect'),
+              ),
             ],
           );
         });
@@ -192,7 +190,8 @@ class _RoomsPageState extends State<RoomsPage> {
   }
 
   Future<void> _createChannelDialog(BuildContext context) async {
-    final GlobalKey<FormFieldState<String>> _channelNameKey = GlobalKey<FormFieldState<String>>();
+    final GlobalKey<FormFieldState<String>> _channelNameKey =
+        GlobalKey<FormFieldState<String>>();
 
     final String channelKey = await showDialog<String>(
         context: context,
@@ -212,20 +211,23 @@ class _RoomsPageState extends State<RoomsPage> {
             ),
             actions: <Widget>[
               FlatButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('Cancel')),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('Cancel'),
+              ),
               FlatButton(
-                  onPressed: () async {
-                    final FormFieldState<String> field = _channelNameKey.currentState;
-                    if (field.validate()) {
-                      final String _channelName = field.value;
-                      final String channelKey = _createChannel(_channelName);
-                      Navigator.of(context).pop(channelKey);
-                    }
-                  },
-                  child: const Text('Create'))
+                onPressed: () async {
+                  final FormFieldState<String> field =
+                      _channelNameKey.currentState;
+                  if (field.validate()) {
+                    final String _channelName = field.value;
+                    final String channelKey = _createChannel(_channelName);
+                    Navigator.of(context).pop(channelKey);
+                  }
+                },
+                child: const Text('Create'),
+              ),
             ],
           );
         });
