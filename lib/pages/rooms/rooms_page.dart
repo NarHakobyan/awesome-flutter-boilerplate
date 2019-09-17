@@ -88,8 +88,8 @@ class _RoomsPageState extends State<RoomsPage> {
         }
 
         if (postStore.posts.isEmpty) {
-          return Center(
-            child: const Text('no data'),
+          return const Center(
+            child: Text('no data'),
           );
         }
         return _buildList(context, postStore.posts);
@@ -145,7 +145,7 @@ class _RoomsPageState extends State<RoomsPage> {
                 return null;
               },
               maxLines: 1,
-              decoration: InputDecoration(hintText: 'Channel key...'),
+              decoration: const InputDecoration(hintText: 'Channel key...'),
             ),
             actions: <Widget>[
               FlatButton(
@@ -207,7 +207,7 @@ class _RoomsPageState extends State<RoomsPage> {
                 return null;
               },
               maxLines: 1,
-              decoration: InputDecoration(hintText: 'Channel name...'),
+              decoration: const InputDecoration(hintText: 'Channel name...'),
             ),
             actions: <Widget>[
               FlatButton(

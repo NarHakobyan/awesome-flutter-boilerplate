@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
+import 'package:logging/logging.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:secure_chat/constants/app_theme.dart';
 import 'package:secure_chat/helpers/keyboard_helper.dart';
@@ -17,6 +18,8 @@ import 'package:secure_chat/store/form_group/form_group_state.dart';
 import 'package:secure_chat/store/login/login_state.dart';
 import 'package:secure_chat/widget/clip_shadow_path.dart';
 import 'package:secure_chat/widget/green_clipper.dart';
+
+final _log = Logger('LoginPage');
 
 class LoginPage extends StatefulWidget {
   @override
@@ -122,7 +125,7 @@ class _LoginPageState extends State<LoginPage> {
                                             );
                                           });
                                         },
-                                        child: Text(
+                                        child: const Text(
                                           'Remember Me',
                                           style: TextStyle(color: Colors.white),
                                         ),
@@ -130,8 +133,8 @@ class _LoginPageState extends State<LoginPage> {
                                     ],
                                   ),
                                   FlatButton(
-                                    onPressed: () => print('pressed'),
-                                    child: Text(
+                                    onPressed: () => _log.info('pressed'),
+                                    child: const Text(
                                       'Forgot password?',
                                       style: TextStyle(color: Colors.white),
                                     ),
@@ -147,8 +150,8 @@ class _LoginPageState extends State<LoginPage> {
                                 elevation: 0,
                                 child: Text(
                                   'Sign In'.toUpperCase(),
-                                  style: TextStyle(
-                                    color: const Color(0xFF83A4D4),
+                                  style: const TextStyle(
+                                    color: Color(0xFF83A4D4),
                                     fontSize: 16,
                                   ),
                                 ),
@@ -220,6 +223,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Observer _buildForm(BuildContext context) {
+    _log.info('repaint _buildForm');
     final FormBuilderTextField emailField = formBuilderTextField(
       attribute: 'email',
       hintText: 'Email',
@@ -266,15 +270,15 @@ class _LoginPageState extends State<LoginPage> {
       style: TextStyle(color: color),
       decoration: InputDecoration(
         hintText: hintText,
-        border: UnderlineInputBorder(),
+        border: const UnderlineInputBorder(),
         enabledBorder: UnderlineInputBorder(
           borderSide: BorderSide(
             color: color.withOpacity(0.2),
           ),
         ),
-        focusedBorder: UnderlineInputBorder(
+        focusedBorder: const UnderlineInputBorder(
           borderSide: BorderSide(
-            color: const Color(0xFFA1D7ED),
+            color: Color(0xFFA1D7ED),
           ),
         ),
         hintStyle: TextStyle(fontWeight: FontWeight.w400, color: color),

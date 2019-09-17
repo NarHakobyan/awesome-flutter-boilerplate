@@ -23,7 +23,6 @@ class _RegisterPageState extends State<RegisterPage> {
   final DataState loadingStore = DataState();
 
   Future<void> _registerHandler() async {
-
     final FormBuilderState form = _fbKey.currentState;
 
     if (!form.validate()) {
@@ -81,7 +80,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           },
                           child: Text(
                             'already have an account?'.toUpperCase(),
-                            style: TextStyle(fontSize: 19),
+                            style: const TextStyle(fontSize: 19),
                             textAlign: TextAlign.center,
                           ),
                         ),

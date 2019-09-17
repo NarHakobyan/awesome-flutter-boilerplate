@@ -62,7 +62,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
             name: displayName,
             self: true,
             animationController: AnimationController(
-              duration: Duration(milliseconds: 700),
+              duration: const Duration(milliseconds: 700),
               vsync: this,
             ),
           );
@@ -92,7 +92,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
                   });
                 },
                 decoration:
-                    InputDecoration.collapsed(hintText: 'Send a message'),
+                    const InputDecoration.collapsed(hintText: 'Send a message'),
               ),
             ),
             Container(
@@ -139,7 +139,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
       self: true,
       name: displayName,
       animationController: AnimationController(
-        duration: Duration(milliseconds: 700),
+        duration: const Duration(milliseconds: 700),
         vsync: this,
       ),
     );
