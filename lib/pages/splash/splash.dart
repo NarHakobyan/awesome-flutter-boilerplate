@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:secure_chat/data/network/auth/auth_api.dart';
+import 'package:get_it/get_it.dart';
+import 'package:secure_chat/data/repositories/auth_repository.dart';
 import 'package:secure_chat/helpers/shared_preference_helper.dart';
-import 'package:secure_chat/providers/get_it.dart';
-import 'package:secure_chat/store/auth/auth_store.dart';
+import 'package:secure_chat/models/user/user.dart';
+import 'package:secure_chat/store/auth/auth_state.dart';
 
 import '../../routes.dart';
 
@@ -12,9 +13,8 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  final authApi = getIt<AuthApi>();
-  final authStore = getIt<AuthStore>();
-  final sharedPreferenceHelper = getIt<SharedPreferenceHelper>();
+  final AuthRepository authRepository = GetIt.I<AuthRepository>();
+  final AuthState authStore = GetIt.I<AuthState>();
 
   @override
   void initState() {
@@ -25,24 +25,26 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Material(
-      child: Center(child: Image.asset('assets/icons/ic_appicon.png')),
+      child: Center(
+        child: Image.asset('assets/icons/ic_appicon.png'),
+      ),
     );
   }
 
-  getAuthUser() async {
-    final token = await sharedPreferenceHelper.getAuthToken();
+  Future<void> getAuthUser() async {
+    final String token = await SharedPreferenceHelper.getAuthToken();
 
     if (token != null && token.isNotEmpty) {
-      final authUser = await authApi.getCurrentUser();
+      final User authUser = await authRepository.getCurrentUser();
       authStore.setCurrentUser(authUser);
     }
     await navigate();
   }
 
-  navigate() async {
-    bool isLoggedIn = await sharedPreferenceHelper.isLoggedIn();
+  Future<void> navigate() async {
+    final bool isLoggedIn = await SharedPreferenceHelper.isLoggedIn();
 
-    Navigator.of(context)
+    await Navigator.of(context)
         .pushReplacementNamed(isLoggedIn ? Routes.rooms : Routes.login);
   }
 }

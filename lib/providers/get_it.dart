@@ -1,69 +1,33 @@
 import 'package:dio/dio.dart';
 import 'package:fluro/fluro.dart';
 import 'package:get_it/get_it.dart';
-import 'package:secure_chat/config/application.dart';
-import 'package:secure_chat/constants/preferences.dart';
-import 'package:secure_chat/data/local/app_database.dart';
-import 'package:secure_chat/data/local/datasources/post/post_datasource.dart';
-import 'package:secure_chat/data/local/post_repository.dart';
-import 'package:secure_chat/data/network/auth/auth_api.dart';
-import 'package:secure_chat/data/network/post/post_api.dart';
-import 'package:secure_chat/helpers/shared_preference_helper.dart';
+import 'package:secure_chat/constants/flavor_mode.dart';
+import 'package:secure_chat/data/app_database.dart';
+import 'package:secure_chat/data/datasources/post/post_datasource.dart';
+import 'package:secure_chat/data/dio.dart';
+import 'package:secure_chat/data/repositories/auth_repository.dart';
+import 'package:secure_chat/data/repositories/post_repository.dart';
 import 'package:secure_chat/routes.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-GetIt getIt = new GetIt();
+import 'flavor_service.dart';
 
-void registerGetIt() {
-  getIt.registerLazySingleton<Dio>(() {
-    final options = BaseOptions(
-      baseUrl: "http://localhost:3000",
-      connectTimeout: 5000,
-      receiveTimeout: 3000,
-      headers: {'Content-Type': 'application/json; charset=utf-8'},
-    );
+void registerGetIt(FlavorMode flavorMode) {
+  GetIt.I.registerSingleton<Dio>(dio);
 
-    final Dio dio = Dio(options)
-      ..interceptors.addAll([
-        LogInterceptor(responseBody: true, error: true),
-        InterceptorsWrapper(onRequest: (RequestOptions options) async {
-          // getting shared pref instance
-          var prefs = await SharedPreferences.getInstance();
-
-          // getting token
-          var token = prefs.getString(Preferences.auth_token);
-
-          if (token != null) {
-            options.headers.putIfAbsent('Authorization', () => token);
-          } else {
-            print('Auth token is null');
-          }
-        })
-      ]);
-
-    return dio;
-  });
-
-  getIt.registerLazySingleton<Router>(() {
-    final router = Router();
+  GetIt.I.registerLazySingleton<Router>(() {
+    final Router router = Router();
     Routes.configureRoutes(router);
 
     return router;
   });
 
-  getIt.registerSingleton(Application());
-  getIt.registerSingleton(AppDatabase());
-  getIt.registerSingleton(SharedPreferenceHelper());
-  getIt.registerSingleton(PostDataSource());
-  registerPostApi();
-  registerAuthApi();
-}
+  GetIt.I.registerLazySingleton<FlavorService>(
+      () => FlavorService(mode: flavorMode));
 
-void registerPostApi() {
-  getIt.registerSingleton(PostApi());
-  getIt.registerSingleton(PostRepository());
-}
+  GetIt.I.registerSingleton<AppDatabase>(AppDatabase());
 
-void registerAuthApi() {
-  getIt.registerSingleton(AuthApi());
+  // Repositories
+  GetIt.I.registerSingleton<PostDataSource>(PostDataSource());
+  GetIt.I.registerSingleton<PostRepository>(PostRepository());
+  GetIt.I.registerSingleton<AuthRepository>(AuthRepository());
 }

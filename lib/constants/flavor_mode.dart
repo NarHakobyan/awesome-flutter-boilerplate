@@ -1,0 +1,4 @@
+enum FlavorMode {
+  development,
+  production,
+}
