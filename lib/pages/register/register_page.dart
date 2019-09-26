@@ -6,8 +6,8 @@ import 'package:get_it/get_it.dart';
 import 'package:secure_chat/helpers/keyboard_helper.dart';
 import 'package:secure_chat/helpers/toast_helper.dart';
 import 'package:secure_chat/routes.dart';
-import 'package:secure_chat/store/data/data_state.dart';
 import 'package:secure_chat/store/form_group/form_group_state.dart';
+import 'package:secure_chat/store/loading/loading_state.dart';
 import 'package:secure_chat/store/register/register_state.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -20,7 +20,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final Router router = GetIt.I<Router>();
   final FormGroupState formState = FormGroupState();
   final RegisterState registerState = RegisterState();
-  final DataState loadingStore = DataState();
+  final LoadingState loadingStore = LoadingState();
 
   Future<void> _registerHandler() async {
     final FormBuilderState form = _fbKey.currentState;

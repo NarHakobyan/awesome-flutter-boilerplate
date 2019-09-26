@@ -13,8 +13,8 @@ import 'package:secure_chat/helpers/toast_helper.dart';
 import 'package:secure_chat/models/user/user.dart';
 import 'package:secure_chat/routes.dart';
 import 'package:secure_chat/store/auth/auth_state.dart';
-import 'package:secure_chat/store/data/data_state.dart';
 import 'package:secure_chat/store/form_group/form_group_state.dart';
+import 'package:secure_chat/store/loading/loading_state.dart';
 import 'package:secure_chat/store/login/login_state.dart';
 import 'package:secure_chat/widget/clip_shadow_path.dart';
 import 'package:secure_chat/widget/green_clipper.dart';
@@ -29,7 +29,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final LoginState loginState = LoginState();
   final FormGroupState formState = FormGroupState();
-  final DataState dataState = DataState();
+  final LoadingState loadingState = LoadingState();
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
   final AuthState authState = GetIt.I<AuthState>();
   final Dio dio = GetIt.I<Dio>();
@@ -47,7 +47,7 @@ class _LoginPageState extends State<LoginPage> {
 
     try {
       unawaited(KeyboardHelper.hideKeyboard());
-      dataState.startLoading();
+      loadingState.startLoading();
 
       authState.setCurrentUser(User(firstName: 'Narek', lastName: 'Hakobyan'));
 
@@ -61,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
       final String message = e.response?.data['message'];
       await ToastHelper.showErrorToast(message);
     } finally {
-      dataState.stopLoading();
+      loadingState.stopLoading();
     }
   }
 

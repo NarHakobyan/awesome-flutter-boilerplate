@@ -9,21 +9,27 @@ part of 'post_state.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$PostState on _PostState, Store {
-  final _$postsAtom = Atom(name: '_PostState.posts');
+  Computed<bool> _$hasResultsComputed;
 
   @override
-  List<Post> get posts {
-    _$postsAtom.context.enforceReadPolicy(_$postsAtom);
-    _$postsAtom.reportObserved();
-    return super.posts;
+  bool get hasResults =>
+      (_$hasResultsComputed ??= Computed<bool>(() => super.hasResults)).value;
+
+  final _$fetchPostsFutureAtom = Atom(name: '_PostState.fetchPostsFuture');
+
+  @override
+  ObservableFuture<List<Post>> get fetchPostsFuture {
+    _$fetchPostsFutureAtom.context.enforceReadPolicy(_$fetchPostsFutureAtom);
+    _$fetchPostsFutureAtom.reportObserved();
+    return super.fetchPostsFuture;
   }
 
   @override
-  set posts(List<Post> value) {
-    _$postsAtom.context.conditionallyRunInAction(() {
-      super.posts = value;
-      _$postsAtom.reportChanged();
-    }, _$postsAtom, name: '${_$postsAtom.name}_set');
+  set fetchPostsFuture(ObservableFuture<List<Post>> value) {
+    _$fetchPostsFutureAtom.context.conditionallyRunInAction(() {
+      super.fetchPostsFuture = value;
+      _$fetchPostsFutureAtom.reportChanged();
+    }, _$fetchPostsFutureAtom, name: '${_$fetchPostsFutureAtom.name}_set');
   }
 
   final _$getPostsAsyncAction = AsyncAction('getPosts');

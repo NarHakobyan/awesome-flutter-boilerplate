@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
+import 'package:mobx/mobx.dart';
 import 'package:secure_chat/models/post/post.dart';
 import 'package:secure_chat/store/auth/auth_state.dart';
 import 'package:secure_chat/store/post/post_state.dart';
@@ -83,7 +84,7 @@ class _RoomsPageState extends State<RoomsPage> {
   Widget _buildChannelList(BuildContext context) {
     return Observer(
       builder: (BuildContext context) {
-        if (!postStore.dataState.hasData) {
+        if (postStore.fetchPostsFuture.status == FutureStatus.pending) {
           return const CircularProgressIndicator();
         }
 

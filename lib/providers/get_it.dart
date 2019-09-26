@@ -8,6 +8,7 @@ import 'package:secure_chat/data/dio.dart';
 import 'package:secure_chat/data/repositories/auth_repository.dart';
 import 'package:secure_chat/data/repositories/post_repository.dart';
 import 'package:secure_chat/routes.dart';
+import 'package:secure_chat/store/store.dart';
 
 import 'flavor_service.dart';
 
@@ -30,4 +31,6 @@ void registerGetIt(FlavorMode flavorMode) {
   GetIt.I.registerSingleton<PostDataSource>(PostDataSource());
   GetIt.I.registerSingleton<PostRepository>(PostRepository());
   GetIt.I.registerSingleton<AuthRepository>(AuthRepository());
+
+  registerStoreGetIt();
 }

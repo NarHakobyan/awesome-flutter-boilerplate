@@ -12,8 +12,8 @@ import 'generated/i18n.dart';
 class MyApp extends StatelessWidget {
   MyApp({this.brightness});
 
-  final Router router = GetIt.I<Router>();
-  final FlavorService flavor = GetIt.I<FlavorService>();
+  final router = GetIt.I<Router>();
+  final flavorService = GetIt.I<FlavorService>();
   final Brightness brightness;
 
   @override
@@ -23,23 +23,23 @@ class MyApp extends StatelessWidget {
       data: (Brightness brightness) => themeData.copyWith(
         brightness: brightness,
       ),
-      themedWidgetBuilder: (BuildContext context, ThemeData theme) =>
-          MaterialApp(
-        localizationsDelegates: <LocalizationsDelegate<dynamic>>[
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-          S.delegate
-        ],
-        localeResolutionCallback:
-            S.delegate.resolution(fallback: const Locale('en', '')),
-        supportedLocales: S.delegate.supportedLocales,
-        debugShowCheckedModeBanner: flavor.isDevelopment(),
-        title: S.current.appName,
-        theme: theme,
-        onGenerateRoute: router.generator,
-        home: SplashScreen(),
-      ),
+      themedWidgetBuilder: (BuildContext context, ThemeData theme) {
+        return MaterialApp(
+          localizationsDelegates: [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            S.delegate
+          ],
+          localeResolutionCallback:
+              S.delegate.resolution(fallback: const Locale('en', '')),
+          supportedLocales: S.delegate.supportedLocales,
+          debugShowCheckedModeBanner: flavorService.isDevelopment(),
+          title: S.current.appName,
+          theme: theme,
+          onGenerateRoute: router.generator,
+          home: SplashScreen(),
+        );
+      },
     );
   }
 }

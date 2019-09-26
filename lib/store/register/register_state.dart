@@ -3,8 +3,8 @@ import 'package:mobx/mobx.dart';
 import 'package:secure_chat/data/repositories/auth_repository.dart';
 import 'package:secure_chat/models/user/user.dart';
 import 'package:secure_chat/store/auth/auth_state.dart';
-import 'package:secure_chat/store/data/data_state.dart';
 import 'package:secure_chat/store/error/error_state.dart';
+import 'package:secure_chat/store/loading/loading_state.dart';
 
 part 'register_state.g.dart';
 
@@ -13,7 +13,7 @@ class RegisterState = _RegisterState with _$RegisterState;
 
 // The store-class
 abstract class _RegisterState with Store {
-  final dataState = DataState();
+  final loadingState = LoadingState();
   final errorState = ErrorState();
   final AuthRepository authRepository = GetIt.I<AuthRepository>();
 
@@ -23,7 +23,7 @@ abstract class _RegisterState with Store {
   // actions:-------------------------------------------------------------------
   @action
   Future<User> registerUser(Map<String, dynamic> data) async {
-    dataState.startLoading();
+    loadingState.startLoading();
 
     try {
       final user = await authRepository.registerUser(data);
@@ -33,9 +33,7 @@ abstract class _RegisterState with Store {
       errorState.error = null;
       return user;
     } finally {
-      dataState
-        ..dataFetched()
-        ..stopLoading();
+      loadingState.stopLoading();
     }
   }
 }

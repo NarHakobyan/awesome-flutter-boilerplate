@@ -123,12 +123,13 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
   void _handleSubmitted(String text) {
     if (text.isEmpty) {
       Fluttertoast.showToast(
-          msg: 'Message is required',
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIos: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white);
+        msg: 'Message is required',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIos: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+      );
       return;
     }
     _textController.clear();
