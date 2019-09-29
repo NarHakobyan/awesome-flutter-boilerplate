@@ -63,7 +63,7 @@ packages:
       name: build_daemon
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.0"
+    version: "2.1.0"
   build_resolvers:
     dependency: transitive
     description:
@@ -77,14 +77,14 @@ packages:
       name: build_runner
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.6.9"
+    version: "1.7.1"
   build_runner_core:
     dependency: transitive
     description:
       name: build_runner_core
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.1.1"
+    version: "4.0.0"
   built_collection:
     dependency: transitive
     description:
@@ -182,7 +182,7 @@ packages:
       name: dio
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.2.1"
+    version: "3.0.2"
   dynamic_theme:
     dependency: "direct main"
     description:
@@ -226,12 +226,10 @@ packages:
   flutter_form_builder:
     dependency: "direct main"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "63e781e705240fe211d4e5b0b7f266b3f1fb7e64"
-      url: "git@github.com:NarHakobyan/flutter_form_builder.git"
-    source: git
-    version: "3.5.3"
+      name: flutter_form_builder
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.5.4"
   flutter_localizations:
     dependency: "direct main"
     description: flutter
@@ -276,7 +274,7 @@ packages:
       name: get_it
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.0"
+    version: "3.0.1"
   glob:
     dependency: transitive
     description:
@@ -675,5 +673,5 @@ packages:
     source: hosted
     version: "2.1.16"
 sdks:
-  dart: ">=2.4.0 <3.0.0"
+  dart: ">2.4.0 <3.0.0"
   flutter: ">=1.5.0 <2.0.0"
